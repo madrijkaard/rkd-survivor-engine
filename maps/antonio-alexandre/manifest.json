@@ -1,0 +1,141 @@
+{
+  "schemaVersion": 1,
+  "city": "Codó",
+  "neighborhood": "Centro",
+  "coordinateSystem": "WGS84",
+  "street": "Rua Antônio Alexandre",
+  "imageryDate": "2025-06",
+  "capturedAt": "2026-09-22",
+  "directions": [
+    "N",
+    "NE",
+    "L",
+    "SE",
+    "S",
+    "SO",
+    "O",
+    "NO"
+  ],
+  "points": [
+    {
+      "id": 1,
+      "pano": "k6BHFWpglP1DnMesHhpImQ",
+      "latitude": -4.4507433,
+      "longitude": -43.8846936
+    },
+    {
+      "id": 2,
+      "pano": "5POlF5rEoifL4FrpaIzEnQ",
+      "latitude": -4.4508232,
+      "longitude": -43.8846876
+    },
+    {
+      "id": 3,
+      "pano": "McpgaQzLPUK0YKndvcEfLw",
+      "latitude": -4.4509096,
+      "longitude": -43.8846694
+    },
+    {
+      "id": 4,
+      "pano": "gJt66PYoHMD18G8FH8lKDQ",
+      "latitude": -4.4509977,
+      "longitude": -43.8846533
+    },
+    {
+      "id": 5,
+      "pano": "0lGUKHPs6F-JorjchCP0Tg",
+      "latitude": -4.4510838,
+      "longitude": -43.884646
+    },
+    {
+      "id": 6,
+      "pano": "6rksOGJJt6As29HyoWkgiQ",
+      "latitude": -4.451168,
+      "longitude": -43.8846517
+    },
+    {
+      "id": 7,
+      "pano": "lb3jHLU4O2Nl6M3L0oBDfQ",
+      "latitude": -4.4512637,
+      "longitude": -43.8846587
+    },
+    {
+      "id": 8,
+      "pano": "QjPNaObTbQSalofdon7rxA",
+      "latitude": -4.4513574,
+      "longitude": -43.8846633
+    },
+    {
+      "id": 9,
+      "pano": "Eb0maWvb9dkmApZRgtsedA",
+      "latitude": -4.4514576,
+      "longitude": -43.8846644
+    },
+    {
+      "id": 10,
+      "pano": "xDc-jI-zoQeHJfTY8qRo9g",
+      "latitude": -4.4515541,
+      "longitude": -43.884639
+    },
+    {
+      "id": 11,
+      "pano": "CXEYAiOENkwcg5778Ev49A",
+      "latitude": -4.4516416,
+      "longitude": -43.8846039
+    },
+    {
+      "id": 12,
+      "pano": "NBys_vXObHMn32lBZ4VfTQ",
+      "latitude": -4.451727,
+      "longitude": -43.8845677
+    },
+    {
+      "id": 13,
+      "pano": "hUG0CjwuSrnhUlGvAkG7zw",
+      "latitude": -4.4518107,
+      "longitude": -43.8845369
+    },
+    {
+      "id": 14,
+      "pano": "QdsNwocghamkWIGnUpmWtw",
+      "latitude": -4.4518942,
+      "longitude": -43.8845084
+    },
+    {
+      "id": 15,
+      "pano": "HcFM4bUoWlxLOK-TXPSrkA",
+      "latitude": -4.4519803,
+      "longitude": -43.8844823
+    },
+    {
+      "id": 16,
+      "pano": "3XJHTGE5n1JSzJHqIT2czQ",
+      "latitude": -4.4520692,
+      "longitude": -43.8844591
+    },
+    {
+      "id": 17,
+      "pano": "qNCtnmRky1rV88r3NgWvYQ",
+      "latitude": -4.4521579,
+      "longitude": -43.8844322
+    },
+    {
+      "id": 18,
+      "pano": "HXMD1lNjp9sz_esC2q5rJQ",
+      "latitude": -4.4522468,
+      "longitude": -43.8844105
+    },
+    {
+      "id": 19,
+      "pano": "neEpmRZ8D3nlHUEvffNChw",
+      "latitude": -4.45234,
+      "longitude": -43.8843866
+    },
+    {
+      "id": 20,
+      "pano": "WJLDwWseqC6nt98aIPhy2A",
+      "latitude": -4.4524304,
+      "longitude": -43.884376
+    }
+  ]
+}

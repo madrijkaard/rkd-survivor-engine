@@ -1,0 +1,111 @@
+{
+  "schemaVersion": 1,
+  "city": "Codó",
+  "neighborhood": "Centro",
+  "coordinateSystem": "WGS84",
+  "street": "Rua Cônego Mendonça",
+  "imageryDate": "2025-06",
+  "capturedAt": "2026-09-20",
+  "directions": [
+    "N",
+    "NE",
+    "L",
+    "SE",
+    "S",
+    "SO",
+    "O",
+    "NO"
+  ],
+  "points": [
+    {
+      "id": 1,
+      "pano": "WOqiStV1h5j9BGtjJxUU6A",
+      "latitude": -4.4509722,
+      "longitude": -43.8854794
+    },
+    {
+      "id": 2,
+      "pano": "ETFQAwpgJ9QheheX-e5vGQ",
+      "latitude": -4.4509403,
+      "longitude": -43.8853942
+    },
+    {
+      "id": 3,
+      "pano": "TCTWnvoo9_wO-1U8KJAYmw",
+      "latitude": -4.450919,
+      "longitude": -43.8853026
+    },
+    {
+      "id": 4,
+      "pano": "VUHf6qNwyyIvh123UG6DPQ",
+      "latitude": -4.450889,
+      "longitude": -43.8852163
+    },
+    {
+      "id": 5,
+      "pano": "DNzV5YaUBiExiZr0OKIlYA",
+      "latitude": -4.4508626,
+      "longitude": -43.8851303
+    },
+    {
+      "id": 6,
+      "pano": "WMh18v_33g_D5E55j2aUIg",
+      "latitude": -4.4508381,
+      "longitude": -43.8850404
+    },
+    {
+      "id": 7,
+      "pano": "NMN9NPPW3QqGUqq-BjQllg",
+      "latitude": -4.4508149,
+      "longitude": -43.8849545
+    },
+    {
+      "id": 8,
+      "pano": "xx6BIXZLIRHSjD_pFnK-BA",
+      "latitude": -4.4507908,
+      "longitude": -43.8848685
+    },
+    {
+      "id": 9,
+      "pano": "HH_IwB3kuGNEdCLXhTzkhQ",
+      "latitude": -4.4507671,
+      "longitude": -43.8847838
+    },
+    {
+      "id": 10,
+      "pano": "k6BHFWpglP1DnMesHhpImQ",
+      "latitude": -4.4507433,
+      "longitude": -43.8846936
+    },
+    {
+      "id": 11,
+      "pano": "eAAkUEeNw3WY138imRCZUA",
+      "latitude": -4.4507213,
+      "longitude": -43.8845977
+    },
+    {
+      "id": 12,
+      "pano": "yxNbNxwbDgzdOl6M95-Saw",
+      "latitude": -4.4506983,
+      "longitude": -43.8845058
+    },
+    {
+      "id": 13,
+      "pano": "MJdqd7dcdcC8ROxm3aCFjw",
+      "latitude": -4.4506719,
+      "longitude": -43.8844129
+    },
+    {
+      "id": 14,
+      "pano": "bIA4CAgyAZEANv4QoCSxdA",
+      "latitude": -4.4506448,
+      "longitude": -43.8843255
+    },
+    {
+      "id": 15,
+      "pano": "m50EKQjLKjyArRBYMtRRww",
+      "latitude": -4.4506102,
+      "longitude": -43.8842343
+    }
+  ]
+}
