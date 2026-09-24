@@ -10,8 +10,11 @@ import { drawMendoncaGround, drawChurchTower, drawChurchNave, drawPlazaSeat, dra
 import { CHURCH_PLAZA, PLAZA_CHURCH, CHURCH_TOWER, plazaSeats, plazaStatue } from './mendonca-data.js';
 import { drawAntonioGround, drawAntonioCactus } from './antonio-render.js';
 import { antonioPoles, antonioShrubs, antonioBikes, antonioCacti } from './antonio-data.js';
-import { buildingPlanPoint, buildingFootprint } from './building-geometry.js';
+import { buildingPlanPoint } from './building-geometry.js';
 import { CINEMA_PLAZA } from './cinema-plaza.js';
+import { poleLamps } from './lighting.js';
+import { selectLitHomes } from './home-lighting.js';
+import { drawSunShadows, beginLampLight, occludeLampLight, drawLampBulbs, finishLighting } from './lighting-render.js';
 
 export function rng(seed = 1) {
   let n = seed >>> 0;
@@ -105,10 +108,11 @@ function drawPole(ctx, p) {
   ctx.lineWidth = 1.5; ctx.strokeStyle = '#b7b999'; ctx.beginPath(); ctx.moveTo(base.x - 2, base.y); ctx.lineTo(top.x - 2, top.y); ctx.stroke();
   line(ctx, [p.x - 22, p.y, p.height - 4], [p.x + 22, p.y, p.height - 4], '#6b7664', 4);
   for (const x of [-17, 0, 17]) { const t = P(p.x + x, p.y, p.height + 1); ctx.fillStyle = '#414c47'; ctx.fillRect(t.x - 2, t.y - 4, 4, 7); }
-  if (p.lamp) {
-    for (const x of [-16, 16]) { const q = P(p.x + x, p.y, p.height + 5); ctx.fillStyle = '#c7c29a'; ctx.beginPath(); ctx.ellipse(q.x, q.y, 7, 3, -.4, 0, Math.PI * 2); ctx.fill(); }
-  } else {
-    const mid = P(p.x, p.y, p.height * .76); ctx.fillStyle = '#828f83'; ctx.fillRect(mid.x - 7, mid.y, 14, 20); ctx.strokeStyle = '#485a50'; ctx.strokeRect(mid.x - 7, mid.y, 14, 20);
+  const mid = P(p.x, p.y, p.height * .76); ctx.fillStyle = '#828f83'; ctx.fillRect(mid.x - 7, mid.y, 14, 20); ctx.strokeStyle = '#485a50'; ctx.strokeRect(mid.x - 7, mid.y, 14, 20);
+  for (const lamp of poleLamps(p)) {
+    line(ctx, [p.x, p.y, p.height * .84], [lamp.x, lamp.y, lamp.z], '#a4ac96', 2);
+    const q = P(lamp.x, lamp.y, lamp.z);
+    ctx.fillStyle = '#9da894'; ctx.beginPath(); ctx.ellipse(q.x, q.y, 5, 2.5, 0, 0, Math.PI * 2); ctx.fill();
   }
 }
 function drawMotorcycle(ctx, x, y) {
@@ -152,6 +156,7 @@ function bakeScene(photos) {
   // Large ground/wire layers use a PS1-sized raster; facades retain full detail.
   const ground = bake(ctx => drawGround(ctx), globalBounds, -Infinity,'ground',.6);
   const sprites = [];
+  const litHomes = selectLitHomes(buildings);
   function bakeBuilding(b,street='simeao') {
     const direction=b.photoDirection??(street==='conego-mendonca'?(b.side==='east'?5:1):(b.side==='east'?3:7));
     const tex = makeFacade(b, photos.get(`${street}-${b.point}-${direction}`));
@@ -159,7 +164,15 @@ function bakeScene(photos) {
     const cross=f?makeFacade({...b,...f,id:`${b.id}-cross`,length:b.depth,facadeAxis:'x'},photos.get(`${f.street||'conego-mendonca'}-${f.point}-${f.photoDirection||(f.face==='minY'?1:5)}`)):null;
     const rear=b.backFacade,back=rear?makeFacade({...b,...rear,id:`${b.id}-rear`},photos.get(`${rear.street}-${rear.point}-${rear.photoDirection}`)):null;
     const base=buildingPlanPoint(b,b.x+b.depth/2,PROJECTION.d>0?b.y+b.length:b.y);
-    sprites.push(bake(ctx => drawBuilding(ctx, b, tex,cross,back), boundsFor(b.x - 25, b.y - 15, b.depth + 50, b.length + 30, b.height + (b.dish?85:55),b), P(base.x,base.y).y, b.id));
+    const bounds=boundsFor(b.x - 25, b.y - 15, b.depth + 50, b.length + 30, b.height + (b.dish?85:55),b);
+    const sprite=bake(ctx => drawBuilding(ctx, b, tex,cross,back), bounds, P(base.x,base.y).y, b.id);
+    if(litHomes.has(b.id)) {
+      const windows=makeFacade(b,null,true);
+      const crossWindows=f?makeFacade({...b,...f,id:`${b.id}-cross`,length:b.depth,facadeAxis:'x'},null,true):null;
+      const backWindows=rear?makeFacade({...b,...rear,id:`${b.id}-rear`},null,true):null;
+      sprite.windowLight=bake(ctx=>drawBuilding(ctx,b,windows,crossWindows,backWindows,true),bounds,sprite.depth).image;
+    }
+    sprites.push(sprite);
   }
   for (const b of buildings) {
     if(b.detail==='plaza-church')continue;
@@ -184,7 +197,7 @@ function bakeScene(photos) {
   for (const t of trees) {
     const p = P(t.x, t.y); sprites.push(bake(ctx => drawTree(ctx, t), { minX: p.x - t.size, maxX: p.x + t.size, minY: p.y - Math.max(t.size*1.6,(t.height||t.size*.8)+t.size*.5+8), maxY: p.y + 10 }, p.y, 'tree'));
   }
-  for (const p of poles) sprites.push(bake(ctx => drawPole(ctx, p), boundsFor(p.x - 29, p.y - 12, 58, 24, p.height + 18), P(p.x, p.y).y, 'pole'));
+  for (const p of poles) sprites.push({ ...bake(ctx => drawPole(ctx, p), boundsFor(p.x - 29, p.y - 20, 58, 40, p.height + 18), P(p.x, p.y).y, 'pole'), pole: p });
   sprites.push(bake(drawBillboard, boundsFor(97, 480, 194, 28, 87), P(192, 495).y, 'billboard'));
   sprites.push(bake(ctx => { drawMotorcycle(ctx, 50, 2195); drawMotorcycle(ctx, 55, 2217); }, boundsFor(36, 2177, 40, 60, 28), P(55, 2205).y, 'motorcycles'));
   for(const b of antonioBikes)sprites.push(bake(c=>drawMotorcycle(c,b.x,b.y),boundsFor(b.x-10,b.y-15,20,30,26),P(b.x,b.y).y,'aa-motorcycle'));
@@ -273,17 +286,6 @@ function drawGround(ctx) {
   for (let i = 0; i < 250; i++) { const p = P(demolitionLot.x + random() * demolitionLot.depth, demolitionLot.y + random() * demolitionLot.length); ctx.fillStyle = random() > .5 ? '#665e4739' : '#d6ba8b4b'; ctx.fillRect(p.x, p.y, 3, 2); }
   drawAntonioGround(ctx,asphalt,paving,dirt,buildings);
   drawMendoncaGround(ctx,asphalt,paving);
-  for (const b of buildings) {
-    const shift = b.height * .73;
-    const [a,bottomRight,topRight]=buildingFootprint(b),shadow=([x,y])=>[x+shift,y-shift*.45];
-    poly(ctx, [a,bottomRight,shadow(bottomRight),shadow(a)], '#1b352b36');
-    poly(ctx, [bottomRight,topRight,shadow(topRight),shadow(bottomRight)], '#1b352b32');
-  }
-  for (const t of trees) {
-    for (let i = 0; i < 6; i++) disk(ctx, t.x + t.size * .42 + i * 2, t.y - 15 - i * 2, t.size * .47, '#1e3d2e09');
-  }
-  for (const c of cars) rect(ctx, c.x - 13, c.y - 33, 40, 66, '#1a312b62');
-  for (const p of poles) line(ctx, [p.x, p.y], [p.x + 65, p.y - 28], '#29493740', 3);
   // Utility covers, weeds at the curb, and a narrow storm drain.
   for (let y = 380; y < 2100; y += 430) {
     disk(ctx, 14, y, 9, '#5c6653', 0, '#374839');
@@ -294,8 +296,8 @@ function drawGround(ctx) {
   for (let i = 0; i < 210; i++) { const y = random() * 2240, x = (random() > .5 ? -1 : 1) * (60 + random() * 5), p = P(x, y); ctx.fillStyle = '#6e815246'; ctx.fillRect(p.x, p.y, 1, 2 + random() * 4); }
   // Contact shadows for the circular planters.
   for (const p of planters) {
-    if(p.monument)rect(ctx,p.x-p.r+4,p.y-p.r-3,p.r*2,p.r*2,'#243e2c36');
-    else disk(ctx, p.x + 8, p.y - 3, p.r + 3, '#243e2c36');
+    if(p.monument)rect(ctx,p.x-p.r,p.y-p.r,p.r*2,p.r*2,'#243e2c36');
+    else disk(ctx, p.x, p.y, p.r + 3, '#243e2c36');
   }
 }
 
@@ -333,15 +335,19 @@ export function createActorFrames() {
 
 export function renderWorld(ctx, scene, camera, actor, frames, options) {
   const { width, height, time, overview, path } = options;
+  const light = options.lighting;
+  const lampContext = beginLampLight(width, height, camera, light);
   const inBar=insideBar(actor.x,actor.y)&&!overview;
   ctx.fillStyle = '#536152'; ctx.fillRect(0, 0, width, height);
   ctx.save(); ctx.translate(width / 2 - camera.x * camera.zoom, height / 2 - camera.y * camera.zoom); ctx.scale(camera.zoom, camera.zoom);
   const visible = s => s.x + s.w > camera.x - width / camera.zoom / 2 && s.x < camera.x + width / camera.zoom / 2 && s.y + s.h > camera.y - height / camera.zoom / 2 && s.y < camera.y + height / camera.zoom / 2;
   ctx.drawImage(scene.ground.image, scene.ground.x, scene.ground.y,scene.ground.w,scene.ground.h);
+  drawSunShadows(ctx, scene, light, actor, inBar);
   if(inBar)ctx.drawImage(scene.bar.floor.image,scene.bar.floor.x,scene.bar.floor.y);
+  if(inBar)occludeLampLight(lampContext,scene.bar.floor.image,scene.bar.floor.x,scene.bar.floor.y);
   const foot = P(actor.x, actor.y);
   // Shadows lie on the ground; the actual character is sorted into the scene.
-  ctx.fillStyle = '#172e2870'; ctx.beginPath(); ctx.ellipse(foot.x + 4, foot.y + 1, 10, 4, -.18, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#172e2850'; ctx.beginPath(); ctx.ellipse(foot.x, foot.y, 7, 3, -.18, 0, Math.PI * 2); ctx.fill();
   if (path?.length) {
     const dest = path.at(-1), target = P(dest.x, dest.y), pulse = Math.sin(time * 4) * 2;
     ctx.strokeStyle = '#e5d89c99'; ctx.lineWidth = 1 / camera.zoom; ctx.beginPath(); ctx.ellipse(target.x, target.y, 8 + pulse, 4 + pulse * .5, 0, 0, Math.PI * 2); ctx.stroke();
@@ -354,13 +360,21 @@ export function renderWorld(ctx, scene, camera, actor, frames, options) {
     if (entry.player) {
       const direction = actor.direction, frame = actor.moving ? Math.floor(actor.walkCycle) % 8 : 0;
       ctx.imageSmoothingEnabled = false; ctx.drawImage(frames[direction][frame], Math.round(foot.x - 19), Math.round(foot.y - 48));
+      occludeLampLight(lampContext, frames[direction][frame], Math.round(foot.x - 19), Math.round(foot.y - 48));
       if (overview) { ctx.strokeStyle = '#e7cb7c'; ctx.lineWidth = 2 / camera.zoom; ctx.beginPath(); ctx.arc(foot.x, foot.y - 14, 12 / camera.zoom, 0, Math.PI * 2); ctx.stroke(); }
     } else {
       const s = entry.sprite;
       // A foreground canopy/facade fades only while it actually covers the actor.
       const occludes = s.depth > foot.y + 3 && foot.x > s.x + 8 && foot.x < s.x + s.w - 8 && foot.y - 30 > s.y && foot.y < s.y + s.h;
       ctx.globalAlpha = (s.opacity ?? 1) * (occludes && !overview && !s.noFade ? .55 : 1);
-      ctx.drawImage(s.image, s.x, s.y); ctx.globalAlpha = 1;
+      ctx.drawImage(s.image, s.x, s.y);
+      occludeLampLight(lampContext, s.image, s.x, s.y, ctx.globalAlpha);
+      if(lampContext && s.windowLight) {
+        lampContext.save();lampContext.globalAlpha=ctx.globalAlpha;
+        lampContext.drawImage(s.windowLight,s.x,s.y);lampContext.restore();
+      }
+      drawLampBulbs(lampContext, s.pole);
+      ctx.globalAlpha = 1;
     }
   }
   ctx.globalAlpha = .75; ctx.drawImage(scene.wires.image, scene.wires.x, scene.wires.y,scene.wires.w,scene.wires.h); ctx.globalAlpha = 1;
@@ -368,6 +382,7 @@ export function renderWorld(ctx, scene, camera, actor, frames, options) {
     ctx.fillStyle = '#e8dfae65';
     for (const mote of scene.particles) { const p = P(mote.x + Math.sin(time * mote.speed + mote.phase) * 10, mote.y + Math.cos(time * .5 + mote.phase) * 7, mote.z); ctx.fillRect(p.x, p.y, 1.1, 1.1); }
   }
+  finishLighting(ctx, width, height, light, lampContext);
   if (overview) {
     ctx.textAlign = 'center'; ctx.font = `${11 / camera.zoom}px Georgia`; ctx.fillStyle = '#f0e5c1'; ctx.shadowColor = '#14271e'; ctx.shadowBlur = 5;
     const labels = [], lineHeight = 15 / camera.zoom;

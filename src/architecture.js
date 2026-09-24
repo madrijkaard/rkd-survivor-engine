@@ -6,7 +6,16 @@ function P(x,y,z=0){const p=drawingBuilding?buildingPlanPoint(drawingBuilding,x,
 function rng(seed) { let n=seed>>>0;return()=>((n=Math.imul(n,1664525)+1013904223>>>0)/4294967296); }
 function poly(c,points,fill,stroke) { c.beginPath();points.forEach((v,i)=>{const p=P(...v);i?c.lineTo(p.x,p.y):c.moveTo(p.x,p.y);});c.closePath();if(fill){c.fillStyle=fill;c.fill();}if(stroke){c.strokeStyle=stroke;c.lineWidth=.7;c.stroke();} }
 function line(c,a,b,color,width=1) {const p=P(...a),q=P(...b);c.strokeStyle=color;c.lineWidth=width;c.beginPath();c.moveTo(p.x,p.y);c.lineTo(q.x,q.y);c.stroke();}
-function surface(c,image,a,b,d) {const p=P(...a),q=P(...b),r=P(...d);c.save();c.transform((q.x-p.x)/image.width,(q.y-p.y)/image.width,(r.x-p.x)/image.height,(r.y-p.y)/image.height,p.x,p.y);c.drawImage(image,0,0);c.restore();}
+function surface(c,image,a,b,d,lightPass=false) {
+  const p=P(...a),q=P(...b),r=P(...d);c.save();
+  c.transform((q.x-p.x)/image.width,(q.y-p.y)/image.width,(r.x-p.x)/image.height,(r.y-p.y)/image.height,p.x,p.y);
+  if(lightPass) {
+    // The opaque wall hides any farther face before its windows emit light.
+    c.fillStyle='#000';c.fillRect(0,0,image.width,image.height);
+    c.globalCompositeOperation='source-over';
+  }
+  c.drawImage(image,0,0);c.restore();
+}
 function shade(hex,n){const v=parseInt(hex.slice(1),16);return `rgb(${Math.max(0,Math.min(255,(v>>16)+n))},${Math.max(0,Math.min(255,((v>>8)&255)+n))},${Math.max(0,Math.min(255,(v&255)+n))})`;}
 function wall(c,a,b,h,color,base,ratio=.22) {poly(c,[[...a,0],[...b,0],[...b,h],[...a,h]],color,'#414f3a77');if(ratio)poly(c,[[...a,0],[...b,0],[...b,h*ratio],[...a,h*ratio]],base);}
 function roof(c,x,y,w,l,h,kind,color,seed) {
@@ -67,12 +76,14 @@ function garden(c,b) {
   wall(c,[x,y+l],[front,y+l],22,b.color,b.base,0);
   for(let i=0;i<13;i++)plant(c,x+w*(.15+(i%3)*.23),y+l*(.08+i*.065),25,15,71+i);
 }
-export function drawDetailedBuilding(c,b,texture,crossTexture,backTexture) {
+export function drawDetailedBuilding(c,b,texture,crossTexture,backTexture,lightPass=false) {
   const previous=drawingBuilding;drawingBuilding=b;
-  try{return drawBuilding(c,b,texture,crossTexture,backTexture);}
-  finally{drawingBuilding=previous;}
+  c.save();
+  if(lightPass)c.globalCompositeOperation='destination-out';
+  try{return drawBuilding(c,b,texture,crossTexture,backTexture,lightPass);}
+  finally{c.restore();drawingBuilding=previous;}
 }
-function drawBuilding(c,b,texture,crossTexture,backTexture) {
+function drawBuilding(c,b,texture,crossTexture,backTexture,lightPass) {
   const {x,y,depth:w,length:l,height:h}=b;
   if(b.roof==='garden'){garden(c,b);return;}
   const inset=b.frontSetback||(b.fence?24:0),front=b.side==='west'?x+w-inset:x+inset,street=b.side==='west'?x+w:x;
@@ -101,10 +112,10 @@ function drawBuilding(c,b,texture,crossTexture,backTexture) {
   }
   if(crossTexture && (b.crossFacade.face==='maxY'?PROJECTION.d>0:PROJECTION.d<0)) {
     const yy=b.crossFacade.face==='maxY'?y+l:y;
-    surface(c,crossTexture,[x,yy,h],[x+w,yy,h],[x,yy,0]);
+    surface(c,crossTexture,[x,yy,h],[x+w,yy,h],[x,yy,0],lightPass);
   }
   if(!frontVisible) {
-    if(backTexture)surface(c,backTexture,[nearX,y,h],[nearX,y+l,h],[nearX,y,0]);
+    if(backTexture)surface(c,backTexture,[nearX,y,h],[nearX,y+l,h],[nearX,y,0],lightPass);
     if(b.dish)dish(c,x+w*.59,y+l*.82,h+29,b.detail==='green-veranda');
     return;
   }
@@ -116,7 +127,7 @@ function drawBuilding(c,b,texture,crossTexture,backTexture) {
   }
   // Only the street-facing side toward this camera receives its facade.
   // Hidden fronts never appear through the roof in the opposite orientation.
-  surface(c,texture,[front,y,h],[front,y+l,h],[front,y,0]);
+  surface(c,texture,[front,y,h],[front,y+l,h],[front,y,0],lightPass);
   line(c,[front,y,0],[front,y+l,0],'#47513d',1.4);
   if(b.parapet) {
     line(c,[front,y,h],[front,y+l,h],shade(b.color,10),2.5);

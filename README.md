@@ -35,6 +35,7 @@ O jogo não utiliza framework, WebGL ou bibliotecas externas. Os fundos estátic
 - Associação da posição da personagem ao conjunto de oito fotos da área, disponível pela tecla **E**.
 - Bairro atual exibido no cabeçalho a partir dos manifestos, com estrutura para mudanças de bairro e nomes opcionais de construções e monumentos.
 - Filtro retrô, som opcional e controles de toque.
+- Horário sincronizado com o relógio e o fuso do servidor, com sombras solares móveis e postes que acendem às 18:00 e apagam às 05:30. Na câmera inicial, o Sol nasce no canto inferior direito e se põe no superior esquerdo; girar a câmera preserva sua direção no mundo. Cerca de 70% das casas com janelas têm brilho interno quente no mesmo período noturno, sem iluminar paredes ou chão.
 
 | Controle | Ação |
 | --- | --- |
@@ -98,6 +99,8 @@ Acesse [http://127.0.0.1:4173/](http://127.0.0.1:4173/). Aguarde a preparação 
 
 Não é necessário executar `npm install` ou um comando de build. Use o endereço HTTP: abrir `index.html` diretamente não carrega corretamente os módulos e manifestos.
 
+O jogo consulta `/api/time` ao iniciar, a cada minuto e ao voltar à aba. A hora e o fuso vêm da máquina que executa `server.mjs`; o relógio continua avançando entre consultas. Não há controle manual de horário. Após atualizar o código do servidor, reinicie `npm start` e recarregue a página.
+
 ### Se a porta 4173 já estiver em uso
 
 O erro `EADDRINUSE` indica que já existe um processo nessa porta. Primeiro, veja se o jogo já abre no endereço acima. Para iniciar em outra porta, no **PowerShell**:
@@ -123,4 +126,4 @@ Na raiz, em outro terminal se o servidor estiver ativo:
 npm test
 ```
 
-Os testes usam os arquivos locais e não precisam do servidor HTTP. Consulte [tests/AGENTS.md](tests/AGENTS.md) para saber o que cada arquivo verifica.
+Os testes usam os arquivos locais e não precisam de um servidor iniciado manualmente. O teste do relógio abre e encerra seu próprio servidor em uma porta local temporária. Consulte [tests/AGENTS.md](tests/AGENTS.md) para saber o que cada arquivo verifica.

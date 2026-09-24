@@ -16,6 +16,7 @@ A renderização usa **Canvas 2D**. O catálogo descreve posições no chão e a
 | `game.js` | Entrada carregada por `index.html`. Mantém personagem, câmera, caminho, estado de exploração e interface; registra teclado, ponteiro e toque; controla minimapa, janelas de fotos/ajuda, entrada e diálogo do bar, som sintetizado e loop de animação. Inicializa manifestos e cena, sem implementar sozinho a geometria das casas. |
 | `world.js` | Integra os catálogos das três ruas, pontos, fachadas compartilhadas, lugares nomeáveis, árvores, carros, postes, áreas transitáveis e obstáculos. Exporta `routes`, `allPoints`, `buildings`, `places`, `getPlace`, `locationAt`, `imagePath`, `walkable`, `moveActor`, `clearLine` e `findPath`. É o ponto central da localização e navegação. |
 | `map-manifests.js` | Exporta `MAP_DIRECTIONS`, `validateMapManifest` e `loadMapManifests`. Lê `maps/<route.folder>/manifest.json`, valida esquema e associação dos IDs e carrega metadados de rua/bairro/GPS sem alterar posições artísticas. Aceita uma função de fetch injetada para testes. |
+| `server-clock.js` | Consulta `/api/time` sem cache, valida a hora/fuso do servidor e avança a amostra com `performance.now()`. Compensa metade do tempo de ida/volta e compartilha sincronizações concorrentes. Não usa o relógio civil ou fuso do navegador. |
 | `place-names.js` | Cadastro `PLACE_NAMES` por ID estável e função `withPlaceName`. Acrescenta `displayName` opcional e `placeType`, preservando a descrição antiga em `name`. Não cria etiquetas na interface nem altera letreiros desenhados. |
 
 ### Projeção, renderização e movimento
@@ -24,6 +25,9 @@ A renderização usa **Canvas 2D**. O catálogo descreve posições no chão e a
 | --- | --- |
 | `projection.js` | Define as quatro `CAMERA_VIEWS`, a projeção ativa `PROJECTION`, `project`/`unproject`, seleção de câmera e escopos temporários `withCameraView`/`withCrossStreetFrame`. Converte o plano do mundo em tela e permite desenhar fachadas transversais em um referencial local. |
 | `render.js` | Carrega fotografias selecionadas, cria texturas e canvases estáticos, calcula limites e profundidade, prepara as quatro vistas em `createScene`, cria sprites com `createActorFrames` e compõe o quadro em `renderWorld`. Integra desenho das ruas, prédios, vegetação, sombras, fios e interior do bar. |
+| `lighting.js` | Regras puras do horário em minutos, posição artística do Sol, deslocamento das sombras, escurecimento e postes ligados entre 18:00 e 05:29. Define as posições das lâmpadas usadas no desenho e no brilho. |
+| `lighting-render.js` | Projeta volumes do cenário em sombras no chão, preservando plantas inclinadas. Mantém um caminho de sombras por câmera/horário e uma camada de luz do tamanho da tela, com ocultação pelos sprites. Aplica o ambiente noturno; a camada emissiva também recebe as janelas preparadas por `render.js`. |
+| `home-lighting.js` | Seleciona aproximadamente 70% das residências com janelas existentes, por ordenação determinística de IDs. Exclui usos comerciais/públicos e conta fachadas locais, transversais e traseiras uma só vez. |
 | `architecture.js` | `drawDetailedBuilding` projeta as texturas de fachadas, faces laterais/traseiras e telhados no volume do prédio. Usa a planta comum de `building-geometry.js` e a orientação de câmera para decidir faces visíveis. Trata fachadas transversais e de fundos. |
 | `facades.js` | `makeDetailedFacade` desenha a textura plana de uma fachada: pintura, desgaste, portas, janelas, grades, revestimentos e inscrições. As fotos podem contribuir sutilmente com a textura. Usa detalhes específicos de `antonio-facades.js`. |
 | `building-geometry.js` | Fonte comum da planta dos prédios: `buildingFootprint`, `buildingPlanPoint`, `footprintBounds`, `footprintObstacle` e `hitsFootprint`. Suporta retângulos e quadriláteros; a interpolação da planta mantém paredes, cobertura e colisão coerentes em lotes inclinados. |
@@ -55,12 +59,26 @@ A renderização usa **Canvas 2D**. O catálogo descreve posições no chão e a
 ## Fluxo de execução
 
 1. `game.js` importa mundo, renderização, projeção, regras de clique, bar e manifestos. Os catálogos formam o mundo em memória.
-2. `init()` ajusta a tela e aguarda `loadMapManifests(routes)`. O carregador valida todas as ruas antes de modificar metadados; um erro não deve deixar apenas parte das ruas atualizada.
+2. `init()` ajusta a tela e aguarda `loadMapManifests(routes)` e a primeira sincronização de `/api/time`. O carregador valida todas as ruas antes de modificar metadados; um erro não deve deixar apenas parte das ruas atualizada.
 3. `createScene` prepara as quatro vistas usando os mesmos objetos do mundo, com projeções e ordens de profundidade próprias. Fotografias ausentes têm tratamento no carregamento de imagens para permitir desenho de fachada sem essa textura; isso não elimina a necessidade de manter as capturas completas.
 4. A cena e os sprites são disponibilizados ao loop `requestAnimationFrame`. A cada quadro, movimento e câmera são atualizados e as camadas já preparadas são compostas com a personagem.
 5. `updateHud` consulta `locationAt`, atualiza cidade/bairro, minimapa e estado de interação. A janela de E busca os oito arquivos do ponto associado.
 
 O estado da partida é local à página. Não há sincronização entre jogadores, banco de dados ou sistema de salvamento persistente implementado.
+
+## Horário, Sol e postes
+
+O comprimento projetado das sombras usa escala artística de 70% (redução de 30%), inclusive para árvores e personagem. Esse fator ajusta o deslocamento no chão, preservando a direção solar e as plantas dos objetos.
+
+As árvores da Praça da Matriz, identificadas por `plaza: true` em `mendoncaTrees`, recebem mais 30% de redução no comprimento em `lighting-render.js` (49% da projeção original). O ajuste altera apenas a altura do volume usado para sua sombra, sem mudar a árvore desenhada, o tamanho da copa ou as sombras de outros elementos.
+
+Na Praça do Cinema, árvores (incluindo copas que alcançam a borda), arbustos, canteiros, bancos, poste, pavilhão e Cruzeiro do Sul também recebem redução local de 30% sobre a escala global. `cinemaShadowScale` usa os limites de `CINEMA_PLAZA`; tronco e copa compartilham o mesmo fator, assim como todas as partes do monumento. O ajuste vale ao nascer e ao pôr do Sol e mantém os desenhos e as colisões originais.
+
+O horário acompanha o relógio e o fuso da máquina que executa `server.mjs`. A barra manual foi removida. `/api/time` retorna `timestamp` (Unix em milissegundos) e `timezoneOffsetMinutes` (convenção de `Date.getTimezoneOffset`), com `Cache-Control: no-store`. A sincronização acontece na inicialização, a cada 60 segundos e ao recuperar foco/visibilidade. Entre consultas, a amostra avança por tempo monotônico; falhas posteriores preservam esse avanço e a primeira sincronização é obrigatória. Mudanças de fuso/relógio no servidor entram na próxima amostra. `game.js` atualiza a iluminação uma vez por segundo, evitando refazer os caminhos de sombra a cada quadro. `data-time`, `data-lamps-on` e `data-clock-synced` no canvas permitem verificar o estado sem um painel na interface.
+
+O ciclo solar permanece artístico: Sol nasce às 06:00 no canto inferior direito da câmera inicial, passa pelo zênite às 12:00 e se põe às 18:00 no canto superior esquerdo. Sua direção permanece fixa no mundo quando Q gira a câmera. Após alterar `server.mjs`, reinicie o servidor para disponibilizar a nova rota.
+
+Sombras solares ficam opostas ao Sol, alongam perto do horizonte e desaparecem à noite. Não devem ser gravadas no chão estático. As plantas compartilhadas também alimentam seus volumes; objetos complexos usam aproximações, e a escultura do cinema tem pedestal e braços separados. O piso interno do bar cobre sombras externas. O ambiente clareia entre 05:00 e 07:00 e escurece gradualmente entre 15:00 e 19:00. Os postes acendem exatamente às 18:00 e apagam às 05:30; essa regra é independente da transição suave do ambiente. No mesmo período, 17 das 24 residências com janelas existentes (70%, arredondado) recebem luz interna quente; não são criadas aberturas em muros ou fachadas vedadas. `home-lighting.js` mantém a escolha determinística por ID, independente da câmera e da ordem do catálogo. `makeDetailedFacade(..., lightPass)` desenha somente emissão nas janelas, contida pelas molduras, grades e frestas das venezianas de madeira. `drawDetailedBuilding(..., lightPass)` reutiliza projeção e visibilidade das fachadas, mascarando cercas, vegetação e outros detalhes próprios. Os canvases emissivos são preparados nas quatro vistas e compostos na ordem de profundidade, com a mesma transparência do prédio; não há halo externo de janela nem iluminação do chão por casas. A camada de brilho é ocultada na mesma ordem de profundidade dos sprites para não iluminar fachadas por cima.
 
 ## Três sistemas de coordenadas
 

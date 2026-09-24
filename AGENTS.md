@@ -18,7 +18,7 @@ Leia este guia a partir da raiz. Os caminhos aqui são relativos a ela. Os guias
 | `README.md` | Apresentação geral para quem quer conhecer ou executar o jogo; contém tecnologias, recursos, estrutura e instruções de execução. |
 | `index.html` | Entrada do navegador. Declara os canvases do cenário/transição, cabeçalho, minimapa, controles, diálogo do bar, janelas de ajuda/fotos e carregamento. Importa `src/game.js` como módulo ES. IDs e elementos são usados por `game.js` e `style.css`. |
 | `style.css` | Aparência e disposição da interface, adaptação a telas menores, controles de toque, janelas e efeitos visuais retrô. O desenho das casas e do chão fica nos módulos Canvas, não neste CSS. |
-| `server.mjs` | Servidor estático com módulos nativos do Node. Serve a raiz por HTTP em `127.0.0.1`, aceita GET/HEAD, define tipos de conteúdo e evita cache persistente. Usa `PORT` ou 4173. Não é um servidor de partidas, autenticação ou multiplayer. |
+| `server.mjs` | Servidor HTTP com módulos nativos do Node. Serve arquivos e `/api/time` (hora e fuso locais do servidor), em `127.0.0.1`, aceita GET/HEAD e evita cache persistente. Usa `PORT` ou 4173. Exporta `createGameServer` para testes. Não é um servidor de partidas, autenticação ou multiplayer. |
 | `package.json` | Define módulos ES (`type: module`), Node >= 20 e comandos `npm start` e `npm test`. O pacote é privado e não possui dependências externas. |
 | `package-lock.json` | Registro do pacote para o npm, em formato lockfile v3. Atualmente contém apenas o próprio projeto; mantenha-o coerente com mudanças feitas pelo npm. |
 
@@ -70,6 +70,7 @@ As posições geográficas WGS84 do manifesto e as posições artísticas `x/y` 
 | Planta e interior do Bar O Péricles | `src/bar-layout.js` e `src/bar-render.js` |
 | Posição da Praça do Cinema e do Cruzeiro do Sul | `src/cinema-plaza.js`; forma da escultura em `src/cinema-monument.js` |
 | Controles, interação, cabeçalho e som | `src/game.js`, com gesto de clique em `src/click-navigation.js` |
+| Horário, sombras solares, postes e janelas noturnas | `src/lighting.js`, `src/lighting-render.js`, `src/home-lighting.js` e `src/server-clock.js`; `/api/time` em `server.mjs`, sincronização em `src/game.js` |
 | Projeção e desenho comuns | `src/projection.js`, `src/render.js`, `src/architecture.js`, `src/facades.js` e `src/building-geometry.js` |
 
 ## Cuidados ao evoluir o jogo

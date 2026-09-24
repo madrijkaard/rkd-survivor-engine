@@ -8,15 +8,18 @@ Este diretório reúne os testes automatizados de dados e comportamento do jogo.
 npm test
 ```
 
-O comando corresponde a `node --test tests/*.test.mjs`. Usa o executor `node:test`, assertivas e módulos nativos do Node, sem framework externo. Requer Node.js 20 ou posterior; não precisa de `npm install`, navegador, servidor HTTP nem acesso ao Street View.
+O comando corresponde a `node --test tests/*.test.mjs`. Usa o executor `node:test`, assertivas e módulos nativos do Node, sem framework externo. Requer Node.js 20 ou posterior; não precisa de `npm install`, navegador, servidor HTTP iniciado manualmente nem acesso ao Street View. O teste do endpoint inicia e encerra um servidor em porta efêmera de `127.0.0.1`.
 
-Os testes importam a implementação real de `src/` e leem fotografias e manifestos locais em `maps/`. Não há uma pasta separada de fixtures. A suíte contém atualmente **sete arquivos de testes, com 36 casos**; `AGENTS.md` é este guia e não é executado pelo runner.
+Os testes importam a implementação real de `src/` e leem fotografias e manifestos locais em `maps/`. Não há uma pasta separada de fixtures. A suíte contém atualmente **dez arquivos de testes, com 48 casos**; `AGENTS.md` é este guia e não é executado pelo runner.
 
 ## Função e cobertura de cada arquivo
 
 | Arquivo | Casos atuais | O que verifica |
 | --- | --- | --- |
 | `world.test.mjs` | 7 | Existência das oito fotos dos 17 pontos da Simeão; ida e volta da projeção dos cliques; continuidade da rua; limites e obstáculos; busca de caminho desviando de canteiro; percurso completo de ida e volta; base inteira do Cruzeiro do Sul dentro da praça e passagem ao redor. |
+| `home-lighting.test.mjs` | 2 | Proporção de casas selecionadas, estabilidade da seleção por ID, exclusão de comércio/serviços e de fachadas sem janelas, incluindo casas transversais. |
+| `lighting.test.mjs` | 5 | Limites exatos de acendimento dos postes; direção oposta ao Sol e comprimento das sombras; transição contínua para noite; preservação da posição mundial nas quatro câmeras; posições das lâmpadas. |
+| `server-clock.test.mjs` | 5 | Endpoint sem cache e métodos HTTP; fuso do servidor, latência e meia-noite; mudança dos postes por avanço real; recuperação após falhas; sincronização concorrente e rejeição de dados inválidos. |
 | `bar.test.mjs` | 3 | Entrada no bar, desvio das mesas, chegada ao balcão e saída; passagem pelas duas portas e bloqueio no restante da fachada; colisão com mesas, balcão e Péricles. |
 | `camera.test.mjs` | 4 | Recuperação dos destinos da rua/bar nas duas primeiras perspectivas; troca de profundidade sem espelhar o mundo; preservação da personagem, construções, colisões e caminho ao girar; restauração da câmera depois de preparar outra vista. |
 | `click-navigation.test.mjs` | 4 | Primeiro clique caminha e segundo clique rápido corre ao mesmo destino mesmo com deslocamento de câmera; cliques lentos, distantes ou em outra superfície não iniciam corrida; reset do gesto e duplo toque; deslocamentos de corrida respeitam mesas e portas. |
@@ -32,6 +35,7 @@ As verificações de fotos incluem existência/estrutura e, nas ruas adicionadas
 | --- | --- |
 | Manifestos, bairro, IDs ou caminhos das fotos | `node --test tests/manifests.test.mjs` e o arquivo da rua afetada. |
 | Geometria geral, praça ou posição do monumento | `node --test tests/world.test.mjs` |
+| Horário, sombras e iluminação dos postes | `node --test tests/lighting.test.mjs tests/server-clock.test.mjs` e comparação com `/api/time` no navegador. |
 | Planta ou interação navegável do bar | `node --test tests/bar.test.mjs tests/click-navigation.test.mjs` |
 | Projeção e câmera | `node --test tests/camera.test.mjs tests/mendonca.test.mjs tests/antonio.test.mjs` |
 | Clique duplo ou velocidades | `node --test tests/click-navigation.test.mjs tests/bar.test.mjs` |
@@ -63,4 +67,8 @@ Quando uma alteração afetar desenho ou interação de tela, abra `npm start` e
 4. Entrada pelas duas portas do bar, circulação pelas mesas, conversa com Péricles e saída.
 5. Locais alterados: continuidade dos lotes na curva, entradas visíveis da escola, ruas livres junto à igreja e monumento dentro da praça.
 
-Use somente os itens relevantes à mudança. Uma suíte aprovada confirma os contratos cobertos, mas não substitui essa inspeção visual. Alterações nos scripts de `reference/` também exigem conferência própria de seus arquivos de saída; não estão cobertas integralmente pelos 36 casos atuais.
+6. Horário automático: compare `data-time` do canvas com `/api/time` considerando o fuso enviado. Confira ausência da barra manual, continuidade após voltar à aba, quatro câmeras, vista aérea e telas pequenas. Os limites 05:29/05:30 e 17:59/18:00 são verificados com relógio injetado nos testes, sem alterar a hora do sistema.
+
+7. Janelas noturnas: conferir brilho interno quente nas casas selecionadas, grades/venezianas preservadas, ausência de luz nas paredes/chão e ocultação por árvores/prédios nas quatro câmeras e vista aérea. Casas sem janelas e construções públicas/comerciais não recebem esse efeito.
+
+Use somente os itens relevantes à mudança. Uma suíte aprovada confirma os contratos cobertos, mas não substitui essa inspeção visual. Alterações nos scripts de `reference/` também exigem conferência própria de seus arquivos de saída; não estão cobertas integralmente pelos 48 casos atuais.

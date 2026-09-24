@@ -6,6 +6,8 @@ import { CAMERA_VIEWS, getCameraView, setCameraView } from './projection.js';
 import { createClickNavigation, WALK_SPEED, RUN_SPEED } from './click-navigation.js';
 import { CHURCH_PLAZA, PLAZA_CHURCH, plazaRoads, mendoncaPoints } from './mendonca-data.js';
 import { antonioPoints, ANTONIO_END, CINEMA_GARDEN } from './antonio-data.js';
+import { lightingAt, formatTime } from './lighting.js';
+import { createServerClock } from './server-clock.js';
 
 const $ = id => document.getElementById(id);
 const surface = $('scene'), ctx = surface.getContext('2d', { alpha: false });
@@ -21,6 +23,27 @@ let turnAnimation;
 let lastTime = 0, elapsed = 0, hudTime = 0, arrivalShown = false, arrivalTimer = 0, toastTimer;
 let sound = null, soundEnabled = false, footstepTimer = 0;
 let talkRequested = false;
+const serverClock = createServerClock();
+let lighting, lightingSecond = -1;
+
+function updateTime() {
+  const second = Math.floor(serverClock.minutes() * 60);
+  if (second === lightingSecond) return;
+  lightingSecond = second;
+  lighting = lightingAt(second / 60);
+  surface.dataset.time = formatTime(lighting.minutes);
+  surface.dataset.lampsOn = String(lighting.lampsOn);
+}
+async function syncTime() {
+  try {
+    await serverClock.sync();
+    updateTime();
+    surface.dataset.clockSynced = 'true';
+  } catch {
+    // Keep advancing the last server sample during a temporary outage.
+    surface.dataset.clockSynced = 'false';
+  }
+}
 
 function resize() {
   clickNavigation.reset();
@@ -325,12 +348,13 @@ function step(dt) {
   if (arrivalTimer > 0) { arrivalTimer -= dt; if (arrivalTimer <= 0) $('arrival').hidden = true; }
 }
 function animate(time) {
+  updateTime();
   const dt = Math.min(.05, (time - lastTime) / 1000 || 0); lastTime = time; elapsed += dt;
   step(dt); taps.clear();
   const goal = cameraGoal(), ease = 1 - Math.exp(-dt * (overview ? 5 : 7));
   for (const key of ['x', 'y', 'zoom']) camera[key] += (goal[key] - camera[key]) * ease;
   ctx.imageSmoothingEnabled = !retro;
-  renderWorld(ctx, scene, camera, actor, frames, { width: surface.width, height: surface.height, time: elapsed, overview, path });
+  renderWorld(ctx, scene, camera, actor, frames, { width: surface.width, height: surface.height, time: elapsed, overview, path, lighting });
   positionPericlesButton();
   hudTime += dt; if (hudTime > .12) { updateHud(); hudTime = 0; }
   requestAnimationFrame(animate);
@@ -339,13 +363,18 @@ window.addEventListener('resize', resize);
 async function init() {
   try {
     resize();
-    await loadMapManifests(routes);
+    await Promise.all([loadMapManifests(routes), serverClock.sync()]);
+    updateTime();
+    surface.dataset.clockSynced = 'true';
     const prepared = await createScene(progress => {
       $('loadFill').style.width = `${progress * 100}%`;
       $('loadStatus').textContent = progress < .78 ? 'Lendo as fachadas das três ruas…' : 'Preparando as quatro vistas do cenário…';
     });
     sceneViews=prepared.views;scene=sceneViews[getCameraView()];
     frames = createActorFrames(); Object.assign(camera, cameraGoal()); updateHud();
+    setInterval(syncTime, 60000);
+    window.addEventListener('focus', syncTime);
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) void syncTime(); });
     surface.dataset.ready = 'true'; surface.dataset.loadedPhotos = scene.photosCount;
     $('loadFill').style.width = '100%'; $('loading').classList.add('finished');
     setTimeout(() => $('loading').remove(), 900);
