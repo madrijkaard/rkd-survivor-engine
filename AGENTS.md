@@ -10,6 +10,7 @@ Leia este guia a partir da raiz. Os caminhos aqui são relativos a ela. Os guias
 
 | Caminho | Função no projeto |
 | --- | --- |
+| `.agents/skills/` | Skills locais do projeto. `expandir-ate-a-proxima-esquina/SKILL.md` orienta captura, registro geográfico e integração de ruas ao cenário. `verificar-semelhanca-grafico-com-fotos/SKILL.md` compara fotos de uma única rua com o jogo e corrige divergências visuais. `commit-e-push-das-alteracoes/SKILL.md` organiza mudanças por assunto, cria commits com mensagens específicas e confirma o push ao remoto. |
 | `maps/` | Dados usados pelo jogo: fotografias originais e `manifest.json` de cada rua. São 66 pontos e 528 fotos, com oito direções por ponto. Não é uma pasta de resultados descartáveis. |
 | `reference/` | Material de desenvolvimento: scripts de captura e geração, levantamentos de fachadas, montagens para comparação e capturas históricas do jogo. Não é importado durante a execução do jogo, mas preserva ferramentas e evidências da reconstrução. |
 | `src/` | Módulos JavaScript do navegador: catálogos do cenário, projeção, renderização, movimento, colisões, localização, interface e áudio. Alguns módulos puros também são usados pelos testes e scripts. |
