@@ -1,10 +1,10 @@
-# Simeão — uma rua em Codó
+# Codó Sobrevive
 
 Um passeio por ruas de Codó, Maranhão, transformadas em um cenário navegável com a estética dos jogos de PlayStation 1.
 
 ## 1 - Sobre o projeto
 
-**Simeão** é um jogo de exploração em terceira pessoa, com visão aérea oblíqua e gráficos 2D pré-renderizados, inspirado na apresentação de jogos como *Parasite Eve*.
+**Codó Sobrevive** é um jogo de exploração em terceira pessoa, com visão aérea oblíqua e gráficos 2D pré-renderizados, inspirado na apresentação de jogos como *Parasite Eve*.
 
 O cenário conecta as ruas **Simeão de Macedo**, **Cônego Mendonça** e **Antônio Alexandre**, no bairro **Centro**, com retorno pela Vinte e Oito de Julho. A reconstrução usa 416 fotografias do Google Street View, distribuídas em 52 pontos, para representar casas, fachadas, árvores, praças e estabelecimentos.
 

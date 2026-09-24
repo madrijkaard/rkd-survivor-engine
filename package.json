@@ -1,9 +1,9 @@
 {
-  "name": "simeao-ps1-street",
+  "name": "codo-sobrevive",
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Cenário 2D navegável da Rua Simeão de Macedo, Codó/MA.",
+  "description": "Codó Sobrevive — jogo de exploração com cenário 2D navegável em Codó/MA.",
   "scripts": {
     "start": "node server.mjs",
     "test": "node --test tests/*.test.mjs"

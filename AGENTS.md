@@ -2,7 +2,7 @@
 
 ## Finalidade e escopo
 
-Este projeto é **Simeão — uma rua em Codó**, um jogo de exploração local, em terceira pessoa, com cenário 2D inspirado na apresentação do PS1. Reconstrói artisticamente três ruas do bairro Centro, em Codó: Simeão de Macedo, Cônego Mendonça e Antônio Alexandre. A ligação pela Vinte e Oito de Julho fecha o percurso; ela não tem um conjunto independente de capturas mapeadas.
+Este projeto é **Codó Sobrevive**, um jogo de exploração local, em terceira pessoa, com cenário 2D inspirado na apresentação do PS1. Reconstrói artisticamente três ruas do bairro Centro, em Codó: Simeão de Macedo, Cônego Mendonça e Antônio Alexandre. A ligação pela Vinte e Oito de Julho fecha o percurso; ela não tem um conjunto independente de capturas mapeadas.
 
 Leia este guia a partir da raiz. Os caminhos aqui são relativos a ela. Os guias de [maps](maps/AGENTS.md), [reference](reference/AGENTS.md), [src](src/AGENTS.md) e [tests](tests/AGENTS.md) detalham suas respectivas áreas. Ao alterar a estrutura ou um contrato descrito, atualize também a documentação correspondente.
 
