@@ -38,6 +38,9 @@ A renderização usa **Canvas 2D**. O catálogo descreve posições no chão e a
 
 | Arquivo | Responsabilidade e relações |
 | --- | --- |
+| `simeao-points.js` | Gerado por `generate-simeao-points.mjs`: 31 posições, preservando as 17 originais e usando distância geográfica × 14 na extensão. |
+| `simeao-extension.js` | Casas, muros, escola, árvores, carros, postes e limite na Henrique Figueiredo, baseados nos pontos 18–31. Atualiza os dois volumes compartilhados da esquina sem duplicá-los. `residential: false` exclui serviços/muros da luz de janelas. |
+| `simeao-facades.js` | Motivos observados na extensão: pintura do Cristo Rei, revestimentos amadeirados, frisos e tijolos expostos. |
 | `street-data.js` | Catálogo manual da Simeão: `streetBuildings`, `specialBuildings`, muros, lote de demolição, recuos, arbustos e lixeiras. Contém fachadas dos dois lados, cores, aberturas, alturas, coberturas e referências fotográficas. |
 | `mendonca-points.js` | **Arquivo gerado** dos 15 pontos da Cônego Mendonça. O gerador transforma a distância acumulada entre coordenadas geográficas em posições no eixo transversal do cenário. É enriquecido com descrições em `world.js`. |
 | `mendonca-data.js` | Geometria e catálogo da Cônego: `CROSS_Y`, extensão/limites do mundo, construções, fachadas de esquina, árvores e postes, praça da igreja, nave, torre, bancos e monumento da praça. Define também suas ruas de contorno. |
@@ -78,7 +81,7 @@ O horário acompanha o relógio e o fuso da máquina que executa `server.mjs`. A
 
 O ciclo solar permanece artístico: Sol nasce às 06:00 no canto inferior direito da câmera inicial, passa pelo zênite às 12:00 e se põe às 18:00 no canto superior esquerdo. Sua direção permanece fixa no mundo quando Q gira a câmera. Após alterar `server.mjs`, reinicie o servidor para disponibilizar a nova rota.
 
-Sombras solares ficam opostas ao Sol, alongam perto do horizonte e desaparecem à noite. Não devem ser gravadas no chão estático. As plantas compartilhadas também alimentam seus volumes; objetos complexos usam aproximações, e a escultura do cinema tem pedestal e braços separados. O piso interno do bar cobre sombras externas. O ambiente clareia entre 05:00 e 07:00 e escurece gradualmente entre 15:00 e 19:00. Os postes acendem exatamente às 18:00 e apagam às 05:30; essa regra é independente da transição suave do ambiente. No mesmo período, 17 das 24 residências com janelas existentes (70%, arredondado) recebem luz interna quente; não são criadas aberturas em muros ou fachadas vedadas. `home-lighting.js` mantém a escolha determinística por ID, independente da câmera e da ordem do catálogo. `makeDetailedFacade(..., lightPass)` desenha somente emissão nas janelas, contida pelas molduras, grades e frestas das venezianas de madeira. `drawDetailedBuilding(..., lightPass)` reutiliza projeção e visibilidade das fachadas, mascarando cercas, vegetação e outros detalhes próprios. Os canvases emissivos são preparados nas quatro vistas e compostos na ordem de profundidade, com a mesma transparência do prédio; não há halo externo de janela nem iluminação do chão por casas. A camada de brilho é ocultada na mesma ordem de profundidade dos sprites para não iluminar fachadas por cima.
+Sombras solares ficam opostas ao Sol, alongam perto do horizonte e desaparecem à noite. Não devem ser gravadas no chão estático. As plantas compartilhadas também alimentam seus volumes; objetos complexos usam aproximações, e a escultura do cinema tem pedestal e braços separados. O piso interno do bar cobre sombras externas. O ambiente clareia entre 05:00 e 07:00 e escurece gradualmente entre 15:00 e 19:00. Os postes acendem exatamente às 18:00 e apagam às 05:30; essa regra é independente da transição suave do ambiente. No mesmo período, 20 das 28 residências com janelas existentes (70%, arredondado) recebem luz interna quente; não são criadas aberturas em muros ou fachadas vedadas. `home-lighting.js` mantém a escolha determinística por ID, independente da câmera e da ordem do catálogo. `makeDetailedFacade(..., lightPass)` desenha somente emissão nas janelas, contida pelas molduras, grades e frestas das venezianas de madeira. `drawDetailedBuilding(..., lightPass)` reutiliza projeção e visibilidade das fachadas, mascarando cercas, vegetação e outros detalhes próprios. Os canvases emissivos são preparados nas quatro vistas e compostos na ordem de profundidade, com a mesma transparência do prédio; não há halo externo de janela nem iluminação do chão por casas. A camada de brilho é ocultada na mesma ordem de profundidade dos sprites para não iluminar fachadas por cima.
 
 ## Três sistemas de coordenadas
 
@@ -96,7 +99,7 @@ Girar câmera muda projeção, faces visíveis e profundidade. Não rotacione os
 
 `routes` contém `id`, `folder`, `name` e `points`; após carregar manifestos, também contém `city` e `neighborhood`. Os pontos recebem `pano`, `latitude`, `longitude` e o bairro efetivo. A rota `simeao` usa a pasta `simeao-de-macedo`; as demais têm ID igual à pasta.
 
-`locationAt(x, y)` compara a distância aos segmentos dos percursos para escolher uma rua e então procura seu ponto mais próximo. Retorna `{ route, point, city, neighborhood }`. Na junção, a proximidade é geométrica; não existe uma planta cadastral de bairros. `pointAt(y)` é uma função legada limitada aos 17 pontos da Simeão: não a use para localizar o mundo inteiro.
+`locationAt(x, y)` compara a distância aos segmentos dos percursos para escolher uma rua e então procura seu ponto mais próximo. Retorna `{ route, point, city, neighborhood }`. Em empate entre segmentos no cruzamento, vence a rota cujo ponto fotografado estiver mais perto. Na junção, a proximidade é geométrica; não existe uma planta cadastral de bairros. `pointAt(y)` é uma função de proximidade limitada aos 31 pontos da Simeão: não a use para localizar o mundo inteiro.
 
 `imagePath(point, direction, street)` recebe o número do ponto e da direção (1–8). Preserve essa associação quando alterar catálogos. Os campos `title`, `detail` e `area` dos pontos continuam sendo metadados mesmo sem o antigo painel inferior esquerdo. O cabeçalho deve usar o bairro carregado, e E deve continuar funcionando.
 
@@ -131,14 +134,15 @@ Para nomear um objeto existente, acrescente seu ID em `PLACE_NAMES`. `withPlaceN
 
 ## Arquivos gerados e mudanças frequentes
 
-`mendonca-points.js` e `antonio-points.js` são saídas destes comandos, executados na raiz:
+`simeao-points.js`, `mendonca-points.js` e `antonio-points.js` são saídas destes comandos, executados na raiz:
 
 ```sh
+node reference/scripts/generate/generate-simeao-points.mjs
 node reference/scripts/generate/generate-mendonca-points.mjs
 node reference/scripts/generate/generate-antonio-points.mjs
 ```
 
-Os comandos **sobrescrevem** esses dois arquivos. Corrija a entrada em `maps/` ou a transformação no gerador conforme a causa, em vez de manter uma correção apenas na saída que será perdida na próxima geração. A Simeão mantém suas posições originais em `world.js` e não tem um gerador equivalente. Gerar pontos não gera casas, descrições nem colisões automaticamente.
+Os comandos **sobrescrevem** esses três arquivos. Corrija a entrada em `maps/` ou a transformação no gerador conforme a causa, em vez de manter uma correção apenas na saída que será perdida na próxima geração. A Simeão preserva as posições 1–17 e prolonga a linha até o ponto 31. `world.js` combina os limites originais com o novo fim; `game.js` adapta o minimapa e a chegada à Henrique Figueiredo. Gerar pontos não gera casas, descrições nem colisões automaticamente.
 
 | Alteração | Comece por | Verifique também |
 | --- | --- | --- |

@@ -1,25 +1,29 @@
 import { streetBuildings, specialBuildings } from './street-data.js';
+import { simeaoPoints } from './simeao-points.js';
+import { SIMEAO_END, HENRIQUE_ROAD, simeaoCornerUpdates, simeaoExtensionBuildings, simeaoExtensionTrees, simeaoExtensionPoles, simeaoExtensionCars } from './simeao-extension.js';
 import { BAR, barWalkAreas, barObstacles } from './bar-layout.js';
 import { antonioPoints, antonioBuildings, antonioCornerFacades, alignAntonioCorner, CINEMA_BACK, onAntonioRoad, CINEMA_GARDEN, JULHO_ROAD, antonioTrees, antonioPoles, antonioCars, antonioBikes } from './antonio-data.js';
 import { footprintObstacle, hitsFootprint } from './building-geometry.js';
 import { CINEMA_PLAZA, CINEMA_MONUMENT } from './cinema-plaza.js';
 import { withPlaceName } from './place-names.js';
 import { CROSS_Y, MENDONCA_END, CHURCH_PLAZA, plazaRoads, plazaSeats, plazaStatue, mendoncaPoints, mendoncaBuildings, cornerFacades, mendoncaTrees, mendoncaPoles } from './mendonca-data.js';
-export { CROSS_Y, MENDONCA_END, WORLD_BOUNDS } from './mendonca-data.js';
+import { WORLD_BOUNDS as baseBounds } from './mendonca-data.js';
+export { CROSS_Y, MENDONCA_END } from './mendonca-data.js';
+export const WORLD_BOUNDS = {...baseBounds,h:Math.max(baseBounds.h,SIMEAO_END+320-baseBounds.y)};
 // Unidade de desenho: aproximadamente 14 pixels por metro.
-// A numeração preserva maps/simeao-de-macedo/ponto-01 … ponto-17.
+// Pontos 01–17 originais preservados; 18–31 seguem até a Henrique Figueiredo.
 export const STEP = 140;
-export const END = 2300;
+export const END = SIMEAO_END;
 export const START = { x: 0, y: 30 };
 export { PROJECTION, project, unproject } from './projection.js';
 export const DIRECTIONS = ['N', 'NE', 'L', 'SE', 'S', 'SO', 'O', 'NO'];
 
-export function pointAt(y) { return Math.max(1, Math.min(17, 1 + Math.round(y / STEP))); }
+export function pointAt(y) { return simeaoPoints.reduce((best,p)=>Math.abs(p.y-y)<Math.abs(best.y-y)?p:best).id; }
 export function imagePath(point, direction = 1, street = 'simeao') {
   const folder = street === 'simeao' ? 'simeao-de-macedo' : street;
   return `maps/${folder}/ponto-${String(point).padStart(2, '0')}/${direction}.jpg`;
 }
-export const points = [
+const simeaoDescriptions = [
   ['O começo da rua', 'PRAÇA DO CINEMA', 'Canteiros circulares, árvores e o antigo cinema.'],
   ['À sombra da praça', 'PRAÇA DO CINEMA', 'O piso de pedra encontra as casas de portas baixas.'],
   ['O fim dos canteiros', 'PRAÇA DO CINEMA', 'O pequeno pavilhão amarelo fica à direita.'],
@@ -37,7 +41,22 @@ export const points = [
   ['O Bar O Péricles', 'ÚLTIMO TRECHO', 'A fachada creme e azul do bar fica à esquerda, diante da garagem cinza.'],
   ['À porta do bar', 'ÚLTIMO TRECHO', 'Entre no Bar O Péricles ou siga até a fachada laranja da autoescola.'],
   ['Autoescola Bom Pastor', 'A LIGAÇÃO ENTRE AS RUAS', 'Vire junto à autoescola para explorar a Rua Cônego Mendonça.'],
-].map(([title, area, detail], i) => ({ id: i + 1, x:0, y: i * STEP, title, area, detail, street:'simeao' }));
+  ['Além da Cônego', 'CONTINUAÇÃO DA SIMEÃO', 'A loja de chaves fica à direita; o muro branco continua do outro lado.'],
+  ['O muro amarelo', 'CONTINUAÇÃO DA SIMEÃO', 'Árvore e muro amarelo com faixa clara, diante do muro branco comprido.'],
+  ['Azulejo e vinho', 'CONTINUAÇÃO DA SIMEÃO', 'Casa de cerâmica bege e garagem vinho com frisos brancos.'],
+  ['A casa verde de madeira', 'CONTINUAÇÃO DA SIMEÃO', 'Porta e janela verdes, telhado aparente e portões diagonais do outro lado.'],
+  ['Varanda e pedra', 'CONTINUAÇÃO DA SIMEÃO', 'Sobrado de varanda vazada diante das garagens claras e do revestimento de pedra.'],
+  ['Tadeu Santos Advogados', 'CONTINUAÇÃO DA SIMEÃO', 'Fachada amadeirada diante do início da pintura colorida do colégio.'],
+  ['Colégio Cristo Rei', 'CONTINUAÇÃO DA SIMEÃO', 'Azul, salmão e amarelo na fachada comprida, com entrada e portão cinza.'],
+  ['Depois do colégio', 'CONTINUAÇÃO DA SIMEÃO', 'Portão preto e branco, reboco gasto e árvores atrás do muro oposto.'],
+  ['Grades radiais', 'CONTINUAÇÃO DA SIMEÃO', 'Casa cinza clara de grades curvas, frisos brancos e calçada elevada.'],
+  ['A garagem antiga', 'CONTINUAÇÃO DA SIMEÃO', 'Portão branco e reboco antigo, diante da tela coberta por vegetação.'],
+  ['Entre os muros', 'CONTINUAÇÃO DA SIMEÃO', 'Parede alta e muro com tijolos expostos; árvores ao fundo.'],
+  ['O portão cinza', 'CONTINUAÇÃO DA SIMEÃO', 'Portão de metal no muro de tijolos e trepadeiras na tela alta.'],
+  ['A próxima esquina', 'CONTINUAÇÃO DA SIMEÃO', 'Os muros terminam adiante, junto à Rua Henrique Figueiredo.'],
+  ['Rua Henrique Figueiredo', 'A PRÓXIMA ESQUINA', 'Um bar de base escura e a casa verde marcam o cruzamento.'],
+];
+export const points=simeaoPoints.map((p,i)=>{const [title,area,detail]=simeaoDescriptions[i];return {...p,title,area,detail,street:'simeao'};});
 
 const mendoncaDescriptions=[
   ['A esquina da autoescola','A lateral laranja da autoescola encontra a loja de chaves e o Bar O Péricles.'],
@@ -91,7 +110,13 @@ export function locationAt(x,y) {
     const a=r.points[i],dx=b.x-a.x,dy=b.y-a.y,t=Math.max(0,Math.min(1,((x-a.x)*dx+(y-a.y)*dy)/(dx*dx+dy*dy)));
     return Math.hypot(x-a.x-t*dx,y-a.y-t*dy);
   }));
-  const route=routes.reduce((best,r)=>distanceToRoute(r)<distanceToRoute(best)?r:best);
+  const nearestPointDistance=r=>Math.min(...r.points.map(p=>Math.hypot(p.x-x,p.y-y)));
+  // At a true intersection both route segments have zero distance. Preserve the
+  // photograph anchored closest to the crossing instead of depending on order.
+  const route=routes.reduce((best,r)=>{
+    const distance=distanceToRoute(r),previous=distanceToRoute(best);
+    return distance<previous-1e-6 || Math.abs(distance-previous)<=1e-6&&nearestPointDistance(r)<nearestPointDistance(best)?r:best;
+  });
   const point=route.points.reduce((best,p)=>Math.hypot(p.x-x,p.y-y)<Math.hypot(best.x-x,best.y-y)?p:best);
   return {route,point,city:route.city??null,neighborhood:point.neighborhood??route.neighborhood??null};
 }
@@ -101,12 +126,13 @@ export const buildings = [...streetBuildings, ...specialBuildings].map(b=>({...b
   ...(b.id==='e15-autoescola-bom-pastor'?{roof:'tile'}:{}),
   ...(b.id==='corner-shop'?{color:'#40596b',base:'#465e6a',pattern:'small-tile',name:'HMB Chaves e Carimbos',signs:b.signs.map(s=>({...s,text:s.text==='HM'?'HMB':s.text}))}:{}),
   ...(b.id==='cinema'?{depth:370,length:360,backFacade:CINEMA_BACK}:{}),
+  ...(simeaoCornerUpdates[b.id]||{}),
 })).concat(mendoncaBuildings.map(b=>{
   const crossFacade=antonioCornerFacades[b.id];
   if(!crossFacade)return b;
   const local={...b.local,crossFacade,...(b.id==='cm-final-clinica'?{depth:288}:{})};
   return {...b,local,y:CROSS_Y-local.x-local.depth,length:local.depth};
-}),antonioBuildings).map(b=>{
+}),antonioBuildings,simeaoExtensionBuildings).map(b=>{
   if(b.id==='cinema'||b.id==='cm-s05-igreja-familia')return alignAntonioCorner(b,'west',CROSS_Y);
   if(b.id==='cm-final-clinica')return alignAntonioCorner(b,'east',CROSS_Y);
   return b;
@@ -128,6 +154,7 @@ export const places = [
 export function getPlace(id) { return places.find(place=>place.id===id) ?? null; }
 
 export const trees = [
+  ...simeaoExtensionTrees,
   ...antonioTrees,
   ...mendoncaTrees,
   { x:132,y:128,size:27,height:43,kind:'sapling',seed:20 },
@@ -144,6 +171,7 @@ export const trees = [
   { x:193,y:1931,size:100,height:133,kind:'palm',seed:61 },
 ];
 export const cars = [
+  ...simeaoExtensionCars,
   ...antonioCars,
   { x: -49, y: 140, color: '#d0d2c6', seed: 7 },
   { x: -49, y: 244, color: '#355c83', seed: 8 },
@@ -152,6 +180,7 @@ export const cars = [
 ];
 export const benches = [{ x:346,y:289,w:38,h:10 },{ x:379,y:244,w:35,h:10 },{ x:341,y:342,w:35,h:10 }];
 export const poles = [
+  ...simeaoExtensionPoles,
   ...antonioPoles,
   { x:311,y:165,height:170,lamp:true },
   { x:-72,y:157,height:147 },{ x:-72,y:548,height:156 },
@@ -161,6 +190,7 @@ export const poles = [
 ];
 
 export const walkAreas = [
+  {x:-77,y:CROSS_Y,w:154,h:SIMEAO_END+60-CROSS_Y},HENRIQUE_ROAD,
   CINEMA_GARDEN,JULHO_ROAD,
   { x: -77, y: -95, w: 154, h: 2435 },
   CINEMA_PLAZA,

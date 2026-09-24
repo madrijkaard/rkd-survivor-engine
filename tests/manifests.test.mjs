@@ -23,7 +23,7 @@ test('cada rua tem manifesto com bairro, rua, coordenadas e oito fotos por ponto
     }
     total += manifest.points.length;
   }
-  assert.equal(total, 52);
+  assert.equal(total, 66);
 });
 
 test('carregar os manifestos preserva as posições e as referências do cenário', async () => {

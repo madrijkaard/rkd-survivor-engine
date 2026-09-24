@@ -4,9 +4,9 @@ import { readdir, stat } from 'node:fs/promises';
 import { START, points, project, unproject, pointAt, imagePath, walkable, moveActor, findPath, clearLine } from '../src/world.js';
 import { CINEMA_PLAZA, CINEMA_MONUMENT } from '../src/cinema-plaza.js';
 
-test('os 17 pontos têm oito fotografias, numeradas em ordem circular', async () => {
+test('os 31 pontos têm oito fotografias, numeradas em ordem circular', async () => {
   const folders = (await readdir(new URL('../maps/simeao-de-macedo/', import.meta.url))).filter(n => /^ponto-\d+$/.test(n));
-  assert.equal(folders.length, 17);
+  assert.equal(folders.length, 31);
   for (const p of points) for (let direction = 1; direction <= 8; direction++) {
     const file = await stat(new URL(`../${imagePath(p.id, direction)}`, import.meta.url));
     assert.ok(file.size > 1000, `Ponto ${p.id}, imagem ${direction}`);
@@ -18,11 +18,11 @@ test('a projeção de cliques recupera a posição no chão', () => {
     assert.ok(Math.abs(result.x - x) < 1e-8 && Math.abs(result.y - y) < 1e-8);
   }
 });
-test('a rua tem passagem contínua da praça à esquina, nos 17 pontos', () => {
+test('a rua tem passagem contínua da praça à Henrique Figueiredo, nos 31 pontos', () => {
   assert.ok(walkable(START.x, START.y));
-  for (let y = START.y; y <= 2320; y += 5) assert.ok(walkable(0, y), `Passagem em ${y}`);
+  for (let y = START.y; y <= points.at(-1).y; y += 5) assert.ok(walkable(0, y), `Passagem em ${y}`);
   for (const p of points) assert.equal(pointAt(p.y), p.id);
-  assert.equal(pointAt(-1000), 1); assert.equal(pointAt(5000), 17);
+  assert.equal(pointAt(-1000), 1); assert.equal(pointAt(5000), 31);
 });
 test('paredes, canteiros, carros e limites impedem atravessar o cenário', () => {
   for (const p of [[126, 26], [-49, 140], [120, 800], [-140, 1700], [600, 100]]) assert.equal(walkable(...p), false);

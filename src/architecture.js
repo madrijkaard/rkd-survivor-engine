@@ -171,6 +171,17 @@ function drawBuilding(c,b,texture,crossTexture,backTexture,lightPass) {
   if(b.detail==='cm-diagonal-wall') {
     for(let yy=y;yy<=y+l;yy+=24){line(c,[front,yy,h],[front,yy,h+18],'#4d5b48',.8);for(let z=h+4;z<h+19;z+=4){line(c,[front,y,z],[front,y+l,z],'#77816b',.35);}}
   }
+  if(b.detail==='sm-net-wall') {
+    // Vegetation caught in the high mesh above the long west wall.
+    for(let yy=y;yy<y+l;yy+=55)line(c,[front,yy,h],[front,yy,h+58],'#6f7560',1.1);
+    for(let z=h+7;z<h+57;z+=7)line(c,[front,y,z],[front,y+l,z],'#786c4b88',.5);
+    for(let yy=y;yy<y+l;yy+=9)line(c,[front,yy,h+3],[front,yy,h+55],'#776f5099',.45);
+    const r=rng(Math.round(y));
+    for(let i=0;i<l*1.5;i++) {
+      const p=P(front,y+r()*l,h+15+r()*42);
+      c.fillStyle=['#6a704966','#596b4588','#85754e88'][i%3];c.fillRect(p.x,p.y,1+r()*2,2+r()*5);
+    }
+  }
   if(b.pots)for(let i=0;i<b.pots;i++) {
     const xx=street+12,yy=y+l*(.17+i*.29),z=13;
     wall(c,[xx-4,yy-4],[xx+4,yy-4],z,'#d5d1b6','#aaa98e',.1);wall(c,[xx+4,yy-4],[xx+4,yy+4],z,'#b5b59b','#a0a88c',.1);

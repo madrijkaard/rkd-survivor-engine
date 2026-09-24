@@ -10,13 +10,14 @@ npm test
 
 O comando corresponde a `node --test tests/*.test.mjs`. Usa o executor `node:test`, assertivas e módulos nativos do Node, sem framework externo. Requer Node.js 20 ou posterior; não precisa de `npm install`, navegador, servidor HTTP iniciado manualmente nem acesso ao Street View. O teste do endpoint inicia e encerra um servidor em porta efêmera de `127.0.0.1`.
 
-Os testes importam a implementação real de `src/` e leem fotografias e manifestos locais em `maps/`. Não há uma pasta separada de fixtures. A suíte contém atualmente **dez arquivos de testes, com 48 casos**; `AGENTS.md` é este guia e não é executado pelo runner.
+Os testes importam a implementação real de `src/` e leem fotografias e manifestos locais em `maps/`. Não há uma pasta separada de fixtures. A suíte contém atualmente **onze arquivos de testes, com 51 casos**; `AGENTS.md` é este guia e não é executado pelo runner.
 
 ## Função e cobertura de cada arquivo
 
 | Arquivo | Casos atuais | O que verifica |
 | --- | --- | --- |
-| `world.test.mjs` | 7 | Existência das oito fotos dos 17 pontos da Simeão; ida e volta da projeção dos cliques; continuidade da rua; limites e obstáculos; busca de caminho desviando de canteiro; percurso completo de ida e volta; base inteira do Cruzeiro do Sul dentro da praça e passagem ao redor. |
+| `world.test.mjs` | 7 | Existência das oito fotos dos 31 pontos da Simeão; ida e volta da projeção dos cliques; continuidade da rua; limites e obstáculos; busca de caminho desviando de canteiro; percurso completo de ida e volta; base inteira do Cruzeiro do Sul dentro da praça e passagem ao redor. |
+| `simeao-extension.test.mjs` | 3 | Preservação dos 17 pontos originais, 112 novas imagens JPEG distintas, coordenadas e limites; travessia da Cônego, chegada/retorno da Henrique Figueiredo; localização das fotos, colisões e unicidade das esquinas compartilhadas. |
 | `home-lighting.test.mjs` | 2 | Proporção de casas selecionadas, estabilidade da seleção por ID, exclusão de comércio/serviços e de fachadas sem janelas, incluindo casas transversais. |
 | `lighting.test.mjs` | 5 | Limites exatos de acendimento dos postes; direção oposta ao Sol e comprimento das sombras; transição contínua para noite; preservação da posição mundial nas quatro câmeras; posições das lâmpadas. |
 | `server-clock.test.mjs` | 5 | Endpoint sem cache e métodos HTTP; fuso do servidor, latência e meia-noite; mudança dos postes por avanço real; recuperação após falhas; sincronização concorrente e rejeição de dados inválidos. |
@@ -71,4 +72,4 @@ Quando uma alteração afetar desenho ou interação de tela, abra `npm start` e
 
 7. Janelas noturnas: conferir brilho interno quente nas casas selecionadas, grades/venezianas preservadas, ausência de luz nas paredes/chão e ocultação por árvores/prédios nas quatro câmeras e vista aérea. Casas sem janelas e construções públicas/comerciais não recebem esse efeito.
 
-Use somente os itens relevantes à mudança. Uma suíte aprovada confirma os contratos cobertos, mas não substitui essa inspeção visual. Alterações nos scripts de `reference/` também exigem conferência própria de seus arquivos de saída; não estão cobertas integralmente pelos 48 casos atuais.
+Use somente os itens relevantes à mudança. Uma suíte aprovada confirma os contratos cobertos, mas não substitui essa inspeção visual. Alterações nos scripts de `reference/` também exigem conferência própria de seus arquivos de saída; não estão cobertas integralmente pelos 51 casos atuais.

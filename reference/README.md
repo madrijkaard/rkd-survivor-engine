@@ -70,7 +70,7 @@ python reference/scripts/generate/antonio-contact.py
 
 Os geradores JavaScript atualizam `src/mendonca-points.js` e `src/antonio-points.js`. Os scripts Python precisam de Pillow e salvam as montagens em `reference/streets/<rua>/comparacoes/`. Os caminhos de entrada e saída são calculados pela localização do script, de modo que também funcionam quando chamados de outra pasta.
 
-A Simeão mantém suas posições artísticas em `src/world.js`; as coordenadas geográficas das capturas estão no manifesto. Não há gerador de posições ou de montagens da Simeão nesta pasta.
+A Simeão tem 31 pontos. `generate-simeao-points.mjs` preserva as 17 posições originais e calcula a extensão a partir das coordenadas do manifesto. `simeao-contact.py` produz pranchas dos pontos 18–31 e comparações oeste/leste, preservando os registros antigos.
 
 ## Adicionar outra rua
 

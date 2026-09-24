@@ -11,7 +11,7 @@ export function drawMendoncaGround(c,asphalt,paving) {
   rect(c,-80,CROSS_Y-50,MENDONCA_END+150,100,asphalt);
   for(const r of plazaRoads)rect(c,r.x,r.y,r.w,r.h,asphalt);
   for(const y of [CROSS_Y-50,CROSS_Y+50]){
-    line(c,[0,y,1],[1190,y,1],'#c0c1a3',2);
+    line(c,[80,y,1],[1190,y,1],'#c0c1a3',2);
     line(c,[1325,y,1],[MENDONCA_END-70,y,1],'#b6bb9b',2);
   }
   for(let x=2;x<MENDONCA_END-70;x+=19)for(const y of [2282,2398]){

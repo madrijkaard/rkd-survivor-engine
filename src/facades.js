@@ -1,5 +1,6 @@
 import { PROJECTION } from './projection.js';
 import { drawAntonioFacade, drawAntonioOpeningDetails } from './antonio-facades.js';
+import { drawSimeaoFacade } from './simeao-facades.js';
 // Desenho das frentes catalogadas em street-data.js. Todas as aberturas são
 // explícitas: o mesmo recorte de fotografia não cria portas/janelas duplicadas.
 function random(seed) { let n=seed>>>0; return () => ((n=Math.imul(n,1664525)+1013904223>>>0)/4294967296); }
@@ -196,6 +197,7 @@ export function makeDetailedFacade(b,image,lightPass=false) {
     for(let x=10;x<w;x+=52) { line(c,x,0,x,h,'#bdba9d',1.2);line(c,x+1,0,x+1,h,'#62695230',.8); }
   }
   drawAntonioFacade(c,b,w,h,r);
+  drawSimeaoFacade(c,b,w,h);
   for(const o of b.openings) drawOpening(c,o,w,h,lightPass);
   drawAntonioOpeningDetails(c,b,w,h);
   if(b.detail==='aa-print'){

@@ -118,6 +118,102 @@
       "pano": "-OJOOerEbiWq_RwklEIpjg",
       "latitude": -4.4510775,
       "longitude": -43.8854653
+    },
+    {
+      "id": 18,
+      "pano": "vzkRIz9QJeM24eqygbV2qg",
+      "latitude": -4.4508922,
+      "longitude": -43.8855186
+    },
+    {
+      "id": 19,
+      "pano": "h5oPVzVOCsDLhGb-fZoEcA",
+      "latitude": -4.4508095,
+      "longitude": -43.8855539
+    },
+    {
+      "id": 20,
+      "pano": "RsOgpnWJ63zMnyOXt0qv5Q",
+      "latitude": -4.4507275,
+      "longitude": -43.8855855
+    },
+    {
+      "id": 21,
+      "pano": "pM4SBXNvLeGBGeD8fk7woA",
+      "latitude": -4.4506407,
+      "longitude": -43.8856175
+    },
+    {
+      "id": 22,
+      "pano": "ifdK_77W-XVrqIaJNiEGbg",
+      "latitude": -4.4505552,
+      "longitude": -43.8856495
+    },
+    {
+      "id": 23,
+      "pano": "g6C5maV5lz6K4KS4Yz3-gw",
+      "latitude": -4.4504679,
+      "longitude": -43.8856732
+    },
+    {
+      "id": 24,
+      "pano": "p5MeFpQXdUFgfdotY4Ycdw",
+      "latitude": -4.4503817,
+      "longitude": -43.8857
+    },
+    {
+      "id": 25,
+      "pano": "j2Af02RuziKTj9FAOUacGg",
+      "latitude": -4.4503029,
+      "longitude": -43.8857335
+    },
+    {
+      "id": 26,
+      "pano": "edJwRUL7M5PS_lOVcdK-sA",
+      "latitude": -4.4502201,
+      "longitude": -43.885766
+    },
+    {
+      "id": 27,
+      "pano": "zqcZr8lwgolirlCadBrPlw",
+      "latitude": -4.4501313,
+      "longitude": -43.8857921
+    },
+    {
+      "id": 28,
+      "pano": "SrVKrXZQllCgTwHSRfDl5Q",
+      "latitude": -4.4500458,
+      "longitude": -43.8858197
+    },
+    {
+      "id": 29,
+      "pano": "uezisVyiPkP9rfP1uTLxgQ",
+      "latitude": -4.4499615,
+      "longitude": -43.8858509
+    },
+    {
+      "id": 30,
+      "pano": "jiJ2a81ToNA8XIAKb6PHRg",
+      "latitude": -4.4498745,
+      "longitude": -43.885882
+    },
+    {
+      "id": 31,
+      "pano": "TggOZk5xNgGSEQ-pUB8PDQ",
+      "latitude": -4.4497823,
+      "longitude": -43.8859137
+    }
+  ],
+  "extensions": [
+    {
+      "fromPoint": 18,
+      "toPoint": 31,
+      "fromStreet": "Rua Cônego Mendonça",
+      "toStreet": "Rua Henrique Figueiredo",
+      "capturedAt": "2026-09-24T01:31:51.393Z",
+      "imageryDate": "2025-06",
+      "source": "Google Street View",
+      "endSourceUrl": "https://www.google.com/maps/@?api=1&map_action=pano&pano=TggOZk5xNgGSEQ-pUB8PDQ&viewpoint=-4.4497823,-43.8859137"
     }
   ]
 }

@@ -6,7 +6,7 @@ Um passeio por ruas de Codó, Maranhão, transformadas em um cenário navegável
 
 **Codó Sobrevive** é um jogo de exploração em terceira pessoa, com visão aérea oblíqua e gráficos 2D pré-renderizados, inspirado na apresentação de jogos como *Parasite Eve*.
 
-O cenário conecta as ruas **Simeão de Macedo**, **Cônego Mendonça** e **Antônio Alexandre**, no bairro **Centro**, com retorno pela Vinte e Oito de Julho. A reconstrução usa 416 fotografias do Google Street View, distribuídas em 52 pontos, para representar casas, fachadas, árvores, praças e estabelecimentos.
+O cenário conecta as ruas **Simeão de Macedo**, **Cônego Mendonça** e **Antônio Alexandre**, no bairro **Centro**, com retorno pela Vinte e Oito de Julho. A reconstrução usa 528 fotografias do Google Street View, distribuídas em 66 pontos, para representar casas, fachadas, árvores, praças e estabelecimentos.
 
 As fotografias orientam cores e detalhes; dimensões e partes não visíveis são aproximações artísticas. O projeto funciona localmente, para um jogador, sem servidor de partidas online.
 
@@ -27,6 +27,7 @@ O jogo não utiliza framework, WebGL ou bibliotecas externas. Os fundos estátic
 
 ## 3 - Recursos do jogo
 
+- A Simeão atravessa a Cônego Mendonça e segue até a esquina com a Henrique Figueiredo, com 14 novos pontos fotografados e coordenadas WGS84.
 - Três ruas conectadas, com casas individualizadas, fachadas de esquina compartilhadas e construções acompanhando a curva da Antônio Alexandre.
 - Quatro orientações de câmera, vista aérea do conjunto e minimapa navegável.
 - Caminhada, corrida moderada e trajetos por clique que desviam dos obstáculos.
@@ -66,7 +67,7 @@ rkd-survive-engine/
 ├── package-lock.json          # Registro do pacote npm
 ├── maps/
 │   ├── AGENTS.md              # Contrato dos manifestos e fotografias
-│   ├── simeao-de-macedo/      # 17 pontos e 136 fotos
+│   ├── simeao-de-macedo/      # 31 pontos e 248 fotos
 │   ├── conego-mendonca/       # 15 pontos e 120 fotos
 │   └── antonio-alexandre/     # 20 pontos e 160 fotos
 ├── reference/

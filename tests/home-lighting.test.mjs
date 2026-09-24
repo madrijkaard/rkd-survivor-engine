@@ -6,7 +6,7 @@ import { hasHomeWindows, selectLitHomes } from '../src/home-lighting.js';
 test('70% of homes with existing windows stay selected across camera/catalog order', () => {
   const eligible = buildings.filter(hasHomeWindows);
   const selected = selectLitHomes(buildings);
-  assert.equal(eligible.length, 24);
+  assert.equal(eligible.length, 28);
   assert.equal(selected.size, Math.round(eligible.length * .7));
   assert.deepEqual(selectLitHomes([...buildings].reverse()), selected);
   assert.deepEqual(selectLitHomes([...buildings, ...buildings]), selected);

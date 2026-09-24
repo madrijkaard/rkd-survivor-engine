@@ -6,6 +6,7 @@ import { CAMERA_VIEWS, getCameraView, setCameraView } from './projection.js';
 import { createClickNavigation, WALK_SPEED, RUN_SPEED } from './click-navigation.js';
 import { CHURCH_PLAZA, PLAZA_CHURCH, plazaRoads, mendoncaPoints } from './mendonca-data.js';
 import { antonioPoints, ANTONIO_END, CINEMA_GARDEN } from './antonio-data.js';
+import { SIMEAO_END } from './simeao-extension.js';
 import { lightingAt, formatTime } from './lighting.js';
 import { createServerClock } from './server-clock.js';
 
@@ -108,12 +109,15 @@ function rotateCamera() {
   notify(CAMERA_VIEWS[next].label);
   surface.focus({preventScroll:true});
 }
-function miniProject(x, y) { return { x: 12 + x * (mini.width-28)/(MENDONCA_END+300) + y * .0018, y: mini.height-16 - y * (mini.height-32)/3360 }; }
+function miniProject(x, y) { return { x: 12 + x * (mini.width-28)/(MENDONCA_END+300) + y * .0018, y: mini.height-16 - y * (mini.height-32)/Math.max(3360,SIMEAO_END+180) }; }
 function drawMinimap() {
   const c = miniCtx; c.clearRect(0, 0, mini.width, mini.height);
   c.lineCap = 'round';
   const start = miniProject(0, -60), corner=miniProject(0,CROSS_Y),end = miniProject(MENDONCA_END,CROSS_Y);
   for(const [color,width] of [['#536c63',10],['#a2b295',1]]){c.strokeStyle=color;c.lineWidth=width;c.beginPath();c.moveTo(start.x,start.y);c.lineTo(corner.x,corner.y);c.lineTo(end.x,end.y);c.stroke();}
+  const simeaoEnd=miniProject(0,SIMEAO_END),henriqueEnd=miniProject(330,SIMEAO_END);
+  for(const [color,width] of [['#536c63',7],['#a2b295',1]]){c.strokeStyle=color;c.lineWidth=width;c.beginPath();c.moveTo(corner.x,corner.y);c.lineTo(simeaoEnd.x,simeaoEnd.y);c.lineTo(henriqueEnd.x,henriqueEnd.y);c.stroke();}
+  c.fillStyle='#bac6b3';c.font='8px Arial';c.fillText(`S${routes[0].points.length}`,simeaoEnd.x+6,simeaoEnd.y-5);
   for(const [color,width] of [['#536c63',7],['#a2b295',1]]){
     c.strokeStyle=color;c.lineWidth=width;c.beginPath();antonioPoints.forEach((p,i)=>{const q=miniProject(p.x,p.y);i?c.lineTo(q.x,q.y):c.moveTo(q.x,q.y);});c.lineTo(start.x,start.y);c.stroke();
   }
@@ -339,11 +343,12 @@ function step(dt) {
   if (!path.length) pathRunning = false;
   if(talkRequested && insideBar(actor.x,actor.y) && Math.hypot(actor.x-BAR.talkSpot.x,actor.y-BAR.talkSpot.y)<8)showDialogue();
   const atAntonio=Math.hypot(actor.x-ANTONIO_END.x,actor.y-ANTONIO_END.y)<40;
-  const arrivalId=atAntonio?'antonio':actor.x>=MENDONCA_END-30&&Math.abs(actor.y-CROSS_Y)<100?'conego':null;
+  const atSimeao=Math.abs(actor.x)<80&&actor.y>SIMEAO_END-130;
+  const arrivalId=atSimeao?'simeao':atAntonio?'antonio':actor.x>=MENDONCA_END-30&&Math.abs(actor.y-CROSS_Y)<100?'conego':null;
   if (arrivalId&&!arrivals.has(arrivalId)) {
     arrivals.add(arrivalId);arrivalShown = true; $('arrival').hidden = false; arrivalTimer = 6;
-    $('arrivalTitle').textContent=atAntonio?'A esquina da Vinte e Oito de Julho':'O fim da Cônego Mendonça';
-    $('arrivalDetail').textContent=atAntonio?'Você percorreu a Rua Antônio Alexandre. Siga pela rua transversal para voltar à Simeão.':'Você chegou à esquina diante da Academia Figueiredo. Explore também a praça e a Rua Antônio Alexandre.';
+    $('arrivalTitle').textContent=atSimeao?'A esquina da Henrique Figueiredo':atAntonio?'A esquina da Vinte e Oito de Julho':'O fim da Cônego Mendonça';
+    $('arrivalDetail').textContent=atSimeao?'Você atravessou a Cônego Mendonça e percorreu mais um quarteirão da Simeão de Macedo.':atAntonio?'Você percorreu a Rua Antônio Alexandre. Siga pela rua transversal para voltar à Simeão.':'Você chegou à esquina diante da Academia Figueiredo. Explore também a praça e a Rua Antônio Alexandre.';
   }
   if (arrivalTimer > 0) { arrivalTimer -= dt; if (arrivalTimer <= 0) $('arrival').hidden = true; }
 }

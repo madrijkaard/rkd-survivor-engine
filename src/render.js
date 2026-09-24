@@ -14,6 +14,7 @@ import { buildingPlanPoint } from './building-geometry.js';
 import { CINEMA_PLAZA } from './cinema-plaza.js';
 import { poleLamps } from './lighting.js';
 import { selectLitHomes } from './home-lighting.js';
+import { SIMEAO_END, HENRIQUE_ROAD } from './simeao-extension.js';
 import { drawSunShadows, beginLampLight, occludeLampLight, drawLampBulbs, finishLighting } from './lighting-render.js';
 
 export function rng(seed = 1) {
@@ -164,7 +165,7 @@ function bakeScene(photos) {
     const cross=f?makeFacade({...b,...f,id:`${b.id}-cross`,length:b.depth,facadeAxis:'x'},photos.get(`${f.street||'conego-mendonca'}-${f.point}-${f.photoDirection||(f.face==='minY'?1:5)}`)):null;
     const rear=b.backFacade,back=rear?makeFacade({...b,...rear,id:`${b.id}-rear`},photos.get(`${rear.street}-${rear.point}-${rear.photoDirection}`)):null;
     const base=buildingPlanPoint(b,b.x+b.depth/2,PROJECTION.d>0?b.y+b.length:b.y);
-    const bounds=boundsFor(b.x - 25, b.y - 15, b.depth + 50, b.length + 30, b.height + (b.dish?85:55),b);
+    const bounds=boundsFor(b.x - 25, b.y - 15, b.depth + 50, b.length + 30, b.height + (b.dish||b.detail==='sm-net-wall'?85:55),b);
     const sprite=bake(ctx => drawBuilding(ctx, b, tex,cross,back), bounds, P(base.x,base.y).y, b.id);
     if(litHomes.has(b.id)) {
       const windows=makeFacade(b,null,true);
@@ -202,7 +203,7 @@ function bakeScene(photos) {
   sprites.push(bake(ctx => { drawMotorcycle(ctx, 50, 2195); drawMotorcycle(ctx, 55, 2217); }, boundsFor(36, 2177, 40, 60, 28), P(55, 2205).y, 'motorcycles'));
   for(const b of antonioBikes)sprites.push(bake(c=>drawMotorcycle(c,b.x,b.y),boundsFor(b.x-10,b.y-15,20,30,26),P(b.x,b.y).y,'aa-motorcycle'));
   const wires = bake(ctx => {
-    const sequence = poles.filter(p => !p.lamp && p.x<0);
+    const sequence = poles.filter(p => !p.lamp && p.x<0).sort((a,b)=>a.y-b.y);
     ctx.strokeStyle = '#273931ba'; ctx.lineWidth = .7;
     for (let i = 1; i < sequence.length; i++) for (const shift of [-12, 0, 12]) {
       const a = P(sequence[i - 1].x + shift, sequence[i - 1].y, sequence[i - 1].height), b = P(sequence[i].x + shift, sequence[i].y, sequence[i].height);
@@ -230,7 +231,7 @@ function drawGround(ctx) {
   const asphalt = ctx.createPattern(makeTexture('#62675c', 51), 'repeat');
   const dirt = ctx.createPattern(makeTexture('#89896b', 14), 'repeat');
   const paving = ctx.createPattern(makeTexture('#aaa993', 26, 'stone'), 'repeat');
-  rect(ctx, -310, -160, 910, 2740, dirt);
+  rect(ctx, -310, -160, 910, SIMEAO_END+480, dirt);
   rect(ctx, 0, 1950, MENDONCA_END+315, 1480, dirt);
   // Block interiors provide a continuous roofscape behind the photographed street.
   for (let side = 0; side < 2; side++) for (let y = -80; y < 2500; y += 160) {
@@ -286,6 +287,22 @@ function drawGround(ctx) {
   for (let i = 0; i < 250; i++) { const p = P(demolitionLot.x + random() * demolitionLot.depth, demolitionLot.y + random() * demolitionLot.length); ctx.fillStyle = random() > .5 ? '#665e4739' : '#d6ba8b4b'; ctx.fillRect(p.x, p.y, 3, 2); }
   drawAntonioGround(ctx,asphalt,paving,dirt,buildings);
   drawMendoncaGround(ctx,asphalt,paving);
+  // Continue straight through Cônego to the next surveyed crossing.
+  rect(ctx,-78,CROSS_Y+50,156,SIMEAO_END+60-CROSS_Y-50,paving);
+  rect(ctx,-60,CROSS_Y+48,120,SIMEAO_END+62-CROSS_Y-48,asphalt);
+  rect(ctx,HENRIQUE_ROAD.x,HENRIQUE_ROAD.y,HENRIQUE_ROAD.w,HENRIQUE_ROAD.h,paving);
+  rect(ctx,HENRIQUE_ROAD.x,HENRIQUE_ROAD.y+10,HENRIQUE_ROAD.w,HENRIQUE_ROAD.h-20,asphalt);
+  for(const x of [-61,60]) {
+    line(ctx,[x,CROSS_Y+65,1],[x,SIMEAO_END-60,1],'#c0c4a8',2);
+    for(let y=CROSS_Y+65;y<SIMEAO_END-60;y+=18)line(ctx,[x<0?-78:62,y],[x<0?-62:78,y],'#737d6855',.7);
+  }
+  for(let i=0;i<1300;i++) {
+    const y=CROSS_Y+70+random()*(SIMEAO_END-CROSS_Y-135),x=-55+random()*110,p=P(x,y);
+    ctx.fillStyle=i%3?'#b9b49832':'#36423540';ctx.fillRect(p.x,p.y,2+random()*4,1+random()*2);
+  }
+  for(let y=3320;y<SIMEAO_END-65;y+=11)for(const x of [-76,67]) {
+    const p=P(x+random()*6,y);ctx.fillStyle='#70854e88';ctx.fillRect(p.x,p.y,2+random()*5,2);
+  }
   // Utility covers, weeds at the curb, and a narrow storm drain.
   for (let y = 380; y < 2100; y += 430) {
     disk(ctx, 14, y, 9, '#5c6653', 0, '#374839');
@@ -386,7 +403,7 @@ export function renderWorld(ctx, scene, camera, actor, frames, options) {
   if (overview) {
     ctx.textAlign = 'center'; ctx.font = `${11 / camera.zoom}px Georgia`; ctx.fillStyle = '#f0e5c1'; ctx.shadowColor = '#14271e'; ctx.shadowBlur = 5;
     const labels = [], lineHeight = 15 / camera.zoom;
-    for (const [x, y, label] of [[350, 330, 'PRAÇA DO CINEMA'], [0, 1180, 'RUA SIMEÃO DE MACEDO'], [950,1250,'R. ANTÔNIO ALEXANDRE'],[680,-105,'R. VINTE E OITO DE JULHO'], [850, CROSS_Y, 'R. CÔNEGO MENDONÇA'],[CHURCH_PLAZA.x+CHURCH_PLAZA.w/2,CHURCH_PLAZA.y+CHURCH_PLAZA.h*.55,'PRAÇA DA IGREJA']]) {
+    for (const [x, y, label] of [[350, 330, 'PRAÇA DO CINEMA'], [0, 1180, 'RUA SIMEÃO DE MACEDO'], [0,3400,'SIMEÃO · CONTINUAÇÃO'],[80,SIMEAO_END,'R. HENRIQUE FIGUEIREDO'],[950,1250,'R. ANTÔNIO ALEXANDRE'],[680,-105,'R. VINTE E OITO DE JULHO'], [850, CROSS_Y, 'R. CÔNEGO MENDONÇA'],[CHURCH_PLAZA.x+CHURCH_PLAZA.w/2,CHURCH_PLAZA.y+CHURCH_PLAZA.h*.55,'PRAÇA DA IGREJA']]) {
       const p = P(x, y), halfWidth = ctx.measureText(label).width / 2 + 4 / camera.zoom;
       let baseline = p.y - 17 / camera.zoom;
       while (labels.some(other => Math.abs(p.x - other.x) < halfWidth + other.halfWidth && Math.abs(baseline - other.baseline) < lineHeight)) baseline -= lineHeight;

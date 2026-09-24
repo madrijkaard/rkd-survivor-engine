@@ -13,7 +13,7 @@ maps/
 ├── AGENTS.md
 ├── simeao-de-macedo/
 │   ├── manifest.json
-│   └── ponto-01/ ... ponto-17/
+│   └── ponto-01/ ... ponto-31/
 │       └── 1.jpg ... 8.jpg
 ├── conego-mendonca/
 │   ├── manifest.json
@@ -28,14 +28,14 @@ maps/
 | Caminho | Conteúdo e função |
 | --- | --- |
 | `AGENTS.md` | Explica o contrato das capturas, a associação com o cenário e os cuidados de manutenção. |
-| `simeao-de-macedo/manifest.json` | Registro dos 17 panoramas da Rua Simeão de Macedo, da Praça do Cinema em direção à Cônego Mendonça. As coordenadas foram recuperadas para os conjuntos já existentes; as posições artísticas originais do jogo foram preservadas. |
-| `simeao-de-macedo/ponto-01/` a `ponto-17/` | 136 fotografias da rua original. O antigo `ponto-18` foi retirado e não faz parte do percurso. |
+| `simeao-de-macedo/manifest.json` | Registro dos 31 panoramas da Rua Simeão de Macedo, da Praça do Cinema, passando pela Cônego Mendonça, até a Henrique Figueiredo. As coordenadas foram recuperadas para os conjuntos já existentes; as posições artísticas originais do jogo foram preservadas. |
+| `simeao-de-macedo/ponto-01/` a `ponto-31/` | 248 fotografias. Pontos 1–17 preservados; 18–31 capturados em setembro de 2026 para a extensão. A numeração 18 agora identifica uma captura nova, não o conjunto antigo retirado. |
 | `conego-mendonca/manifest.json` | Registro dos 15 panoramas da rua transversal, incluindo a continuação ao lado da praça da igreja até a esquina final. É entrada do gerador de `src/mendonca-points.js`. |
 | `conego-mendonca/ponto-01/` a `ponto-15/` | 120 fotografias, oito por avanço registrado na Cônego Mendonça. |
 | `antonio-alexandre/manifest.json` | Registro dos 20 panoramas da rua paralela à Simeão, da Cônego em direção à Vinte e Oito de Julho. É entrada do gerador de `src/antonio-points.js`. |
 | `antonio-alexandre/ponto-01/` a `ponto-20/` | 160 fotografias que mostram a curva, fachadas, escola, vegetação e outro lado do cinema. |
 
-O total atual é **52 pontos e 416 JPEGs**. O número de uma pasta só identifica um ponto dentro de sua rua. Por exemplo, `ponto-01` existe nas três ruas e representa três conjuntos diferentes.
+O total atual é **66 pontos e 528 JPEGs**. O número de uma pasta só identifica um ponto dentro de sua rua. Por exemplo, `ponto-01` existe nas três ruas e representa três conjuntos diferentes.
 
 ### Função de cada arquivo de imagem
 
@@ -56,7 +56,7 @@ Mantenha a ordem **N, NE, L, SE, S, SO, O, NO**, mesmo quando a solicitação de
 
 ## Contrato do manifest.json
 
-Formato ilustrativo com **apenas o primeiro ponto** da Simeão; o manifesto real da rua contém todos os 17 registros:
+Formato ilustrativo com **apenas o primeiro ponto** da Simeão; o manifesto real da rua contém todos os 31 registros:
 
 ```json
 {
@@ -88,7 +88,7 @@ Formato ilustrativo com **apenas o primeiro ponto** da Simeão; o manifesto real
 | `points[].pano` | Identificador textual do panorama. Não pode ser vazio nem repetido dentro do mesmo manifesto. |
 | `points[].latitude`, `longitude` | Números finitos, respectivamente entre -90 e 90 e entre -180 e 180. Não usar strings, coordenadas estimadas de outra casa ou a posição da personagem. |
 | `points[].neighborhood` | Texto opcional e não vazio que substitui o bairro padrão **somente naquele ponto**. |
-| Metadados de procedência | Os arquivos também registram dados como `imageryDate`, `capturedAt` ou `coordinatesRecoveredAt`. Preserve os campos existentes; o validador principal não os exige. Não confunda data da imagem com data de captura/recuperação. |
+| Metadados de procedência | Os arquivos também registram dados como `imageryDate`, `capturedAt` ou `coordinatesRecoveredAt`. Preserve os campos existentes; o validador principal não os exige. Não confunda data da imagem com data de captura/recuperação. `extensions` documenta o intervalo 18–31, ruas de início/fim, data e fonte da nova captura. |
 
 Consulte `src/map-manifests.js` antes de alterar o formato. O jogo valida também se a quantidade e os IDs do manifesto correspondem aos pontos já cadastrados na rota. Ele rejeita divergências em vez de inventar posições. Os dados das três ruas só são aplicados depois de todos os manifestos passarem pela validação.
 
@@ -98,7 +98,7 @@ Em `src/world.js`, cada rota liga seu identificador à pasta e aos pontos com co
 
 | Identificador da rota | Pasta em maps | Origem das posições do cenário |
 | --- | --- | --- |
-| `simeao` | `simeao-de-macedo` | Catálogo original em `src/world.js`, com espaçamento de 140 unidades. |
+| `simeao` | `simeao-de-macedo` | `src/simeao-points.js`, gerado do manifesto: preserva 140 unidades nos pontos 1–17 e acumula distâncias geográficas × 14 nos pontos 18–31. |
 | `conego-mendonca` | `conego-mendonca` | `src/mendonca-points.js`, gerado a partir do manifesto. |
 | `antonio-alexandre` | `antonio-alexandre` | `src/antonio-points.js`, gerado a partir do manifesto com ajuste às junções do cenário. |
 

@@ -19,6 +19,8 @@ reference/
 │   │   ├── capture-mendonca.mjs
 │   │   └── capture-antonio.mjs
 │   └── generate/
+│       ├── generate-simeao-points.mjs
+│       ├── simeao-contact.py
 │       ├── generate-mendonca-points.mjs
 │       ├── generate-antonio-points.mjs
 │       ├── mendonca-contact.py
@@ -48,6 +50,8 @@ Os caminhos da tabela são relativos a `reference/`. As entradas e saídas citad
 | `scripts/capture/capture-simeao.mjs` | Atalho para o capturador comum, com pasta `simeao-de-macedo` e nome Rua Simeão de Macedo. Recebe panorama, latitude, longitude e bairro opcional. | Atualiza a captura e o manifesto da Simeão. |
 | `scripts/capture/capture-mendonca.mjs` | Atalho com pasta `conego-mendonca` e nome Rua Cônego Mendonça; mesmos argumentos. | Atualiza a captura e o manifesto da Cônego. |
 | `scripts/capture/capture-antonio.mjs` | Atalho com pasta `antonio-alexandre` e nome Rua Antônio Alexandre; mesmos argumentos. | Atualiza a captura e o manifesto da Antônio. |
+| `scripts/generate/generate-simeao-points.mjs` | Lê e valida o manifesto da Simeão. Preserva posições 1–17; acumula distâncias geográficas dos novos panoramas a partir do ponto 17, em 14 unidades/m. | Sobrescreve `src/simeao-points.js`; não altera fotos nem desenha casas. |
+| `scripts/generate/simeao-contact.py` | Lê somente pontos 18 em diante, com Python/Pillow. | Grava pranchas de oito direções `ponto-NN.jpg` e comparações oeste/leste `extensao-1.jpg` a `extensao-4.jpg`, preservando as pranchas históricas 1–17. |
 | `scripts/generate/generate-mendonca-points.mjs` | Lê e valida `maps/conego-mendonca/manifest.json`. Acumula as distâncias geográficas entre panoramas e as converte em aproximadamente 14 unidades do jogo por metro, mantendo `y = 2345`. | **Sobrescreve** `src/mendonca-points.js`, exportando `mendoncaPoints`. Não desenha as casas nem altera o manifesto. |
 | `scripts/generate/generate-antonio-points.mjs` | Lê e valida `maps/antonio-alexandre/manifest.json`. Rotaciona deslocamentos geográficos para o referencial da Simeão e ajusta a extensão longitudinal às junções existentes. | **Sobrescreve** `src/antonio-points.js`, exportando `antonioPoints`. O ajuste é artístico, não uma projeção cadastral de medidas exatas. |
 | `scripts/generate/mendonca-contact.py` | Abre `1.jpg` a `8.jpg` de cada pasta da Cônego, com Python/Pillow. Monta uma prancha de 1200 × 1720 pixels, duas colunas e quatro linhas, com número e direção. | Grava/substitui `streets/conego-mendonca/comparacoes/ponto-NN.jpg`. Não altera os originais de `maps/`. |
@@ -69,7 +73,7 @@ Os scripts calculam a raiz a partir da própria localização: JavaScript usa `i
 
 Os scripts JavaScript usam módulos nativos do Node. As montagens Python precisam de **Pillow**, mas essa dependência não é necessária para executar o jogo. A opção `--use-system-ca` nos comandos de captura usa certificados do sistema em versões do Node que a oferecem; o Node usado para jogar pode ser diferente do utilizado nas ferramentas. Não desative a validação TLS para contornar um erro de certificado.
 
-Não existe gerador de posições ou montagens da Simeão nesta pasta. Suas posições artísticas continuam em `src/world.js`; os arquivos de comparação existentes são registros preservados.
+A Simeão possui gerador de posições e de montagens para a extensão. As posições originais 1–17 e suas pranchas históricas são preservadas; o levantamento documenta as novas capturas 18–31.
 
 ## Levantamentos e montagens por rua
 
@@ -77,6 +81,7 @@ Não existe gerador de posições ou montagens da Simeão nesta pasta. Suas posi
 | --- | --- |
 | `streets/simeao-de-macedo/levantamento.md` | Observações da sequência de casas, aberturas, cores, muros, vegetação e limites da reconstrução original. Apoia o catálogo `src/street-data.js`. |
 | `streets/simeao-de-macedo/comparacoes/ponto-01.jpg` a `ponto-17.jpg` | Pranchas de revisão por ponto, preservadas da organização anterior de auditoria. São seleções de vistas, não substitutos dos oito originais de cada ponto. |
+| `streets/simeao-de-macedo/comparacoes/ponto-18.jpg` a `ponto-31.jpg` e `extensao-1.jpg` a `extensao-4.jpg` | Pranchas novas, oito direções por ponto e comparações oeste/leste da extensão até a Henrique Figueiredo. |
 | `streets/simeao-de-macedo/comparacoes/trecho-1.jpg` | Montagem de comparação do primeiro trecho da Simeão. |
 | `streets/simeao-de-macedo/comparacoes/trecho-2.jpg` | Montagem de comparação do segundo trecho. |
 | `streets/simeao-de-macedo/comparacoes/trecho-3.jpg` | Montagem de comparação do terceiro trecho. |
@@ -124,8 +129,10 @@ Nos três atalhos de ruas conhecidas, um argumento de bairro pode vir após a lo
 Geração a partir dos dados locais:
 
 ```sh
+node reference/scripts/generate/generate-simeao-points.mjs
 node reference/scripts/generate/generate-mendonca-points.mjs
 node reference/scripts/generate/generate-antonio-points.mjs
+python reference/scripts/generate/simeao-contact.py
 python reference/scripts/generate/mendonca-contact.py
 python reference/scripts/generate/antonio-contact.py
 ```

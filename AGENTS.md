@@ -10,7 +10,7 @@ Leia este guia a partir da raiz. Os caminhos aqui são relativos a ela. Os guias
 
 | Caminho | Função no projeto |
 | --- | --- |
-| `maps/` | Dados usados pelo jogo: fotografias originais e `manifest.json` de cada rua. São 52 pontos e 416 fotos, com oito direções por ponto. Não é uma pasta de resultados descartáveis. |
+| `maps/` | Dados usados pelo jogo: fotografias originais e `manifest.json` de cada rua. São 66 pontos e 528 fotos, com oito direções por ponto. Não é uma pasta de resultados descartáveis. |
 | `reference/` | Material de desenvolvimento: scripts de captura e geração, levantamentos de fachadas, montagens para comparação e capturas históricas do jogo. Não é importado durante a execução do jogo, mas preserva ferramentas e evidências da reconstrução. |
 | `src/` | Módulos JavaScript do navegador: catálogos do cenário, projeção, renderização, movimento, colisões, localização, interface e áudio. Alguns módulos puros também são usados pelos testes e scripts. |
 | `tests/` | Testes automatizados com `node:test`: integridade das fotos e manifestos, geometria, trajetos, colisões, câmeras e gestos de navegação. |
@@ -62,7 +62,7 @@ As posições geográficas WGS84 do manifesto e as posições artísticas `x/y` 
 | Fotos em cada direção | `maps/<rua>/ponto-NN/1.jpg` até `8.jpg` |
 | Observações do que aparece nas fotos | `reference/streets/<rua>/levantamento.md` e `comparacoes/` |
 | Posições e conexões navegáveis, obstáculos e associação ao ponto atual | `src/world.js` e catálogos das ruas |
-| Casas da Simeão | `src/street-data.js` |
+| Casas da Simeão | `src/street-data.js`; extensão em `src/simeao-extension.js`, motivos em `src/simeao-facades.js` e pontos gerados em `src/simeao-points.js` |
 | Cônego Mendonça, praça e igreja | `src/mendonca-data.js` e `src/mendonca-render.js` |
 | Curva, casas e escola da Antônio Alexandre | `src/antonio-data.js`, `src/antonio-facades.js` e `src/antonio-render.js` |
 | Posições geradas da Cônego e Antônio | `src/*-points.js`, gerados pelos dois scripts em `reference/scripts/generate/` |
@@ -76,7 +76,7 @@ As posições geográficas WGS84 do manifesto e as posições artísticas `x/y` 
 ## Cuidados ao evoluir o jogo
 
 - Preserve a associação **rua + número do ponto + direção**. A numeração de cada rua é independente; os oito arquivos seguem a ordem circular documentada em `maps/AGENTS.md`. Uma foto não corresponde a uma casa: a mesma construção aparece em vários pontos.
-- A Simeão tem 17 pontos; o antigo ponto 18 foi retirado. Seu identificador interno de rota é `simeao`, enquanto a pasta se chama `simeao-de-macedo`.
+- A Simeão tem 31 pontos, incluindo a extensão após a Cônego até a Henrique Figueiredo. Os pontos 1–17 originais foram preservados; 18–31 são novas capturas de setembro de 2026. Seu identificador interno de rota é `simeao`, enquanto a pasta se chama `simeao-de-macedo`.
 - O painel informativo inferior esquerdo foi removido por decisão de interface. A localização, seus metadados e a consulta das fotos continuam ativos. Não confunda remover um painel com apagar o mapeamento.
 - Os trechos atuais pertencem ao Centro. O bairro do cabeçalho vem dos manifestos; não deve ser fixado no HTML. A escolha acompanha o ponto próximo, sem representar uma divisa administrativa exata.
 - Preserve IDs das construções. `name` pode ser uma descrição visual antiga; `displayName` reserva o nome próprio. O cadastro de nomes não cria etiquetas nem muda automaticamente o letreiro pintado de uma fachada.
