@@ -59,3 +59,21 @@ export function poleLamps(pole) {
     x: pole.x + dx, y: pole.y + dy, z: pole.height * (pole.lamp ? 1 : .9),
   }));
 }
+
+// Incident street light uses world distances, so rotating/zooming the camera
+// cannot change its intensity. Multi-arm poles share one pool of light.
+export function actorLampLight(actor, poles, light) {
+  let total = 0, x = 0, y = 0, z = 0;
+  if (light.lampsOn) for (const pole of poles) {
+    const lamps = poleLamps(pole), radius = pole.lamp ? 145 : 120;
+    for (const lamp of lamps) {
+      const dx = lamp.x - actor.x, dy = lamp.y - actor.y;
+      const amount = smooth(1 - Math.hypot(dx, dy) / radius) / lamps.length;
+      total += amount;
+      x += dx * amount; y += dy * amount; z += lamp.z * amount;
+    }
+  }
+  return total > 0
+    ? { strength: Math.min(.95, total), x: x / total, y: y / total, z: z / total }
+    : { strength: 0, x: 0, y: 0, z: 0 };
+}

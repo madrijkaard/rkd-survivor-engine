@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { lightingAt, shadowPoint, formatTime, poleLamps } from '../src/lighting.js';
+import { lightingAt, shadowPoint, formatTime, poleLamps, actorLampLight } from '../src/lighting.js';
 import { CAMERA_VIEWS, withCameraView, project, unproject } from '../src/projection.js';
 import { buildingFootprint } from '../src/building-geometry.js';
 import { buildings } from '../src/world.js';
@@ -71,4 +71,35 @@ test('lâmpadas acompanham a altura dos postes comuns e os quatro braços da pra
   const lamps = poleLamps({ ...p, lamp: true });
   assert.equal(lamps.length, 4);
   assert.ok(lamps.every(l => l.z === p.height && Math.hypot(l.x - p.x, l.y - p.y) === 13));
+});
+
+test('luz no corpo aumenta sob a lâmpada e desaparece gradualmente fora do alcance ou de dia', () => {
+  const poles = [{ x: 0, y: 0, height: 160 }], night = lightingAt(1200);
+  const under = { x: 18, y: 0 };
+  let previous = actorLampLight(under, poles, night).strength;
+  assert.ok(previous > .8);
+  for (let distance = 1; distance <= 120; distance++) {
+    const value = actorLampLight({ x: 18 + distance, y: 0 }, poles, night).strength;
+    assert.ok(value <= previous);
+    assert.ok(previous - value < .02, 'sem salto ao entrar/sair da luz');
+    previous = value;
+  }
+  assert.equal(previous, 0);
+  assert.equal(actorLampLight(under, poles, lightingAt(720)).strength, 0);
+  assert.equal(actorLampLight(under, poles, lightingAt(330)).strength, 0);
+  assert.ok(actorLampLight(under, poles, lightingAt(1080)).strength > .8);
+  assert.equal(actorLampLight(under, [], night).strength, 0);
+});
+
+test('luz incidente preserva intensidade nas quatro câmeras e limita sobreposição de postes', () => {
+  const night = lightingAt(1200), actor = { x: 10, y: 10 };
+  const pole = { x: 0, y: 0, height: 160, lamp: true };
+  const original = actorLampLight(actor, [pole], night);
+  assert.ok(original.strength > .8 && original.strength <= .95);
+  assert.ok(original.x < 0 && original.y < 0 && original.z === 160);
+  for (let index = 0; index < CAMERA_VIEWS.length; index++) withCameraView(index, () => {
+    assert.deepEqual(actorLampLight(actor, [pole], night), original);
+    assert.ok(project(original.x, original.y, original.z).y < 0, 'luz vem de cima');
+  });
+  assert.ok(actorLampLight(actor, [pole, pole, pole], night).strength <= .95);
 });

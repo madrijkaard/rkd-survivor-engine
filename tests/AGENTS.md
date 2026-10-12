@@ -10,7 +10,7 @@ npm test
 
 O comando corresponde a `node --test tests/*.test.mjs`. Usa o executor `node:test`, assertivas e módulos nativos do Node, sem framework externo. Requer Node.js 20 ou posterior; não precisa de `npm install`, navegador, servidor HTTP iniciado manualmente nem acesso ao Street View. O teste do endpoint inicia e encerra um servidor em porta efêmera de `127.0.0.1`.
 
-Os testes importam a implementação real de `src/` e leem fotografias e manifestos locais em `maps/`. Não há uma pasta separada de fixtures. A suíte contém atualmente **12 arquivos de testes, com 55 casos**; `AGENTS.md` é este guia e não é executado pelo runner.
+Os testes importam a implementação real de `src/` e leem fotografias e manifestos locais em `maps/`. Não há uma pasta separada de fixtures. A suíte contém atualmente **12 arquivos de testes, com 57 casos**; `AGENTS.md` é este guia e não é executado pelo runner.
 
 ## Função e cobertura de cada arquivo
 
@@ -19,7 +19,7 @@ Os testes importam a implementação real de `src/` e leem fotografias e manifes
 | `world.test.mjs` | 7 | Existência das oito fotos dos 31 pontos da Simeão; ida e volta da projeção dos cliques; continuidade da rua; limites e obstáculos; busca de caminho desviando de canteiro; percurso completo de ida e volta; base inteira do Cruzeiro do Sul dentro da praça e passagem ao redor. |
 | `simeao-extension.test.mjs` | 3 | Preservação dos 17 pontos originais, 112 novas imagens JPEG distintas, coordenadas e limites; travessia da Cônego, chegada/retorno da Henrique Figueiredo; localização das fotos, colisões e unicidade das esquinas compartilhadas. |
 | `home-lighting.test.mjs` | 2 | Proporção de casas selecionadas, estabilidade da seleção por ID, exclusão de comércio/serviços e de fachadas sem janelas, incluindo casas transversais. |
-| `lighting.test.mjs` | 5 | Limites exatos de acendimento dos postes; direção oposta ao Sol e comprimento das sombras; transição contínua para noite; preservação da posição mundial nas quatro câmeras; posições das lâmpadas. |
+| `lighting.test.mjs` | 7 | Limites exatos de acendimento dos postes; direção oposta ao Sol e comprimento das sombras; transição contínua para noite; preservação da posição mundial nas quatro câmeras; posições das lâmpadas; luz no corpo com intensidade gradual, desligamento diurno e limite na sobreposição de postes. |
 | `server-clock.test.mjs` | 5 | Endpoint sem cache e métodos HTTP; fuso do servidor, latência e meia-noite; mudança dos postes por avanço real; recuperação após falhas; sincronização concorrente e rejeição de dados inválidos. |
 | `bar.test.mjs` | 3 | Entrada no bar, desvio das mesas, chegada ao balcão e saída; passagem pelas duas portas e bloqueio no restante da fachada; colisão com mesas, balcão e Péricles. |
 | `camera.test.mjs` | 4 | Recuperação dos destinos da rua/bar nas duas primeiras perspectivas; troca de profundidade sem espelhar o mundo; preservação da personagem, construções, colisões e caminho ao girar; restauração da câmera depois de preparar outra vista. |
@@ -73,4 +73,6 @@ Quando uma alteração afetar desenho ou interação de tela, abra `npm start` e
 
 7. Janelas noturnas: conferir brilho interno quente nas casas selecionadas, grades/venezianas preservadas, ausência de luz nas paredes/chão e ocultação por árvores/prédios nas quatro câmeras e vista aérea. Casas sem janelas e construções públicas/comerciais não recebem esse efeito.
 
-Use somente os itens relevantes à mudança. Uma suíte aprovada confirma os contratos cobertos, mas não substitui essa inspeção visual. Alterações nos scripts de `reference/` também exigem conferência própria de seus arquivos de saída; não estão cobertas integralmente pelos 55 casos atuais.
+8. Personagem sob postes à noite: conferir luz quente na roupa e pele, transição gradual ao entrar/sair do alcance, direção nas quatro câmeras, vista aérea e ocultação por objetos à frente. Dentro do bar e durante o dia, a personagem não recebe essa contribuição dos postes.
+
+Use somente os itens relevantes à mudança. Uma suíte aprovada confirma os contratos cobertos, mas não substitui essa inspeção visual. Alterações nos scripts de `reference/` também exigem conferência própria de seus arquivos de saída; não estão cobertas integralmente pelos 57 casos atuais.

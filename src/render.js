@@ -15,7 +15,7 @@ import { CINEMA_PLAZA } from './cinema-plaza.js';
 import { poleLamps } from './lighting.js';
 import { selectLitHomes } from './home-lighting.js';
 import { SIMEAO_END, HENRIQUE_ROAD } from './simeao-extension.js';
-import { drawSunShadows, beginLampLight, occludeLampLight, drawLampBulbs, finishLighting } from './lighting-render.js';
+import { drawSunShadows, beginLampLight, occludeLampLight, drawActorLampLight, drawLampBulbs, finishLighting } from './lighting-render.js';
 
 export function rng(seed = 1) {
   let n = seed >>> 0;
@@ -349,6 +349,7 @@ export function renderWorld(ctx, scene, camera, actor, frames, options) {
       const sprite = frames[actor.moving && actor.running ? 'run' : 'walk'][direction][frame];
       ctx.imageSmoothingEnabled = false; ctx.drawImage(sprite, Math.round(foot.x - 19), Math.round(foot.y - 48));
       occludeLampLight(lampContext, sprite, Math.round(foot.x - 19), Math.round(foot.y - 48));
+      drawActorLampLight(lampContext, sprite, Math.round(foot.x - 19), Math.round(foot.y - 48), actor, light, insideBar(actor.x, actor.y));
       if (overview) { ctx.strokeStyle = '#e7cb7c'; ctx.lineWidth = 2 / camera.zoom; ctx.beginPath(); ctx.arc(foot.x, foot.y - 14, 12 / camera.zoom, 0, Math.PI * 2); ctx.stroke(); }
     } else {
       const s = entry.sprite;

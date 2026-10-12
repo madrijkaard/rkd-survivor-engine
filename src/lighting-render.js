@@ -4,7 +4,7 @@ import { buildingFootprint } from './building-geometry.js';
 import { CHURCH_TOWER, plazaSeats, plazaStatue } from './mendonca-data.js';
 import { antonioShrubs, antonioCacti, antonioBikes } from './antonio-data.js';
 import { gardenWall, demolitionLot, brickRecess, flowerShrubs, bins } from './street-data.js';
-import { convexHull, shadowPoint, poleLamps } from './lighting.js';
+import { convexHull, shadowPoint, poleLamps, actorLampLight } from './lighting.js';
 import { CINEMA_PLAZA } from './cinema-plaza.js';
 
 const rectangle = (x, y, w, h) => [[x, y], [x + w, y], [x + w, y + h], [x, y + h]];
@@ -130,6 +130,36 @@ export function occludeLampLight(ctx, image, x, y, opacity = 1) {
   ctx.globalAlpha = opacity;
   ctx.drawImage(image, x, y);
   ctx.restore();
+}
+
+let actorLightCanvas;
+export function drawActorLampLight(ctx, image, x, y, actor, light, sheltered) {
+  if (!ctx || sheltered) return;
+  const incident = actorLampLight(actor, poles, light);
+  if (!incident.strength) return;
+  actorLightCanvas ||= document.createElement('canvas');
+  if (actorLightCanvas.width !== image.width || actorLightCanvas.height !== image.height) {
+    actorLightCanvas.width = image.width; actorLightCanvas.height = image.height;
+  }
+  const c = actorLightCanvas.getContext('2d'), w = image.width, h = image.height;
+  c.clearRect(0, 0, w, h);
+  c.save();
+  c.drawImage(image, 0, 0);
+  // Retain the sprite's fabric/skin shading instead of painting a flat glow.
+  c.globalCompositeOperation = 'source-atop';
+  c.fillStyle = 'rgba(255, 207, 134, .18)';
+  c.fillRect(0, 0, w, h);
+  const direction = project(incident.x, incident.y, incident.z - 24);
+  const length = Math.hypot(direction.x, direction.y) || 1;
+  const dx = direction.x / length * w * .5, dy = direction.y / length * h * .5;
+  const mask = c.createLinearGradient(w / 2 + dx, h / 2 + dy, w / 2 - dx, h / 2 - dy);
+  mask.addColorStop(0, `rgba(255,255,255,${incident.strength})`);
+  mask.addColorStop(1, `rgba(255,255,255,${incident.strength * .42})`);
+  c.globalCompositeOperation = 'destination-in';
+  c.fillStyle = mask; c.fillRect(0, 0, w, h);
+  c.restore();
+  // Insert at the actor's depth, before foreground sprites erase their cover.
+  ctx.drawImage(actorLightCanvas, x, y);
 }
 
 export function drawLampBulbs(ctx, pole) {
