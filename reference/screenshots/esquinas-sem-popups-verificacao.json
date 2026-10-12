@@ -1,0 +1,32 @@
+{
+  "date": "2026-10-12",
+  "corners": [
+    {
+      "header": " CODÓ, CENTRO / RUA VINTE E OITO DE JULHO",
+      "popup": false,
+      "openDialogs": 0
+    },
+    {
+      "header": " CODÓ, CENTRO / RUA VINTE E OITO DE JULHO",
+      "popup": false,
+      "openDialogs": 0
+    },
+    {
+      "header": " CODÓ, CENTRO / RUA CÔNEGO MENDONÇA",
+      "popup": false,
+      "openDialogs": 0
+    },
+    {
+      "header": " CODÓ, CENTRO / RUA CÔNEGO MENDONÇA",
+      "popup": false,
+      "openDialogs": 0
+    },
+    {
+      "header": " CODÓ, CENTRO / RUA CÔNEGO MENDONÇA",
+      "popup": false,
+      "openDialogs": 0
+    }
+  ],
+  "errors": [],
+  "testsPassed": 80
+}

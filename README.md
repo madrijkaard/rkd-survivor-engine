@@ -34,7 +34,7 @@ O jogo não utiliza framework, WebGL ou bibliotecas externas. Os fundos estátic
 - Interior acessível do **Bar O Péricles**, com três mesas de sinuca, balcão e atendimento: “E aí meu chapa, o que vai querer?”.
 - **Igreja da Matriz**, **Escola Santa Filomena**, **Praça do Cinema** e a escultura do **Cruzeiro do Sul** integradas ao cenário.
 - Associação da posição da personagem ao conjunto de oito fotos da área, disponível pela tecla **E**.
-- Bairro atual exibido no cabeçalho a partir dos manifestos, com estrutura para mudanças de bairro e nomes opcionais de construções e monumentos.
+- Cidade, bairro e rua atual exibidos no cabeçalho a partir dos manifestos; o nome da rua acompanha a mudança de via nas esquinas. Nomes opcionais de construções e monumentos continuam disponíveis.
 - Filtro retrô, som opcional e controles de toque.
 - Horário sincronizado com o relógio e o fuso do servidor, com sombras solares móveis e postes que acendem às 18:00 e apagam às 05:30. Na câmera inicial, o Sol nasce no canto inferior direito e se põe no superior esquerdo; girar a câmera preserva sua direção no mundo. Cerca de 70% das casas com janelas têm brilho interno quente no mesmo período noturno, sem iluminar paredes ou chão.
 

@@ -15,13 +15,13 @@ const surface = $('scene'), ctx = surface.getContext('2d', { alpha: false });
 const mini = $('minimap'), miniCtx = mini.getContext('2d');
 const actor = { ...START, direction: 4, facing: unproject(0,-1), walkCycle: 0, moving: false, running: false };
 const camera = { x: 0, y: 0, zoom: 1 }, keys = new Set(), taps = new Set(), visited = new Set(['simeao:1']);
-const arrivals=new Set();
+
 let scene, sceneViews, frames, path = [], overview = false, retro = true, currentPoint = 0;
 let pathRunning = false;
 let currentStreet = 'simeao';
 const clickNavigation = createClickNavigation();
 let turnAnimation;
-let lastTime = 0, elapsed = 0, hudTime = 0, arrivalShown = false, arrivalTimer = 0, toastTimer;
+let lastTime = 0, elapsed = 0, hudTime = 0, toastTimer;
 let sound = null, soundEnabled = false, footstepTimer = 0;
 let talkRequested = false;
 const serverClock = createServerClock();
@@ -71,6 +71,8 @@ function updateHud() {
   const {route,point:data,city,neighborhood}=locationAt(actor.x,actor.y),point=data.id;
   const locationLabel = [city,neighborhood].filter(Boolean).join(', ').toLocaleUpperCase('pt-BR');
   if ($('cityNeighborhood').textContent !== locationLabel) $('cityNeighborhood').textContent = locationLabel;
+  const streetLabel = route.name.toLocaleUpperCase('pt-BR');
+  if ($('currentStreetName').textContent !== streetLabel) $('currentStreetName').textContent = streetLabel;
   surface.dataset.neighborhood = neighborhood ?? '';
   visited.add(`${route.id}:${point}`);
   const inBar = insideBar(actor.x,actor.y);
@@ -82,7 +84,7 @@ function updateHud() {
   surface.dataset.point = point; surface.dataset.playerX = actor.x.toFixed(2); surface.dataset.playerY = actor.y.toFixed(2);
   surface.dataset.overview = String(overview); surface.dataset.moving = String(actor.moving);
   surface.dataset.movementMode = actor.moving ? (actor.running ? 'run' : 'walk') : 'idle';
-  surface.dataset.arrived = String(arrivalShown);
+
   surface.dataset.view=CAMERA_VIEWS[getCameraView()].id;
   surface.dataset.street=route.id;
   drawMinimap();
@@ -143,12 +145,12 @@ function toggleOverview() {
   overview = !overview;
   document.body.classList.toggle('overview', overview); $('mapToggle').classList.toggle('active', overview);
   $('mapToggle').setAttribute('aria-pressed', String(overview)); $('overviewHint').hidden = !overview;
-  $('arrival').hidden = true; surface.focus({ preventScroll: true }); updateHud();
+  surface.focus({ preventScroll: true }); updateHud();
 }
 function reset() {
   closeDialogue();
   Object.assign(actor, START, { direction: 4, facing:unproject(0,-1), moving: false, running: false, walkCycle: 0 }); path = []; pathRunning = false; clickNavigation.reset(); keys.clear(); taps.clear();
-  visited.clear(); visited.add('simeao:1'); arrivals.clear();arrivalShown = false; $('arrival').hidden = true;
+  visited.clear(); visited.add('simeao:1');
   if (overview) toggleOverview(); Object.assign(camera, cameraGoal()); updateHud(); surface.focus({ preventScroll: true });
 }
 function notify(text) {
@@ -244,7 +246,7 @@ document.querySelectorAll('[data-move]').forEach(button => {
   const release = () => keys.delete(virtualKeys[button.dataset.move]);
   button.addEventListener('pointerup', release); button.addEventListener('pointercancel', release); button.addEventListener('lostpointercapture', release);
 });
-$('mapToggle').addEventListener('click', toggleOverview); $('arrivalMap').addEventListener('click', toggleOverview);
+$('mapToggle').addEventListener('click', toggleOverview);
 $('rotateCamera').addEventListener('click',rotateCamera);
 $('reset').addEventListener('click', reset);
 $('effectToggle').addEventListener('click', () => {
@@ -342,15 +344,7 @@ function step(dt) {
   }
   if (!path.length) pathRunning = false;
   if(talkRequested && insideBar(actor.x,actor.y) && Math.hypot(actor.x-BAR.talkSpot.x,actor.y-BAR.talkSpot.y)<8)showDialogue();
-  const atAntonio=Math.hypot(actor.x-ANTONIO_END.x,actor.y-ANTONIO_END.y)<40;
-  const atSimeao=Math.abs(actor.x)<80&&actor.y>SIMEAO_END-130;
-  const arrivalId=atSimeao?'simeao':atAntonio?'antonio':actor.x>=MENDONCA_END-30&&Math.abs(actor.y-CROSS_Y)<100?'conego':null;
-  if (arrivalId&&!arrivals.has(arrivalId)) {
-    arrivals.add(arrivalId);arrivalShown = true; $('arrival').hidden = false; arrivalTimer = 6;
-    $('arrivalTitle').textContent=atSimeao?'A esquina da Henrique Figueiredo':atAntonio?'A esquina da Vinte e Oito de Julho':'O fim da Cônego Mendonça';
-    $('arrivalDetail').textContent=atSimeao?'Você atravessou a Cônego Mendonça e percorreu mais um quarteirão da Simeão de Macedo.':atAntonio?'Você percorreu a Rua Antônio Alexandre. Siga pela rua transversal para voltar à Simeão.':'Você chegou à esquina diante da Academia Figueiredo. Explore também a praça e a Rua Antônio Alexandre.';
-  }
-  if (arrivalTimer > 0) { arrivalTimer -= dt; if (arrivalTimer <= 0) $('arrival').hidden = true; }
+
 }
 function animate(time) {
   updateTime();

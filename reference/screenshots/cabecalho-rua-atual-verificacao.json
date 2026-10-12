@@ -1,0 +1,22 @@
+{
+  "routes": [
+    " CODÓ, CENTRO / RUA SIMEÃO DE MACEDO",
+    " CODÓ, CENTRO / RUA CÔNEGO MENDONÇA",
+    " CODÓ, CENTRO / RUA ANTÔNIO ALEXANDRE",
+    " CODÓ, CENTRO / RUA VINTE E OITO DE JULHO",
+    " CODÓ, CENTRO / RUA FERNANDO CARVALHO",
+    " CODÓ, CENTRO / PRAÇA ALCEBÍADES SILVA"
+  ],
+  "errors": [],
+  "crossing": " CODÓ, CENTRO / RUA FERNANDO CARVALHO",
+  "return": " CODÓ, CENTRO / RUA VINTE E OITO DE JULHO",
+  "mobile": {
+    "visible": true,
+    "withinViewport": true,
+    "separate": true,
+    "titleRemoved": true,
+    "subtitleRemoved": true
+  },
+  "date": "2026-10-12",
+  "testsPassed": 80
+}

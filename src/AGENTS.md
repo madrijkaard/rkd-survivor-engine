@@ -101,7 +101,7 @@ Girar câmera muda projeção, faces visíveis e profundidade. Não rotacione os
 
 `locationAt(x, y)` compara a distância aos segmentos dos percursos para escolher uma rua e então procura seu ponto mais próximo. Retorna `{ route, point, city, neighborhood }`. Em empate entre segmentos no cruzamento, vence a rota cujo ponto fotografado estiver mais perto. Na junção, a proximidade é geométrica; não existe uma planta cadastral de bairros. `pointAt(y)` é uma função de proximidade limitada aos 31 pontos da Simeão: não a use para localizar o mundo inteiro.
 
-`imagePath(point, direction, street)` recebe o número do ponto e da direção (1–8). Preserve essa associação quando alterar catálogos. Os campos `title`, `detail` e `area` dos pontos continuam sendo metadados mesmo sem o antigo painel inferior esquerdo. O cabeçalho deve usar o bairro carregado, e E deve continuar funcionando.
+`imagePath(point, direction, street)` recebe o número do ponto e da direção (1–8). Preserve essa associação quando alterar catálogos. Os campos `title`, `detail` e `area` dos pontos continuam sendo metadados mesmo sem o antigo painel inferior esquerdo. O cabeçalho exibe cidade/bairro em `cityNeighborhood` e `route.name` em `currentStreetName`, atualizados por `updateHud()` conforme `locationAt`. O título grande e a frase de apresentação foram removidos; a localização permanece visível também em telas pequenas. E continua usando a mesma rua selecionada.
 
 ## Construções, curvas e colisões
 
@@ -159,3 +159,5 @@ Evite refazer o cenário estático a cada quadro. Os fundos amplos e fios já us
 ## Verificação
 
 Execute os testes pertinentes descritos em [tests/AGENTS.md](../tests/AGENTS.md), ou `npm test` para a integração completa. Para desenho/interface, valide também no navegador: Q nas quatro vistas, M, clique e clique duplo, E, entrada/saída do bar e os locais modificados. Testes de geometria não detectam fachadas pintadas sobre telhados nem textos escondidos por uma janela.
+
+Os avisos automáticos centrais de chegada às esquinas foram removidos da interface e de `step()`. Não há elemento `arrival`, temporizador de chegada ou atributo `data-arrived`. A localização continua no cabeçalho dinâmico; as janelas de fotos (E) e ajuda são abertas apenas por ação do jogador.
