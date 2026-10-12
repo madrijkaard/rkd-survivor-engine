@@ -1,12 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { createClickNavigation, RUN_SPEED } from '../src/click-navigation.js';
+import { createClickNavigation, WALK_SPEED, RUN_SPEED } from '../src/click-navigation.js';
 import { findPath, moveActor, walkable } from '../src/world.js';
 import { BAR } from '../src/bar-layout.js';
 
 const pointer = { x: 200, y: 300, time: 1000, source: 'scene', type: 'mouse' };
 
-test('primeiro clique caminha imediatamente; segundo corre ao mesmo destino apesar da câmera', () => {
+test('primeiro clique anda rápido imediatamente; segundo corre ao mesmo destino apesar da câmera', () => {
   const clicks = createClickNavigation(), destination = { x: 0, y: 280 };
   assert.deepEqual(clicks.select(pointer, () => destination), { destination, running: false });
   const second = clicks.select({ ...pointer, x: 204, time: 1200 }, () => {
@@ -52,5 +52,16 @@ test('passos de corrida no limite de duração do frame contornam mesas e atrave
       }
     }
     assert.ok(Math.hypot(actor.x - destination.x, actor.y - destination.y) < 1e-6, 'Para no destino sem ultrapassá-lo');
+  }
+});
+
+
+test('andar rápido mantém a antiga velocidade máxima e corrida avança 25% mais',()=>{
+  assert.equal(WALK_SPEED,100);
+  assert.equal(RUN_SPEED,WALK_SPEED*1.25);
+  for(const speed of [WALK_SPEED,RUN_SPEED]){
+    const actor={x:0,y:800};
+    for(let frame=0;frame<20;frame++)assert.ok(moveActor(actor,0,speed*.05));
+    assert.ok(Math.abs(actor.y-800-speed)<1e-8,'Um segundo de movimento conserva a velocidade escolhida');
   }
 });

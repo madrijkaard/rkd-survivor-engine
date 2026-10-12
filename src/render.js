@@ -318,37 +318,7 @@ function drawGround(ctx) {
   }
 }
 
-// Eight camera-facing directions and eight walk frames. These 2D sprites are
-// baked once, then composited with the pre-rendered street using their feet.
-export function createActorFrames() {
-  return Array.from({ length: 8 }, (_, direction) => Array.from({ length: 8 }, (_, frame) => {
-    const c = canvas(38, 54), ctx = c.getContext('2d'), angle = direction * Math.PI / 4;
-    const sway = Math.sin(frame * Math.PI / 4), side = Math.sin(angle), face = Math.cos(angle);
-    const x = 19, foot = 48, bounce = Math.abs(sway) * .9;
-    const stroke = (a, b, color, width) => { ctx.lineCap = 'round'; ctx.lineWidth = width; ctx.strokeStyle = color; ctx.beginPath(); ctx.moveTo(...a); ctx.lineTo(...b); ctx.stroke(); };
-    // Slight limb foreshortening makes each walk direction distinct.
-    for (const s of [-1, 1]) {
-      const stride = sway * s, hip = [x + s * 3, 31 - bounce], knee = [x + s * 3 + stride * 2.5 + side, 39 - bounce], boot = [x + s * 3 + stride * 4 + side * 2, foot - Math.max(0, stride) * 2.5];
-      stroke(hip, knee, s < 0 ? '#526a71' : '#6b8386', 5); stroke(knee, boot, '#405861', 4);
-      stroke([boot[0] - 1, boot[1]], [boot[0] + (side || 1) * 3, boot[1]], '#26322f', 4);
-    }
-    ctx.fillStyle = '#273b38'; ctx.beginPath(); ctx.moveTo(x - 6, 19 - bounce); ctx.lineTo(x + 6, 19 - bounce); ctx.lineTo(x + 5, 33 - bounce); ctx.lineTo(x - 5, 33 - bounce); ctx.fill();
-    ctx.fillStyle = '#716960'; ctx.fillRect(x - 3, 19 - bounce, 6, 11);
-    ctx.fillStyle = '#394c47'; ctx.fillRect(x - 6, 19 - bounce, 3, 13); ctx.fillStyle = '#4b5c50'; ctx.fillRect(x + 3, 19 - bounce, 3, 13);
-    if (face < -.3) { ctx.fillStyle = '#586552'; ctx.fillRect(x - 5, 20 - bounce, 10, 11); ctx.fillStyle = '#303f36'; ctx.fillRect(x - 2, 21 - bounce, 1, 10); }
-    for (const s of [-1, 1]) {
-      const swing = -s * sway * 3, arm = [x + s * 6, 21 - bounce], elbow = [x + s * 8 + side, 28 + swing - bounce], hand = [x + s * 7 + side * 2, 33 + swing - bounce];
-      stroke(arm, elbow, s < 0 ? '#30433c' : '#607060', 4); stroke(elbow, hand, '#536150', 3); ctx.fillStyle = '#baad8a'; ctx.fillRect(hand[0] - 1, hand[1] - 1, 3, 3);
-    }
-    ctx.fillStyle = '#bcb18e'; ctx.fillRect(x - 2, 15 - bounce, 4, 5);
-    ctx.fillStyle = '#c9b691'; ctx.beginPath(); ctx.ellipse(x + side, 12 - bounce, 4.3, 5.7, -.12, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = '#51463a'; ctx.beginPath(); ctx.ellipse(x, 9 - bounce, 5, 4, -.2, 0, Math.PI * 2); ctx.fill();
-    if (face < 0) { ctx.fillStyle = '#4f4437'; ctx.fillRect(x - 4, 10 - bounce, 8, 7); }
-    else { ctx.fillStyle = '#594b38'; ctx.fillRect(x - 5, 9 - bounce, 2, 7); ctx.fillStyle = '#423f32'; ctx.fillRect(x + 2 + side, 12 - bounce, 1, 1); }
-    stroke([x - 3, 10 - bounce], [x - 6 + sway * .5, 19 - bounce], '#544735', 3);
-    return c;
-  }));
-}
+export { createActorFrames } from './actor-animation.js';
 
 export function renderWorld(ctx, scene, camera, actor, frames, options) {
   const { width, height, time, overview, path } = options;
@@ -376,8 +346,9 @@ export function renderWorld(ctx, scene, camera, actor, frames, options) {
   for (const entry of renderables) {
     if (entry.player) {
       const direction = actor.direction, frame = actor.moving ? Math.floor(actor.walkCycle) % 8 : 0;
-      ctx.imageSmoothingEnabled = false; ctx.drawImage(frames[direction][frame], Math.round(foot.x - 19), Math.round(foot.y - 48));
-      occludeLampLight(lampContext, frames[direction][frame], Math.round(foot.x - 19), Math.round(foot.y - 48));
+      const sprite = frames[actor.moving && actor.running ? 'run' : 'walk'][direction][frame];
+      ctx.imageSmoothingEnabled = false; ctx.drawImage(sprite, Math.round(foot.x - 19), Math.round(foot.y - 48));
+      occludeLampLight(lampContext, sprite, Math.round(foot.x - 19), Math.round(foot.y - 48));
       if (overview) { ctx.strokeStyle = '#e7cb7c'; ctx.lineWidth = 2 / camera.zoom; ctx.beginPath(); ctx.arc(foot.x, foot.y - 14, 12 / camera.zoom, 0, Math.PI * 2); ctx.stroke(); }
     } else {
       const s = entry.sprite;

@@ -30,7 +30,7 @@ O jogo não utiliza framework, WebGL ou bibliotecas externas. Os fundos estátic
 - A Simeão atravessa a Cônego Mendonça e segue até a esquina com a Henrique Figueiredo, com 14 novos pontos fotografados e coordenadas WGS84.
 - Três ruas conectadas, com casas individualizadas, fachadas de esquina compartilhadas e construções acompanhando a curva da Antônio Alexandre.
 - Quatro orientações de câmera, vista aérea do conjunto e minimapa navegável.
-- Caminhada, corrida moderada e trajetos por clique que desviam dos obstáculos.
+- Caminhada e corrida com animações em oito direções: o clique orienta a personagem para o trajeto, que desvia dos obstáculos.
 - Interior acessível do **Bar O Péricles**, com três mesas de sinuca, balcão e atendimento: “E aí meu chapa, o que vai querer?”.
 - **Igreja da Matriz**, **Escola Santa Filomena**, **Praça do Cinema** e a escultura do **Cruzeiro do Sul** integradas ao cenário.
 - Associação da posição da personagem ao conjunto de oito fotos da área, disponível pela tecla **E**.
@@ -40,10 +40,10 @@ O jogo não utiliza framework, WebGL ou bibliotecas externas. Os fundos estátic
 
 | Controle | Ação |
 | --- | --- |
-| WASD ou setas | Caminhar na direção da tela. |
+| WASD ou setas | Andar rápido na direção da tela. |
 | Shift | Correr. |
-| Clique no chão ou minimapa | Caminhar até o destino. |
-| Dois cliques rápidos no mesmo lugar | Correr até o destino; um novo clique simples volta à caminhada. |
+| Clique no chão ou minimapa | Andar rápido até o destino. |
+| Dois cliques rápidos no mesmo lugar | Correr até o destino; um novo clique simples volta ao andar rápido. |
 | Q / Girar câmera | Alternar entre as quatro perspectivas. |
 | M / Vista aérea | Ver o conjunto das ruas. |
 | E | Abrir as oito fotografias do ponto atual. |
@@ -128,3 +128,5 @@ npm test
 ```
 
 Os testes usam os arquivos locais e não precisam de um servidor iniciado manualmente. O teste do relógio abre e encerra seu próprio servidor em uma porta local temporária. Consulte [tests/AGENTS.md](tests/AGENTS.md) para saber o que cada arquivo verifica.
+
+A caminhada padrão usa a antiga velocidade rápida (100 unidades/s); a corrida usa 125 unidades/s, 25% a mais. Clique simples/toque e WASD/setas andam rápido; clique duplo/duplo toque ou Shift correm com animação própria de passadas, braços dobrados e inclinação do corpo.

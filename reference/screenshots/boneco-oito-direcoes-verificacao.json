@@ -1,0 +1,261 @@
+{
+  "checks": [
+    {
+      "view": 1,
+      "d": 0,
+      "selected": 0,
+      "path": 1,
+      "finalDirection": 0,
+      "error": 0.000022261323600230145
+    },
+    {
+      "view": 1,
+      "d": 1,
+      "selected": 1,
+      "path": 1,
+      "finalDirection": 1,
+      "error": 0.00000929928696731224
+    },
+    {
+      "view": 1,
+      "d": 2,
+      "selected": 2,
+      "path": 1,
+      "finalDirection": 2,
+      "error": 0.000011818634310682014
+    },
+    {
+      "view": 1,
+      "d": 3,
+      "selected": 3,
+      "path": 1,
+      "finalDirection": 3,
+      "error": 0.000013958098471452952
+    },
+    {
+      "view": 1,
+      "d": 4,
+      "selected": 4,
+      "path": 1,
+      "finalDirection": 4,
+      "error": 0.000010837861534821705
+    },
+    {
+      "view": 1,
+      "d": 5,
+      "selected": 5,
+      "path": 1,
+      "finalDirection": 5,
+      "error": 0.00000952004559772579
+    },
+    {
+      "view": 1,
+      "d": 6,
+      "selected": 6,
+      "path": 1,
+      "finalDirection": 6,
+      "error": 0.000011021431111948078
+    },
+    {
+      "view": 1,
+      "d": 7,
+      "selected": 7,
+      "path": 1,
+      "finalDirection": 7,
+      "error": 0.000017595767490715167
+    },
+    {
+      "view": 2,
+      "d": 0,
+      "selected": 0,
+      "path": 1,
+      "finalDirection": 0,
+      "error": 0.000011589578108438525
+    },
+    {
+      "view": 2,
+      "d": 1,
+      "selected": 1,
+      "path": 1,
+      "finalDirection": 1,
+      "error": 0.000008848403332308625
+    },
+    {
+      "view": 2,
+      "d": 2,
+      "selected": 2,
+      "path": 1,
+      "finalDirection": 2,
+      "error": 0.00001292493049333452
+    },
+    {
+      "view": 2,
+      "d": 3,
+      "selected": 3,
+      "path": 1,
+      "finalDirection": 3,
+      "error": 0.000014892408549224578
+    },
+    {
+      "view": 2,
+      "d": 4,
+      "selected": 4,
+      "path": 1,
+      "finalDirection": 4,
+      "error": 0.000010953482863017958
+    },
+    {
+      "view": 2,
+      "d": 5,
+      "selected": 5,
+      "path": 1,
+      "finalDirection": 5,
+      "error": 0.000008814211667643567
+    },
+    {
+      "view": 2,
+      "d": 6,
+      "selected": 6,
+      "path": 1,
+      "finalDirection": 6,
+      "error": 0.000007570115172634126
+    },
+    {
+      "view": 2,
+      "d": 7,
+      "selected": 7,
+      "path": 1,
+      "finalDirection": 7,
+      "error": 0.000016416379961036836
+    },
+    {
+      "view": 3,
+      "d": 0,
+      "selected": 0,
+      "path": 1,
+      "finalDirection": 0,
+      "error": 0.00002247829320117769
+    },
+    {
+      "view": 3,
+      "d": 1,
+      "selected": 1,
+      "path": 1,
+      "finalDirection": 1,
+      "error": 0.000025783637849977914
+    },
+    {
+      "view": 3,
+      "d": 2,
+      "selected": 2,
+      "path": 1,
+      "finalDirection": 2,
+      "error": 0.000009059044711911066
+    },
+    {
+      "view": 3,
+      "d": 3,
+      "selected": 3,
+      "path": 1,
+      "finalDirection": 3,
+      "error": 0.00001169476710844325
+    },
+    {
+      "view": 3,
+      "d": 4,
+      "selected": 4,
+      "path": 1,
+      "finalDirection": 4,
+      "error": 0.000011044768168307805
+    },
+    {
+      "view": 3,
+      "d": 5,
+      "selected": 5,
+      "path": 1,
+      "finalDirection": 5,
+      "error": 0.000016430713574561937
+    },
+    {
+      "view": 3,
+      "d": 6,
+      "selected": 6,
+      "path": 1,
+      "finalDirection": 6,
+      "error": 0.000015410741949632978
+    },
+    {
+      "view": 3,
+      "d": 7,
+      "selected": 7,
+      "path": 1,
+      "finalDirection": 7,
+      "error": 0.00001538210655782509
+    },
+    {
+      "view": 0,
+      "d": 0,
+      "selected": 0,
+      "path": 1,
+      "finalDirection": 0,
+      "error": 0.000020312760801683373
+    },
+    {
+      "view": 0,
+      "d": 1,
+      "selected": 1,
+      "path": 1,
+      "finalDirection": 1,
+      "error": 0.000012245368770882192
+    },
+    {
+      "view": 0,
+      "d": 2,
+      "selected": 2,
+      "path": 1,
+      "finalDirection": 2,
+      "error": 0.00002967740551772177
+    },
+    {
+      "view": 0,
+      "d": 3,
+      "selected": 3,
+      "path": 1,
+      "finalDirection": 3,
+      "error": 0.000010600350103133718
+    },
+    {
+      "view": 0,
+      "d": 4,
+      "selected": 4,
+      "path": 1,
+      "finalDirection": 4,
+      "error": 0.00001235574950982867
+    },
+    {
+      "view": 0,
+      "d": 5,
+      "selected": 5,
+      "path": 1,
+      "finalDirection": 5,
+      "error": 0.00001824637430029693
+    },
+    {
+      "view": 0,
+      "d": 6,
+      "selected": 6,
+      "path": 1,
+      "finalDirection": 6,
+      "error": 0.000008065227805626117
+    },
+    {
+      "view": 0,
+      "d": 7,
+      "selected": 7,
+      "path": 1,
+      "finalDirection": 7,
+      "error": 0.000023865779332719106
+    }
+  ],
+  "errors": []
+}

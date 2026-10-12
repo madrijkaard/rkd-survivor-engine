@@ -10,7 +10,7 @@ npm test
 
 O comando corresponde a `node --test tests/*.test.mjs`. Usa o executor `node:test`, assertivas e módulos nativos do Node, sem framework externo. Requer Node.js 20 ou posterior; não precisa de `npm install`, navegador, servidor HTTP iniciado manualmente nem acesso ao Street View. O teste do endpoint inicia e encerra um servidor em porta efêmera de `127.0.0.1`.
 
-Os testes importam a implementação real de `src/` e leem fotografias e manifestos locais em `maps/`. Não há uma pasta separada de fixtures. A suíte contém atualmente **onze arquivos de testes, com 51 casos**; `AGENTS.md` é este guia e não é executado pelo runner.
+Os testes importam a implementação real de `src/` e leem fotografias e manifestos locais em `maps/`. Não há uma pasta separada de fixtures. A suíte contém atualmente **12 arquivos de testes, com 55 casos**; `AGENTS.md` é este guia e não é executado pelo runner.
 
 ## Função e cobertura de cada arquivo
 
@@ -23,7 +23,8 @@ Os testes importam a implementação real de `src/` e leem fotografias e manifes
 | `server-clock.test.mjs` | 5 | Endpoint sem cache e métodos HTTP; fuso do servidor, latência e meia-noite; mudança dos postes por avanço real; recuperação após falhas; sincronização concorrente e rejeição de dados inválidos. |
 | `bar.test.mjs` | 3 | Entrada no bar, desvio das mesas, chegada ao balcão e saída; passagem pelas duas portas e bloqueio no restante da fachada; colisão com mesas, balcão e Péricles. |
 | `camera.test.mjs` | 4 | Recuperação dos destinos da rua/bar nas duas primeiras perspectivas; troca de profundidade sem espelhar o mundo; preservação da personagem, construções, colisões e caminho ao girar; restauração da câmera depois de preparar outra vista. |
-| `click-navigation.test.mjs` | 4 | Primeiro clique caminha e segundo clique rápido corre ao mesmo destino mesmo com deslocamento de câmera; cliques lentos, distantes ou em outra superfície não iniciam corrida; reset do gesto e duplo toque; deslocamentos de corrida respeitam mesas e portas. |
+| `actor-animation.test.mjs` | 3 | Oito setores de direção, preservação da postura ao parar e orientação do destino clicado nas quatro câmeras. |
+| `click-navigation.test.mjs` | 5 | Primeiro clique anda rápido e segundo clique rápido corre ao mesmo destino mesmo com deslocamento de câmera; cliques lentos, distantes ou em outra superfície não iniciam corrida; reset do gesto e duplo toque; deslocamentos de corrida respeitam mesas e portas; velocidades de 100/125 unidades/s, com avanço efetivo de 25% a mais na corrida. |
 | `mendonca.test.mjs` | 5 | Quinze panoramas, 120 fotos distintas e coordenadas; igreja inteira dentro da praça e ruas de contorno livres; percurso conectado com a Simeão; mudança de fotos/numeração na esquina preservando os 17 pontos originais; projeção transversal nas quatro câmeras e restauração do estado. |
 | `antonio.test.mjs` | 9 | Vinte pontos, 160 fotos distintas e coordenadas; volta pelas três ruas e Vinte e Oito de Julho; associação de fotos nas quatro câmeras; volumes compartilhados e obstáculos da escola; encontro das fachadas nas divisas; lotes fora da faixa da rua; colisões em paredes inclinadas e plantas de esquina; alinhamento da casa rosa; recorte do muro azul na entrada coberta da escola. |
 | `manifests.test.mjs` | 4 | Esquema dos três manifestos, bairro e oito imagens por ponto; carregamento preservando `x/y` e referências; mudança de bairro por ponto e retorno ao bairro da rua vizinha; rejeição de manifestos inválidos/falhas de carregamento sem aplicar metadados parcialmente. |
@@ -72,4 +73,4 @@ Quando uma alteração afetar desenho ou interação de tela, abra `npm start` e
 
 7. Janelas noturnas: conferir brilho interno quente nas casas selecionadas, grades/venezianas preservadas, ausência de luz nas paredes/chão e ocultação por árvores/prédios nas quatro câmeras e vista aérea. Casas sem janelas e construções públicas/comerciais não recebem esse efeito.
 
-Use somente os itens relevantes à mudança. Uma suíte aprovada confirma os contratos cobertos, mas não substitui essa inspeção visual. Alterações nos scripts de `reference/` também exigem conferência própria de seus arquivos de saída; não estão cobertas integralmente pelos 51 casos atuais.
+Use somente os itens relevantes à mudança. Uma suíte aprovada confirma os contratos cobertos, mas não substitui essa inspeção visual. Alterações nos scripts de `reference/` também exigem conferência própria de seus arquivos de saída; não estão cobertas integralmente pelos 55 casos atuais.

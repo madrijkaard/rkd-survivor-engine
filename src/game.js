@@ -1,3 +1,4 @@
+import { directionFromScreen } from './actor-animation.js';
 import { project, unproject, routes, allPoints, locationAt, START, DIRECTIONS, imagePath, moveActor, findPath, CROSS_Y, MENDONCA_END, WORLD_BOUNDS } from './world.js';
 import { loadMapManifests } from './map-manifests.js';
 import { createScene, createActorFrames, renderWorld } from './render.js';
@@ -84,6 +85,7 @@ function updateHud() {
   surface.dataset.point = point; surface.dataset.playerX = actor.x.toFixed(2); surface.dataset.playerY = actor.y.toFixed(2);
   surface.dataset.overview = String(overview); surface.dataset.moving = String(actor.moving);
   surface.dataset.movementMode = actor.moving ? (actor.running ? 'run' : 'walk') : 'idle';
+  surface.dataset.movementSpeed = String(actor.moving ? (actor.running ? RUN_SPEED : WALK_SPEED) : 0);
 
   surface.dataset.view=CAMERA_VIEWS[getCameraView()].id;
   surface.dataset.street=route.id;
@@ -99,7 +101,7 @@ function rotateCamera() {
   const next=(getCameraView()+1)%CAMERA_VIEWS.length;
   setCameraView(next);scene=sceneViews[next];
   const direction=project(actor.facing.x,actor.facing.y);
-  actor.direction=(Math.round(Math.atan2(direction.x,direction.y)/(Math.PI/4))+8)%8;
+  actor.direction=directionFromScreen(direction.x, direction.y, actor.direction);
   Object.assign(camera,cameraGoal());
   $('cameraViewNumber').textContent=`${next+1}/${CAMERA_VIEWS.length}`;
   $('rotateCamera').setAttribute('aria-pressed',String(next!==0));
@@ -162,6 +164,12 @@ function navigate(destination, forConversation=false, running=false) {
   const route = findPath(actor, destination);
   if (!route) { notify(insideBar(actor.x,actor.y)?'Escolha um espaço livre entre as mesas.':'Não há passagem por aqui. Selecione a rua, a praça ou uma porta aberta.'); return false; }
   path = route; pathRunning = running;
+  const next = path.find(point => Math.hypot(point.x - actor.x, point.y - actor.y) > .001);
+  if (next) {
+    actor.facing = { x: next.x - actor.x, y: next.y - actor.y };
+    const direction = project(actor.facing.x, actor.facing.y);
+    actor.direction = directionFromScreen(direction.x, direction.y, actor.direction);
+  }
   if (overview) toggleOverview();
   surface.focus({ preventScroll: true });
   return true;
@@ -210,7 +218,7 @@ surface.addEventListener('pointerdown', event => navigateByPointer(event, () => 
   }
   return unproject((x - surface.width / 2) / camera.zoom + camera.x, (y - surface.height / 2) / camera.zoom + camera.y);
 }));
-mini.style.cursor = 'pointer'; mini.title = 'Um clique para caminhar; dois cliques rápidos para correr até o trecho';
+mini.style.cursor = 'pointer'; mini.title = 'Um clique para andar rápido; dois cliques rápidos para correr até o trecho';
 mini.addEventListener('pointerdown', event => navigateByPointer(event, () => {
   const rect = mini.getBoundingClientRect(), x=(event.clientX-rect.left)*mini.width/rect.width,y = (event.clientY - rect.top) * mini.height / rect.height;
   const distance=p=>{const q=miniProject(p.x,p.y);return Math.hypot(q.x-x,q.y-y);};
@@ -336,10 +344,10 @@ function step(dt) {
       actor.running = running;
       actor.facing={x:actor.x-before.x,y:actor.y-before.y};
       const direction = project(actor.facing.x, actor.facing.y);
-      actor.direction = (Math.round(Math.atan2(direction.x, direction.y) / (Math.PI / 4)) + 8) % 8;
-      actor.walkCycle += dt * (running ? 14 : 9);
+      actor.direction = directionFromScreen(direction.x, direction.y, actor.direction);
+      actor.walkCycle += dt * (running ? 18 : 14);
       footstepTimer += dt;
-      if (footstepTimer > (running ? .27 : .42)) { footstep(); footstepTimer = 0; }
+      if (footstepTimer > (running ? .22 : .27)) { footstep(); footstepTimer = 0; }
     } else if (path.length) path = [];
   }
   if (!path.length) pathRunning = false;

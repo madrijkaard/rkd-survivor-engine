@@ -1,5 +1,6 @@
-export const WALK_SPEED = 67;
-export const RUN_SPEED = 100;
+// O andar rápido anterior passa a ser a caminhada padrão; corrida é 25% maior.
+export const WALK_SPEED = 100;
+export const RUN_SPEED = 125;
 
 export function createClickNavigation() {
   let previous = null;
