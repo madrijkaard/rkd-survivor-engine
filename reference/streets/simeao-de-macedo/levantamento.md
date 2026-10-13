@@ -56,3 +56,12 @@ As divisões de imóveis, alturas, profundidades, plantas internas e o recuo ent
 O catálogo simeao-extension.js reutiliza os IDs corner-wall e corner-shop, compartilhados com a Cônego. O muro oeste comprido e o muro final leste são divididos em sprites adjacentes somente para composição e transparência: não representam múltiplos imóveis. Motocicletas e pessoas das fotografias não são um cadastro de habitantes; o cenário mantém os elementos estáticos aproximados. Os postes e casas elegíveis herdam o ciclo de iluminação existente.
 
 Verificação: consulta E no ponto 22, câmeras e vista aérea; testes de continuidade pelo eixo, travessia da Cônego, chegada/retorno à Henrique Figueiredo, localização dos novos pontos, colisões e unicidade das esquinas. As pranchas ponto-18.jpg a ponto-31.jpg e extensao-1.jpg a extensao-4.jpg podem ser regeneradas com simeao-contact.py.
+
+## Revisão da largura da pista — 10/10/2026
+
+Por definição do usuário, o manifesto agora registra `roadType: "rua"`. A pista desta rota usa três larguras do carro do jogo: 3 × 32 = 96 unidades, medidas perpendicularmente ao eixo e sem incluir as calçadas. A regra para avenidas é 4 × 32 = 128. É uma proporção artística definida para o jogo, não uma medida extraída do Street View. Fotos, GPS e IDs foram preservados. As larguras e posições de fachadas descritas anteriormente neste levantamento são o registro histórico anterior a essa revisão.
+
+
+## Nova proporção de pistas e calçadas — 10/10/2026
+
+Substitui a proporção anterior por solicitação do usuário: rua = quatro carros (128 unidades) e avenida = cinco (160). Cada passeio de rua tem duas pessoas (40 unidades); cada passeio de avenida tem quatro (80). Este manifesto mantém `roadType: "rua"` e registra explicitamente `sidewalkType: "calcada-de-rua"`, aplicado a ambos os lados e a todos os pontos do trajeto. A referência é artística: carro de 32 unidades e corpo com braços de 20, não uma nova medição geográfica. Pisos, limites transitáveis, fachadas e esquinas foram reconstruídos mantendo IDs, fotos e eixos. Praças e recuos existentes somam áreas além da faixa de calçada.

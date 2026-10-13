@@ -1,0 +1,267 @@
+{
+  "legs": [
+    {
+      "point": 2,
+      "started": true,
+      "steps": 24,
+      "distance": 0,
+      "remaining": 0
+    },
+    {
+      "point": 3,
+      "started": true,
+      "steps": 41,
+      "distance": 0,
+      "remaining": 0
+    },
+    {
+      "point": 4,
+      "started": true,
+      "steps": 39,
+      "distance": 0,
+      "remaining": 0
+    },
+    {
+      "point": 5,
+      "started": true,
+      "steps": 39,
+      "distance": 0,
+      "remaining": 0
+    },
+    {
+      "point": 6,
+      "started": true,
+      "steps": 39,
+      "distance": 0,
+      "remaining": 0
+    },
+    {
+      "point": 7,
+      "started": true,
+      "steps": 39,
+      "distance": 0,
+      "remaining": 0
+    },
+    {
+      "point": 8,
+      "started": true,
+      "steps": 40,
+      "distance": 0,
+      "remaining": 0
+    },
+    {
+      "point": 9,
+      "started": true,
+      "steps": 40,
+      "distance": 1.1368683772161603e-13,
+      "remaining": 0
+    },
+    {
+      "point": 10,
+      "started": true,
+      "steps": 40,
+      "distance": 1.1368683772161603e-13,
+      "remaining": 0
+    },
+    {
+      "point": 11,
+      "started": true,
+      "steps": 39,
+      "distance": 0,
+      "remaining": 0
+    },
+    {
+      "point": 12,
+      "started": true,
+      "steps": 37,
+      "distance": 0,
+      "remaining": 0
+    },
+    {
+      "point": 13,
+      "started": true,
+      "steps": 39,
+      "distance": 1.4210854715202004e-14,
+      "remaining": 0
+    },
+    {
+      "point": 14,
+      "started": true,
+      "steps": 38,
+      "distance": 0,
+      "remaining": 0
+    },
+    {
+      "point": 13,
+      "started": true,
+      "steps": 38,
+      "distance": 0,
+      "remaining": 0
+    },
+    {
+      "point": 12,
+      "started": true,
+      "steps": 39,
+      "distance": 0,
+      "remaining": 0
+    },
+    {
+      "point": 11,
+      "started": true,
+      "steps": 37,
+      "distance": 0,
+      "remaining": 0
+    },
+    {
+      "point": 10,
+      "started": true,
+      "steps": 39,
+      "distance": 0,
+      "remaining": 0
+    },
+    {
+      "point": 9,
+      "started": true,
+      "steps": 40,
+      "distance": 0,
+      "remaining": 0
+    },
+    {
+      "point": 8,
+      "started": true,
+      "steps": 40,
+      "distance": 0,
+      "remaining": 0
+    },
+    {
+      "point": 7,
+      "started": true,
+      "steps": 40,
+      "distance": 0,
+      "remaining": 0
+    },
+    {
+      "point": 6,
+      "started": true,
+      "steps": 39,
+      "distance": 0,
+      "remaining": 0
+    },
+    {
+      "point": 5,
+      "started": true,
+      "steps": 39,
+      "distance": 0,
+      "remaining": 0
+    },
+    {
+      "point": 4,
+      "started": true,
+      "steps": 39,
+      "distance": 0,
+      "remaining": 0
+    },
+    {
+      "point": 3,
+      "started": true,
+      "steps": 39,
+      "distance": 0,
+      "remaining": 0
+    },
+    {
+      "point": 2,
+      "started": true,
+      "steps": 41,
+      "distance": 0,
+      "remaining": 0
+    },
+    {
+      "point": 1,
+      "started": true,
+      "steps": 24,
+      "distance": 0,
+      "remaining": 0
+    }
+  ],
+  "header": " CODÓ, CENTRO / RUA CÔNEGO MENDONÇA\n↗\nVista aérea\nM\n⟳\nGirar câmera\n1/4\nQ\nPS1\nSom\n○\n?",
+  "references": [
+    {
+      "title": "Rua Cônego Mendonça · Ponto 37",
+      "count": 9,
+      "header": " CODÓ, CENTRO / RUA CÔNEGO MENDONÇA"
+    },
+    {
+      "title": "Avenida São Benedito · Ponto 07",
+      "count": 9,
+      "header": " CODÓ, CENTRO / AVENIDA SÃO BENEDITO"
+    },
+    {
+      "title": "Avenida São Benedito · Ponto 14",
+      "count": 9,
+      "header": " CODÓ, CENTRO / AVENIDA SÃO BENEDITO"
+    },
+    {
+      "title": "Praça Alcebíades Silva · Ponto 02",
+      "count": 9,
+      "header": " CODÓ, CENTRO / PRAÇA ALCEBÍADES SILVA"
+    },
+    {
+      "title": "Rua Cônego Mendonça · Ponto 36",
+      "count": 9,
+      "header": " CODÓ, CENTRO / RUA CÔNEGO MENDONÇA"
+    }
+  ],
+  "groundClick": {
+    "started": true,
+    "distance": 0.000026342643603334604
+  },
+  "minimap": {
+    "started": true,
+    "distance": 0,
+    "remaining": 0
+  },
+  "keyboard": {
+    "distance": 19.98999999999715
+  },
+  "cameras": [
+    "2/4",
+    "3/4",
+    "4/4",
+    "1/4"
+  ],
+  "overview": "Vista aérea inspecionada em sao-benedito-vista-aerea.png",
+  "preserved": {
+    "simeao": true,
+    "mendonca": true,
+    "antonio": true,
+    "julho": true,
+    "fernando": true,
+    "alcebiades": true,
+    "coelho": true
+  },
+  "generatorIdempotent": true,
+  "runtimeErrors": [],
+  "visual": {
+    "regions": [
+      "norte",
+      "meio",
+      "sul"
+    ],
+    "cameras": 4,
+    "day": 660,
+    "night": 1200,
+    "inspected": true
+  },
+  "suite": {
+    "total": 95,
+    "passed": 95,
+    "focusedAfterVisualRefinement": 10
+  },
+  "capture": {
+    "points": 14,
+    "photos": 112,
+    "newPhotos": 104,
+    "reusedPhotos": 8
+  },
+  "date": "2026-10-12"
+}

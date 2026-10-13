@@ -6,7 +6,7 @@ import { hasHomeWindows, selectLitHomes } from '../src/home-lighting.js';
 test('70% of homes with existing windows stay selected across camera/catalog order', () => {
   const eligible = buildings.filter(hasHomeWindows);
   const selected = selectLitHomes(buildings);
-  assert.equal(eligible.length, 28);
+  assert.equal(eligible.length, 62);
   assert.equal(selected.size, Math.round(eligible.length * .7));
   assert.deepEqual(selectLitHomes([...buildings].reverse()), selected);
   assert.deepEqual(selectLitHomes([...buildings, ...buildings]), selected);
@@ -15,7 +15,8 @@ test('70% of homes with existing windows stay selected across camera/catalog ord
 
 test('only residential window openings qualify, including transverse homes', () => {
   for (const id of ['w04-fachada-rosa-antiga', 'cinema', 'w15-fc-motos-yamaha',
-    'e07-clinica-recuada', 'cm-final-clinica', 'aa-school-classrooms', 'corner-shop']) {
+    'e07-clinica-recuada', 'cm-final-clinica', 'aa-school-classrooms', 'corner-shop',
+    'am-sobrado-paroquial','am-salao-aa','am-escola-arco-iris','am-muro-branco']) {
     assert.equal(hasHomeWindows(buildings.find(b => b.id === id)), false, id);
   }
   assert.equal(hasHomeWindows(buildings.find(b => b.id === 'cm-n05-sobrado-branco')), true);

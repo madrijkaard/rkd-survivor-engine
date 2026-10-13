@@ -1,11 +1,13 @@
+import { MENDONCA_ROAD, ANTONIO_ROAD } from './road-profiles.js';
 import { mendoncaPoints } from './mendonca-points.js';
 import { withPlaceName } from './place-names.js';
 export { mendoncaPoints };
 export const CROSS_Y = 2345;
-export const MENDONCA_END = mendoncaPoints.at(-1).x;
+export const MENDONCA_END = mendoncaPoints.find(p=>p.id===15).x;
 export const WORLD_BOUNDS = { x:-380, y:-335, w:2820, h:3930, height:380 };
-// One raised square contains the church; the four surrounding streets remain open.
-export const CHURCH_PLAZA = withPlaceName({id:'church-plaza',placeType:'square',x:1320,y:2410,w:MENDONCA_END-70-1320,h:830});
+// One raised square contains the church. The northern edge is a garden/property
+// boundary, not a cross street (confirmed by Antônio Alexandre points 25–28).
+export const CHURCH_PLAZA = withPlaceName({id:'church-plaza',placeType:'square',x:1257+ANTONIO_ROAD.outerHalfWidth,y:CROSS_Y+MENDONCA_ROAD.outerHalfWidth,w:MENDONCA_END-MENDONCA_ROAD.outerHalfWidth-1257-ANTONIO_ROAD.outerHalfWidth,h:3240-CROSS_Y-MENDONCA_ROAD.outerHalfWidth});
 export const PLAZA_CHURCH = withPlaceName({id:'cm-igreja-praca',x:1365,y:2860,w:495,h:235,height:180});
 export const CHURCH_TOWER = {x:1780,y:2940,w:76,h:78,height:362};
 export const plazaSeats=[
@@ -14,9 +16,8 @@ export const plazaSeats=[
 ];
 export const plazaStatue=withPlaceName({id:'plaza-statue',placeType:'monument',x:1690,y:2790,w:24,h:24});
 export const plazaRoads=[
-  {x:1194,y:2130,w:126,h:1230},
-  {x:MENDONCA_END-70,y:2100,w:140,h:1260},
-  {x:1194,y:3240,w:MENDONCA_END+70-1194,h:120},
+  {x:1257-ANTONIO_ROAD.outerHalfWidth,y:2130,w:ANTONIO_ROAD.totalWidth,h:1230},
+  {x:MENDONCA_END-MENDONCA_ROAD.outerHalfWidth,y:2100,w:MENDONCA_ROAD.totalWidth,h:1260},
 ];
 
 const o=(kind,u,w,bottom,h,extra={})=>({kind,u,w,bottom,h,...extra});
@@ -27,7 +28,8 @@ const sign=(u,top,w,h,text,extra={})=>({u,top,w,h,text,...extra});
 // Local x points across the street; local y progresses from the autoescola.
 // The same facade renderer is rotated into this transverse street at bake time.
 const frontage=(id,side,start,end,data)=>{
-  const local={id,side:side==='north'?'west':'east',x:side==='north'?-220:57,y:start,depth:side==='north'?155:173,length:end-start,height:60,roof:'tile',color:'#d5c7ac',base:'#9d9d8b',baseHeight:.12,wear:.3,openings:[],signs:[],...data};
+  if(end===1945)end=MENDONCA_END-MENDONCA_ROAD.outerHalfWidth;
+  const local={id,side:side==='north'?'west':'east',x:side==='north'?-(MENDONCA_ROAD.outerHalfWidth+155):MENDONCA_ROAD.outerHalfWidth,y:start,depth:side==='north'?155:173,length:end-start,height:60,roof:'tile',color:'#d5c7ac',base:'#9d9d8b',baseHeight:.12,wear:.3,openings:[],signs:[],...data};
   return {...local,street:'conego-mendonca',axis:'x',local,x:start,y:CROSS_Y-local.x-local.depth,depth:end-start,length:local.depth};
 };
 
@@ -99,10 +101,10 @@ export const mendoncaBuildings=[
   }),
   {id:'cm-igreja-praca',name:'Igreja dentro da praça elevada',...PLAZA_CHURCH,depth:PLAZA_CHURCH.w,length:PLAZA_CHURCH.h,detail:'plaza-church',street:'conego-mendonca',point:11,refs:[[11,1],[13,1],[15,8]]},
   // These fronts face the terminal cross street, beyond its open carriageway.
-  {id:'cm-academia-figueiredo',name:'Academia Figueiredo, fachada escura com três faixas brancas',street:'conego-mendonca',point:15,photoDirection:2,side:'east',x:MENDONCA_END+75,y:2410,depth:170,length:270,height:74,roof:'hidden-tile',color:'#354250',base:'#394750',baseHeight:.08,wear:.4,detail:'cm-gym',openings:[door(.50,.13,{color:'#4b5c4b',grille:'square'}),door(.86,.11,{color:'#4b5c4b',grille:'square',awning:true})],signs:[sign(.05,.09,.85,.13,'ACADEMIA FIGUEIREDO',{ink:'#d1d2b7'})]},
-  {id:'cm-final-casa-creme',name:'Casa creme com garagem preta, porta e janela gradeadas',street:'conego-mendonca',point:15,photoDirection:3,side:'east',x:MENDONCA_END+75,y:2140,depth:170,length:265,height:56,roof:'tile',color:'#d8cebc',base:'#a19f86',baseHeight:.12,wear:.4,openings:[win(.10,.18,{grille:'square',color:'#7c735c'}),door(.39,.18,{grille:'square',color:'#8e866e'}),gate(.70,.26,{color:'#39443d',grille:'diagonal',bars:'#484d42',solid:1})],signs:[]},
-  {id:'cm-final-casa-rosa',name:'Casa rosa baixa ao lado da casa creme',street:'conego-mendonca',point:15,photoDirection:3,side:'east',x:MENDONCA_END+75,y:2000,depth:170,length:138,height:51,roof:'tile',color:'#b88278',base:'#969078',baseHeight:.29,wear:.70,openings:[win(.09,.21,{grille:'square'}),door(.40,.16,{color:'#a4a68c',wood:true}),win(.68,.22,{grille:'square'})],signs:[]},
-  {id:'cm-azul-junto-academia',name:'Casa azul baixa junto à academia',street:'conego-mendonca',point:15,photoDirection:1,side:'east',x:MENDONCA_END+75,y:2685,depth:155,length:145,height:53,roof:'tile',color:'#8aaec0',base:'#6488a1',baseHeight:.13,wear:.30,openings:[win(.09,.22,{color:'#b8c8b4',grille:'square'}),door(.42,.17,{color:'#bfc8b0',grille:'vertical'}),win(.71,.19,{color:'#bbc5ac',grille:'square'})],signs:[]},
+  {id:'cm-academia-figueiredo',name:'Academia Figueiredo, fachada escura com três faixas brancas',street:'conego-mendonca',point:15,photoDirection:2,side:'east',x:MENDONCA_END+MENDONCA_ROAD.outerHalfWidth,y:2410,depth:170,length:270,height:74,roof:'hidden-tile',color:'#354250',base:'#394750',baseHeight:.08,wear:.4,detail:'cm-gym',openings:[door(.50,.13,{color:'#4b5c4b',grille:'square'}),door(.86,.11,{color:'#4b5c4b',grille:'square',awning:true})],signs:[sign(.05,.09,.85,.13,'ACADEMIA FIGUEIREDO',{ink:'#d1d2b7'})]},
+  {id:'cm-final-casa-creme',name:'Casa creme com garagem preta, porta e janela gradeadas',street:'conego-mendonca',point:15,photoDirection:3,side:'east',x:MENDONCA_END+MENDONCA_ROAD.outerHalfWidth,y:2140,depth:170,length:265,height:56,roof:'tile',color:'#d8cebc',base:'#a19f86',baseHeight:.12,wear:.4,openings:[win(.10,.18,{grille:'square',color:'#7c735c'}),door(.39,.18,{grille:'square',color:'#8e866e'}),gate(.70,.26,{color:'#39443d',grille:'diagonal',bars:'#484d42',solid:1})],signs:[]},
+  {id:'cm-final-casa-rosa',name:'Casa rosa baixa ao lado da casa creme',street:'conego-mendonca',point:15,photoDirection:3,side:'east',x:MENDONCA_END+MENDONCA_ROAD.outerHalfWidth,y:2000,depth:170,length:138,height:51,roof:'tile',color:'#b88278',base:'#969078',baseHeight:.29,wear:.70,openings:[win(.09,.21,{grille:'square'}),door(.40,.16,{color:'#a4a68c',wood:true}),win(.68,.22,{grille:'square'})],signs:[]},
+  {id:'cm-azul-junto-academia',name:'Casa azul baixa junto à academia',street:'conego-mendonca',point:15,photoDirection:1,side:'east',x:MENDONCA_END+MENDONCA_ROAD.outerHalfWidth,y:2685,depth:155,length:145,height:53,roof:'tile',color:'#8aaec0',base:'#6488a1',baseHeight:.13,wear:.30,openings:[win(.09,.22,{color:'#b8c8b4',grille:'square'}),door(.42,.17,{color:'#bfc8b0',grille:'vertical'}),win(.71,.19,{color:'#bbc5ac',grille:'square'})],signs:[]},
 ];
 
 export const cornerFacades={
@@ -119,3 +121,9 @@ export const mendoncaTrees=[
   ...[[1380,2550,65],[1590,2550,72],[1770,2550,42],[1880,2550,43],[1380,2750,61],[1550,2760,61],[1790,2750,64],[1885,2830,65],[1400,3170,58],[1780,3170,59]].map(([x,y,size],i)=>({x,y,size,height:size+15,kind:size>55?'mature':'young',seed:185+i,plaza:true})),
 ];
 export const mendoncaPoles=[{x:112,y:2408,height:159},{x:470,y:2407,height:153},{x:940,y:2407,height:153},{x:1333,y:2407,height:158},{x:1740,y:2407,height:158},{x:2055,y:2407,height:156},{x:1182,y:2287,height:155},{x:1910,y:2780,height:135,lamp:true}];
+
+// Preserve the observed corner lamps along the rebuilt sidewalks.
+for (const pole of mendoncaPoles) {
+  if (!pole.lamp) pole.y=CROSS_Y+Math.sign(pole.y-CROSS_Y)*(MENDONCA_ROAD.outerHalfWidth-8);
+  if (pole.x===2055) pole.x=MENDONCA_END+MENDONCA_ROAD.outerHalfWidth-8;
+}

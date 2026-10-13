@@ -1,3 +1,5 @@
+import { antonioCenter } from './antonio-data.js';
+import { MENDONCA_ROAD, ANTONIO_ROAD } from './road-profiles.js';
 import { project as P, PROJECTION } from './projection.js';
 import { CROSS_Y, MENDONCA_END, CHURCH_PLAZA, PLAZA_CHURCH, CHURCH_TOWER, plazaRoads, mendoncaTrees } from './mendonca-data.js';
 function poly(c,vertices,fill,stroke) {
@@ -7,22 +9,26 @@ function poly(c,vertices,fill,stroke) {
 function line(c,a,b,color,width=1){const p=P(...a),q=P(...b);c.strokeStyle=color;c.lineWidth=width;c.beginPath();c.moveTo(p.x,p.y);c.lineTo(q.x,q.y);c.stroke();}
 function rect(c,x,y,w,h,color,z=0){poly(c,[[x,y,z],[x+w,y,z],[x+w,y+h,z],[x,y+h,z]],color);}
 export function drawMendoncaGround(c,asphalt,paving) {
-  rect(c,0,CROSS_Y-65,MENDONCA_END+70,130,paving);
-  rect(c,-80,CROSS_Y-50,MENDONCA_END+150,100,asphalt);
-  for(const r of plazaRoads)rect(c,r.x,r.y,r.w,r.h,asphalt);
-  for(const y of [CROSS_Y-50,CROSS_Y+50]){
+  rect(c,0,CROSS_Y-MENDONCA_ROAD.outerHalfWidth,MENDONCA_END+MENDONCA_ROAD.outerHalfWidth,MENDONCA_ROAD.totalWidth,paving);
+  rect(c,-80,CROSS_Y-MENDONCA_ROAD.halfWidth,MENDONCA_END+150,MENDONCA_ROAD.width,asphalt);
+  // Separate sidewalks from the carriageway on the short terminal arm.
+  const r=plazaRoads[1];rect(c,r.x,r.y,r.w,r.h,paving);
+  rect(c,r.x+r.w/2-MENDONCA_ROAD.halfWidth,r.y,MENDONCA_ROAD.width,r.h,asphalt);
+  for(const y of [CROSS_Y-MENDONCA_ROAD.halfWidth,CROSS_Y+MENDONCA_ROAD.halfWidth]){
     line(c,[80,y,1],[1190,y,1],'#c0c1a3',2);
     line(c,[1325,y,1],[MENDONCA_END-70,y,1],'#b6bb9b',2);
   }
-  for(let x=2;x<MENDONCA_END-70;x+=19)for(const y of [2282,2398]){
+  for(let x=2;x<MENDONCA_END-70;x+=19)for(const y of [CROSS_Y-MENDONCA_ROAD.outerHalfWidth+1,CROSS_Y+MENDONCA_ROAD.halfWidth+1]){
     if(x>1190&&x<1325)continue;
-    line(c,[x,y],[x,y+12],'#79806b77',.7);
+    line(c,[x,y],[x,y+MENDONCA_ROAD.sidewalkWidth-2],'#79806b77',.7);
   }
   for(let x=17;x<MENDONCA_END;x+=49){
     const y=CROSS_Y+Math.sin(x*.12)*26;
     poly(c,[[x,y],[x+28,y-4],[x+37,y+9],[x+23,y+25],[x-3,y+18]],'#434e413e');
     line(c,[x,y],[x+40,y+5],'#35423766',.6);
   }
+  // The Antônio crosses both sidewalks of Cônego without a paving band.
+  rect(c,antonioCenter(CROSS_Y)-ANTONIO_ROAD.halfWidth,CROSS_Y-MENDONCA_ROAD.outerHalfWidth,ANTONIO_ROAD.width,MENDONCA_ROAD.totalWidth,asphalt);
   const {x,y,w,h}=CHURCH_PLAZA;
   // The full elevated paving continues underneath the church and around it.
   for(let i=0;i<4;i++){

@@ -1,21 +1,33 @@
+import { ANTONIO_ROAD, JULHO_PROFILE } from './road-profiles.js';
+import { parkingOffset, offsetRoadPath } from './road-dimensions.js';
 import { antonioPoints } from './antonio-points.js';
 export { antonioPoints };
-export const ANTONIO_END=antonioPoints.at(-1);
+export const antonioPath=antonioPoints.toSorted((a,b)=>b.y-a.y);
+export const ANTONIO_END=antonioPoints.find(p=>p.id===20);
+export const ANTONIO_NORTH=antonioPath[0];
 // Shared frontage endpoints keep neighbouring lots joined at every division.
 // The clearance also accommodates a straight facade across a measured bend.
-export const ANTONIO_FRONTAGE_OFFSET=90;
+export const ANTONIO_FRONTAGE_OFFSET=ANTONIO_ROAD.outerHalfWidth;
 export function antonioCenter(y) {
-  if(y>=antonioPoints[0].y)return antonioPoints[0].x;
-  for(let i=1;i<antonioPoints.length;i++){
-    const a=antonioPoints[i-1],b=antonioPoints[i];
+  if(y>=antonioPath[0].y)return antonioPath[0].x;
+  for(let i=1;i<antonioPath.length;i++){
+    const a=antonioPath[i-1],b=antonioPath[i];
     if(y>=b.y)return b.x+(a.x-b.x)*(y-b.y)/(a.y-b.y);
   }
   return ANTONIO_END.x;
 }
+// Offset edges are measured perpendicular to the centerline, shared by paving and navigation.
+const edgeCache=new Map();
+export function antonioEdge(y,offset) {
+  if (!edgeCache.has(offset)) edgeCache.set(offset,offsetRoadPath(antonioPath,offset));
+  const path=edgeCache.get(offset);
+  for(let i=1;i<path.length;i++){const a=path[i-1],b=path[i];if(y<=a.y&&y>=b.y)return b.x+(a.x-b.x)*(y-b.y)/(a.y-b.y);}
+  return y>path[0].y?path[0].x:path.at(-1).x;
+}
 // Follow the measured bend, including the sidewalk.
-export function onAntonioRoad(x,y){return y>-120&&y<2345&&Math.abs(x-antonioCenter(y))<86;}
+export function onAntonioRoad(x,y){return y>-120&&y<ANTONIO_NORTH.y+140&&x>antonioEdge(y,-ANTONIO_ROAD.outerHalfWidth)&&x<antonioEdge(y,ANTONIO_ROAD.outerHalfWidth);}
 export const CINEMA_GARDEN={x:420,y:325,w:425,h:985};
-export const JULHO_ROAD={x:-320,y:-120,w:1580,h:85};
+export const JULHO_ROAD={x:-320,y:-95-JULHO_PROFILE.halfWidth,w:1580,h:JULHO_PROFILE.width};
 const o=(kind,u,w,bottom,h,extra={})=>({kind,u,w,bottom,h,...extra});
 const door=(u,w,extra={})=>o('door',u,w,0,.74,extra);
 const win=(u,w,extra={})=>o('window',u,w,.30,.43,extra);
@@ -23,9 +35,11 @@ const gate=(u,w,extra={})=>o('gate',u,w,0,.76,extra);
 const sign=(u,top,w,h,text,extra={})=>({u,top,w,h,text,...extra});
 // Record each frontage ONCE, in north-to-south order. Openings below use that
 // order; reverse u when placing them in the existing south-to-north world frame.
-const front=(id,side,north,south,data)=>{
+export const front=(id,side,north,south,data)=>{
+  if(south===-30)south=-95+JULHO_PROFILE.outerHalfWidth;
   const depth=data.depth??160,offset=ANTONIO_FRONTAGE_OFFSET+(data.setback??0);
-  const edge=antonioCenter(south)+(side==='east'?offset:-offset),shift=antonioCenter(north)-antonioCenter(south);
+  const signed=side==='east'?offset:-offset;
+  const edge=antonioEdge(south,signed),shift=antonioEdge(north,signed)-edge;
   const b={id,street:'antonio-alexandre',side,x:side==='east'?edge:edge-depth,y:south,depth,length:north-south,height:59,roof:'tile',color:'#d3ccb5',base:'#949582',baseHeight:.12,wear:.3,openings:[],signs:[],...data};
   b.antonioSide=side;
   b.footprint=[[b.x,south],[b.x+depth,south],[b.x+depth+shift,north],[b.x+shift,north]];
@@ -38,7 +52,10 @@ const front=(id,side,north,south,data)=>{
 // Its frontage on Cônego and its side on Antônio remain one building.
 export function alignAntonioCorner(b,side,originY){
   const y0=b.y,y1=b.y+b.length,x0=b.x,x1=b.x+b.depth;
-  const roadEdge=y=>antonioCenter(y)+(side==='east'?ANTONIO_FRONTAGE_OFFSET:-ANTONIO_FRONTAGE_OFFSET);
+  const sign=side==='east'?1:-1,offset=sign*ANTONIO_FRONTAGE_OFFSET;
+  const a=antonioEdge(y0,offset),z=antonioEdge(y1,offset);
+  const clearance=Math.max(0,...offsetRoadPath(antonioPath,offset).filter(p=>p.y>y0&&p.y<y1).map(p=>sign*(p.x-a-(z-a)*(p.y-y0)/(y1-y0))));
+  const roadEdge=y=>antonioEdge(y,offset)+sign*clearance;
   const footprint=side==='west'
     ?[[x0,y0],[roadEdge(y0),y0],[roadEdge(y1),y1],[x0,y1]]
     :[[roadEdge(y0),y0],[x1,y0],[x1,y1],[roadEdge(y1),y1]];
@@ -48,6 +65,31 @@ export function alignAntonioCorner(b,side,originY){
     result.local={...b.local,footprint:[nw,sw,se,ne].map(([x,y])=>[originY-y,x])};
   }
   return result;
+}
+// A fachada reta entre dois pontos pode cortar a curva do passeio. Recuamos
+// somente os vértices necessários, compartilhados com o lote vizinho.
+export function fitAntonioFrontages(buildings) {
+  const row=buildings.filter(b=>b.street==='antonio-alexandre'&&!b.axis);
+  const nodes=new Map(), key=(b,y)=>`${b.side}/${b.setback??0}/${y}`;
+  for(const b of row) for(const y of [b.y,b.y+b.length]) {
+    nodes.set(key(b,y),antonioEdge(y,(b.side==='east'?1:-1)*(ANTONIO_FRONTAGE_OFFSET+(b.setback??0))));
+  }
+  for(const b of row) {
+    const side=b.side==='east'?1:-1, y0=b.y,y1=b.y+b.length;
+    const ys=[y0,y1,...offsetRoadPath(antonioPath,side*(ANTONIO_FRONTAGE_OFFSET+(b.setback??0))).map(p=>p.y).filter(y=>y>y0&&y<y1)];
+    let clearance=0;
+    for(const y of ys) {
+      const t=(y-y0)/(y1-y0),x=nodes.get(key(b,y0))*(1-t)+nodes.get(key(b,y1))*t;
+      clearance=Math.max(clearance,side*(antonioEdge(y,side*(ANTONIO_FRONTAGE_OFFSET+(b.setback??0)))-x));
+    }
+    if(clearance>0) for(const y of [y0,y1])nodes.set(key(b,y),nodes.get(key(b,y))+side*clearance);
+  }
+  return buildings.map(b=>{
+    if(!row.includes(b))return b;
+    const y0=b.y,y1=b.y+b.length,east=b.side==='east';
+    const x0=nodes.get(key(b,y0))-(east?0:b.depth),x1=nodes.get(key(b,y1))-(east?0:b.depth);
+    return {...b,x:x0,footprint:[[x0,y0],[x0+b.depth,y0],[x1+b.depth,y1],[x1,y1]]};
+  });
 }
 export const antonioBuildings=[
   front('aa-w01-amarela','west',2115,2040,{name:'Casa amarela, garagem branca e colunas de pedra escura',point:3,refs:[[2,6],[3,7]],color:'#c9ad65',base:'#b2a482',wear:.70,detail:'aa-stone-columns',openings:[gate(.57,.38,{color:'#dde0d3',grille:'horizontal',bars:'#e0dfcc',solid:1})],signs:[sign(.08,.48,.30,.13,'IMPÉRIO GRANITOS',{ink:'#b7c4c2'})],meters:[.05,.52],steps:true}),
@@ -81,7 +123,7 @@ export const antonioBuildings=[
   front('aa-school-secondary','east',260,150,{name:'Entrada da Escola Santa Filomena em azulejo branco e rosa',point:18,refs:[[18,3]],height:67,depth:80,roof:'flat',color:'#d8d9d1',base:'#c49e8e',baseHeight:.10,pattern:'small-tile',detail:'aa-school-secondary',openings:[gate(.22,.56,{color:'#26382c',grille:'vertical',bars:'#40523e',solid:.7}),o('window',.03,.09,.35,.13,{color:'#23332c'})],signs:[sign(.05,.01,.9,.15,'ESCOLA SANTA FILOMENA',{color:'#b5b29c',ink:'#626a59'})]}),
   front('aa-school-last-wall','east',150,-30,{name:'Muro da esquina, reboco cinza e tijolo aparente no topo',point:19,refs:[[19,3],[20,2]],depth:8,height:60,roof:'none',color:'#a49d86',base:'#9a9c83',baseHeight:.03,detail:'aa-brick-top',wear:.45}),
 ];
-const reabilitar={id:'aa-reabilitar',name:'Clínica Reabilitar na esquina da Vinte e Oito de Julho',point:20,photoDirection:4,side:'east',x:56,y:890,depth:150,length:350,height:69,roof:'flat',color:'#d6caab',base:'#9d6252',baseHeight:.10,wear:.43,detail:'aa-reabilitar',openings:[win(.08,.10,{color:'#b6c5b8',grille:'square'}),win(.25,.10,{color:'#b6c5b8',grille:'square'}),win(.43,.10,{color:'#b6c5b8',grille:'square'}),o('shutter',.63,.17,0,.58,{color:'#acb8b0'}),door(.88,.09,{color:'#4b5144',grille:'square',h:.64})],signs:[sign(.02,.06,.79,.17,'REABILITAR',{ink:'#4b5140',sub:'CLÍNICA DE FISIOTERAPIA'})]};
+const reabilitar={id:'aa-reabilitar',name:'Clínica Reabilitar na esquina da Vinte e Oito de Julho',point:20,photoDirection:4,side:'east',x:JULHO_PROFILE.outerHalfWidth-15,y:890,depth:150,length:350,height:69,roof:'flat',color:'#d6caab',base:'#9d6252',baseHeight:.10,wear:.43,detail:'aa-reabilitar',openings:[win(.08,.10,{color:'#b6c5b8',grille:'square'}),win(.25,.10,{color:'#b6c5b8',grille:'square'}),win(.43,.10,{color:'#b6c5b8',grille:'square'}),o('shutter',.63,.17,0,.58,{color:'#acb8b0'}),door(.88,.09,{color:'#4b5144',grille:'square',h:.64})],signs:[sign(.02,.06,.79,.17,'REABILITAR',{ink:'#4b5140',sub:'CLÍNICA DE FISIOTERAPIA'})]};
 antonioBuildings.push({...reabilitar,street:'antonio-alexandre',axis:'x',originY:-80,local:reabilitar,x:890,y:-80-reabilitar.x-reabilitar.depth,depth:reabilitar.length,length:reabilitar.depth});
 // Same two corner buildings already present on Cônego, with their true side faces.
 export const antonioCornerFacades={
@@ -90,13 +132,18 @@ export const antonioCornerFacades={
 };
 export const CINEMA_BACK={street:'antonio-alexandre',point:19,photoDirection:7,color:'#aa8d68',base:'#77745f',baseHeight:.25,wear:1,detail:'aa-cinema-rear',trim:'',openings:[],signs:[]};
 export const antonioTrees=[
-  ...[1535,1450,1365].map((y,i)=>({x:antonioCenter(y)+67,y,size:68,height:71,kind:'mature',spreading:true,seed:301+i})),
+  ...[1535,1450,1365].map((y,i)=>({x:antonioEdge(y,ANTONIO_ROAD.outerHalfWidth-7),y,size:68,height:71,kind:'mature',spreading:true,seed:301+i})),
   ...[[1230,81],[1080,89],[920,88],[760,65],[585,79],[410,74]].map(([y,size],i)=>({x:antonioCenter(y)-115,y,size:size*1.55,height:size+30,kind:'mature',spreading:true,seed:310+i})),
   ...[[590,1180,83],[540,970,75],[560,650,79],[515,460,72]].map(([x,y,size],i)=>({x,y,size:size*1.55,height:size+22,kind:'mature',spreading:true,seed:320+i})),
   {x:1370,y:1920,size:50,height:76,kind:'young',seed:329},
 ];
-export const antonioPoles=[2100,1895,1510,1190,900,650,240,0].map((y,i)=>({x:antonioCenter(y)+(i%3===1?66:-66),y,height:151+i%3*7,street:'antonio-alexandre'}));
-export const antonioCars=[{x:antonioCenter(1545)-49,y:1545,color:'#354b50',seed:331},...[450,610,785].map((y,i)=>({x:antonioCenter(y)-49,y,color:['#c9cec1','#40545a','#aeb4af'][i],seed:332+i})),{x:antonioCenter(565)+50,y:565,color:'#53605e',seed:335}];
+export const antonioPoles=[2100,1895,1510,1190,900,650,240,0].map((y,i)=>({x:antonioEdge(y,(i%3===1?1:-1)*(ANTONIO_ROAD.outerHalfWidth-6)),y,height:151+i%3*7,street:'antonio-alexandre'}));
+export function alignAntonioCar(c) {
+  const slope=(antonioCenter(c.y+1)-antonioCenter(c.y-1))/2, norm=Math.hypot(1,slope);
+  const offset=Math.sign(c.x-antonioCenter(c.y))*parkingOffset(ANTONIO_ROAD);
+  return {...c,x:antonioCenter(c.y)+offset/norm,y:c.y-offset*slope/norm,angle:Math.atan2(slope,1)};
+}
+export const antonioCars=[{x:antonioCenter(1545)-parkingOffset(ANTONIO_ROAD),y:1545,color:'#354b50',seed:331},...[450,610,785].map((y,i)=>({x:antonioCenter(y)-parkingOffset(ANTONIO_ROAD),y,color:['#c9cec1','#40545a','#aeb4af'][i],seed:332+i})),{x:antonioCenter(565)+parkingOffset(ANTONIO_ROAD),y:565,color:'#53605e',seed:335}].map(alignAntonioCar);
 export const antonioShrubs=[{x:antonioCenter(1790)+96,y:1790,r:25},{x:antonioCenter(1610)+90,y:1610,r:22},...Array.from({length:18},(_,i)=>({x:595+(i%2)*130,y:410+Math.floor(i/2)*89,r:17+i%3*3})),...Array.from({length:54},(_,i)=>({x:1040+(i*137)%465,y:969+(i*97)%320,r:25+i%5*5,flowers:false}))];
 export const antonioCacti=Array.from({length:7},(_,i)=>({x:antonioCenter(1800)+87+i%2*5,y:1779+i*4,height:38+i*17%28}));
 export const antonioBikes=[{x:antonioCenter(1670)+53,y:1670},{x:antonioCenter(1640)+55,y:1640},{x:antonioCenter(1605)+53,y:1605},{x:antonioCenter(1735)-55,y:1735}];

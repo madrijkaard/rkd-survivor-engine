@@ -1,0 +1,369 @@
+{
+  "schemaVersion": 1,
+  "city": "Codó",
+  "street": "Rua Vinte e Oito de Julho",
+  "neighborhood": "Centro",
+  "coordinateSystem": "WGS84",
+  "capturedAt": "2026-10-10",
+  "directions": [
+    "N",
+    "NE",
+    "L",
+    "SE",
+    "S",
+    "SO",
+    "O",
+    "NO"
+  ],
+  "points": [
+    {
+      "id": 1,
+      "pano": "c25pmIA5GqoGY1RBYiOszw",
+      "latitude": -4.4525292,
+      "longitude": -43.8849162,
+      "imageryDate": "2025-06",
+      "capturedAt": "2026-10-10"
+    },
+    {
+      "id": 2,
+      "pano": "rxM1KfD1Nt-zQz5dBO5qkA",
+      "latitude": -4.4525659,
+      "longitude": -43.8850335,
+      "imageryDate": "2025-06",
+      "capturedAt": "2026-10-10"
+    },
+    {
+      "id": 3,
+      "pano": "icWxOrr13sSXOBMabJbyJw",
+      "latitude": -4.4525677,
+      "longitude": -43.8851162,
+      "imageryDate": "2025-06",
+      "capturedAt": "2026-10-10"
+    },
+    {
+      "id": 4,
+      "pano": "UmZ9YZyJY_6i7n5_ym2RIA",
+      "latitude": -4.4525738,
+      "longitude": -43.8852078,
+      "imageryDate": "2025-06",
+      "capturedAt": "2026-10-10"
+    },
+    {
+      "id": 5,
+      "pano": "6vv-1rT_2ZVZKeUqAFhQIg",
+      "latitude": -4.4525767,
+      "longitude": -43.8852992,
+      "imageryDate": "2025-06",
+      "capturedAt": "2026-10-10"
+    },
+    {
+      "id": 6,
+      "pano": "3PcrLaE7Mj_wAFahOJOKQw",
+      "latitude": -4.4525784,
+      "longitude": -43.885391,
+      "imageryDate": "2025-06",
+      "capturedAt": "2026-10-10"
+    },
+    {
+      "id": 7,
+      "pano": "4dANl1advZrHbszCipiBnA",
+      "latitude": -4.4525839,
+      "longitude": -43.8854838,
+      "imageryDate": "2025-06",
+      "capturedAt": "2026-10-10"
+    },
+    {
+      "id": 8,
+      "pano": "4laI1UBSshEPaf1hKVnWqQ",
+      "latitude": -4.4525907,
+      "longitude": -43.8855844,
+      "imageryDate": "2025-06",
+      "capturedAt": "2026-10-10"
+    },
+    {
+      "id": 9,
+      "pano": "lomRw8xn5PN_Kj007gZQ8A",
+      "latitude": -4.4526356,
+      "longitude": -43.8856738,
+      "imageryDate": "2025-06",
+      "capturedAt": "2026-10-10"
+    },
+    {
+      "id": 10,
+      "pano": "6EHpJN61DPJveMI4-DXkeA",
+      "latitude": -4.452606769815101,
+      "longitude": -43.88643640637424,
+      "capturedAt": "2026-10-11",
+      "sourceUrl": "https://www.google.com/maps/@-4.4526068,-43.8864364,45a,75y,162.34h,90t/data=!3m7!1e1!3m5!1s6EHpJN61DPJveMI4-DXkeA!2e0!6shttps:%2F%2Fstreetviewpixels-pa.clients6.google.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D0%26panoid%3D6EHpJN61DPJveMI4-DXkeA%26yaw%3D162.34!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI2MTAwNy4wIKXMDSoASAFQAw%3D%3D",
+      "imageryDate": "2025-06",
+      "reusedFrom": {
+        "street": "praca-alcebiades-silva",
+        "point": 15
+      },
+      "reusedAt": "2026-10-11"
+    },
+    {
+      "id": 11,
+      "pano": "YL7hwAkf6AJzbZe6LzwmKw",
+      "latitude": -4.452605602824879,
+      "longitude": -43.88639772405726,
+      "capturedAt": "2026-10-11",
+      "sourceUrl": "https://www.google.com/maps/@-4.4526056,-43.8863977,45a,75y,90h,90t/data=!3m7!1e1!3m5!1sYL7hwAkf6AJzbZe6LzwmKw!2e0!6shttps:%2F%2Fstreetviewpixels-pa.clients6.google.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D0%26panoid%3DYL7hwAkf6AJzbZe6LzwmKw%26yaw%3D90!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI2MTAwNy4wIKXMDSoASAFQAw%3D%3D",
+      "imageryDate": "2025-06"
+    },
+    {
+      "id": 12,
+      "pano": "d2f2rP6486Qxe4w2PHwGUA",
+      "latitude": -4.452609257635329,
+      "longitude": -43.88629821347305,
+      "capturedAt": "2026-10-11",
+      "sourceUrl": "https://www.google.com/maps/@-4.4526093,-43.8862982,45a,75y,90h,90t/data=!3m7!1e1!3m5!1sd2f2rP6486Qxe4w2PHwGUA!2e0!6shttps:%2F%2Fstreetviewpixels-pa.clients6.google.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D0%26panoid%3Dd2f2rP6486Qxe4w2PHwGUA%26yaw%3D90!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI2MTAwNy4wIKXMDSoASAFQAw%3D%3D",
+      "imageryDate": "2025-06"
+    },
+    {
+      "id": 13,
+      "pano": "qLCKFlqAC5J5Eb-eA5YEew",
+      "latitude": -4.452604619861432,
+      "longitude": -43.88620846436704,
+      "capturedAt": "2026-10-11",
+      "sourceUrl": "https://www.google.com/maps/@-4.4526046,-43.8862085,45a,75y,90h,90t/data=!3m7!1e1!3m5!1sqLCKFlqAC5J5Eb-eA5YEew!2e0!6shttps:%2F%2Fstreetviewpixels-pa.clients6.google.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D0%26panoid%3DqLCKFlqAC5J5Eb-eA5YEew%26yaw%3D90!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI2MTAwNy4wIKXMDSoASAFQAw%3D%3D",
+      "imageryDate": "2025-06"
+    },
+    {
+      "id": 14,
+      "pano": "Wpf7mnUDCeMgwe2nncEcKg",
+      "latitude": -4.452604230578864,
+      "longitude": -43.88611521836685,
+      "capturedAt": "2026-10-11",
+      "sourceUrl": "https://www.google.com/maps/@-4.4526042,-43.8861152,45a,75y,90h,90t/data=!3m7!1e1!3m5!1sWpf7mnUDCeMgwe2nncEcKg!2e0!6shttps:%2F%2Fstreetviewpixels-pa.clients6.google.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D0%26panoid%3DWpf7mnUDCeMgwe2nncEcKg%26yaw%3D90!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI2MTAwNy4wIKXMDSoASAFQAw%3D%3D",
+      "imageryDate": "2025-06"
+    },
+    {
+      "id": 15,
+      "pano": "F0iF9_-eF6_kecIbxG_uxw",
+      "latitude": -4.452605454346156,
+      "longitude": -43.88602393910094,
+      "capturedAt": "2026-10-11",
+      "sourceUrl": "https://www.google.com/maps/@-4.4526055,-43.8860239,45a,75y,90h,90t/data=!3m7!1e1!3m5!1sF0iF9_-eF6_kecIbxG_uxw!2e0!6shttps:%2F%2Fstreetviewpixels-pa.clients6.google.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D0%26panoid%3DF0iF9_-eF6_kecIbxG_uxw%26yaw%3D90!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI2MTAwNy4wIKXMDSoASAFQAw%3D%3D",
+      "imageryDate": "2025-06"
+    },
+    {
+      "id": 16,
+      "pano": "rvC4tgghll858KeJraMPtQ",
+      "latitude": -4.452601932862124,
+      "longitude": -43.88593258681459,
+      "capturedAt": "2026-10-11",
+      "sourceUrl": "https://www.google.com/maps/@-4.4526019,-43.8859326,45a,75y,90h,90t/data=!3m7!1e1!3m5!1srvC4tgghll858KeJraMPtQ!2e0!6shttps:%2F%2Fstreetviewpixels-pa.clients6.google.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D0%26panoid%3DrvC4tgghll858KeJraMPtQ%26yaw%3D90!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI2MTAwNy4wIKXMDSoASAFQAw%3D%3D",
+      "imageryDate": "2025-06"
+    },
+    {
+      "id": 17,
+      "pano": "0t5qCv8iR5gXSItUdgvIyA",
+      "latitude": -4.452594657738624,
+      "longitude": -43.88584123435629,
+      "capturedAt": "2026-10-11",
+      "sourceUrl": "https://www.google.com/maps/@-4.4525947,-43.8858412,45a,75y,90h,90t/data=!3m7!1e1!3m5!1s0t5qCv8iR5gXSItUdgvIyA!2e0!6shttps:%2F%2Fstreetviewpixels-pa.clients6.google.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D0%26panoid%3D0t5qCv8iR5gXSItUdgvIyA%26yaw%3D90!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI2MTAwNy4wIKXMDSoASAFQAw%3D%3D",
+      "imageryDate": "2025-06"
+    },
+    {
+      "id": 18,
+      "pano": "vwfWi6En4noFzD0fhseTPA",
+      "latitude": -4.452597236147169,
+      "longitude": -43.88577508749288,
+      "capturedAt": "2026-10-11",
+      "sourceUrl": "https://www.google.com/maps/@-4.4525972,-43.8857751,45a,75y,90h,90t/data=!3m7!1e1!3m5!1svwfWi6En4noFzD0fhseTPA!2e0!6shttps:%2F%2Fstreetviewpixels-pa.clients6.google.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D0%26panoid%3DvwfWi6En4noFzD0fhseTPA%26yaw%3D90!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI2MTAwNy4wIKXMDSoASAFQAw%3D%3D",
+      "imageryDate": "2025-06"
+    },
+    {
+      "id": 19,
+      "pano": "WJLDwWseqC6nt98aIPhy2A",
+      "latitude": -4.4524304,
+      "longitude": -43.884376,
+      "imageryDate": "2025-06",
+      "capturedAt": "2026-10-12",
+      "reusedFrom": {
+        "street": "antonio-alexandre",
+        "point": 20
+      },
+      "sourceUrl": "https://www.google.com/maps/@-4.4524304,-43.884376,41a,90y,80h,90t/data=!3m7!1e1!3m5!1sWJLDwWseqC6nt98aIPhy2A!2e0!6shttps:%2F%2Fstreetviewpixels-pa.clients6.google.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D0%26panoid%3DWJLDwWseqC6nt98aIPhy2A%26yaw%3D80!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI2MTAwNy4wIKXMDSoASAFQAw%3D%3D"
+    },
+    {
+      "id": 20,
+      "pano": "uYZnXhaUeaTEB-kC3moTrA",
+      "latitude": -4.4524627,
+      "longitude": -43.8842689,
+      "imageryDate": "2025-06",
+      "capturedAt": "2026-10-12",
+      "sourceUrl": "https://www.google.com/maps/@-4.4524627,-43.8842689,41a,75y,80h,90t/data=!3m7!1e1!3m5!1suYZnXhaUeaTEB-kC3moTrA!2e0!6shttps:%2F%2Fstreetviewpixels-pa.clients6.google.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D0%26panoid%3DuYZnXhaUeaTEB-kC3moTrA%26yaw%3D80!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI2MTAwNy4wIKXMDSoASAFQAw%3D%3D"
+    },
+    {
+      "id": 21,
+      "pano": "XEZJGv6aRf1CF80yQGiOlg",
+      "latitude": -4.4524501,
+      "longitude": -43.8841721,
+      "imageryDate": "2025-06",
+      "capturedAt": "2026-10-12",
+      "sourceUrl": "https://www.google.com/maps/@-4.4524501,-43.8841721,41a,75y,80h,90t/data=!3m7!1e1!3m5!1sXEZJGv6aRf1CF80yQGiOlg!2e0!6shttps:%2F%2Fstreetviewpixels-pa.clients6.google.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D0%26panoid%3DXEZJGv6aRf1CF80yQGiOlg%26yaw%3D80!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI2MTAwNy4wIKXMDSoASAFQAw%3D%3D"
+    },
+    {
+      "id": 22,
+      "pano": "-cobrY1JXxzgMb5A6cnE5g",
+      "latitude": -4.4524363,
+      "longitude": -43.884082,
+      "imageryDate": "2025-06",
+      "capturedAt": "2026-10-12",
+      "sourceUrl": "https://www.google.com/maps/@-4.4524363,-43.884082,41a,75y,80h,90t/data=!3m7!1e1!3m5!1s-cobrY1JXxzgMb5A6cnE5g!2e0!6shttps:%2F%2Fstreetviewpixels-pa.clients6.google.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D0%26panoid%3D-cobrY1JXxzgMb5A6cnE5g%26yaw%3D80!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI2MTAwNy4wIKXMDSoASAFQAw%3D%3D"
+    },
+    {
+      "id": 23,
+      "pano": "H9V_6d97Q2kIF529HsABNg",
+      "latitude": -4.4524233,
+      "longitude": -43.8839897,
+      "imageryDate": "2025-06",
+      "capturedAt": "2026-10-12",
+      "sourceUrl": "https://www.google.com/maps/@-4.4524233,-43.8839897,41a,75y,80h,90t/data=!3m7!1e1!3m5!1sH9V_6d97Q2kIF529HsABNg!2e0!6shttps:%2F%2Fstreetviewpixels-pa.clients6.google.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D0%26panoid%3DH9V_6d97Q2kIF529HsABNg%26yaw%3D80!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI2MTAwNy4wIKXMDSoASAFQAw%3D%3D"
+    },
+    {
+      "id": 24,
+      "pano": "KxQ0Du0t5dpwxsYMuC3Ntg",
+      "latitude": -4.452409,
+      "longitude": -43.8838965,
+      "imageryDate": "2025-06",
+      "capturedAt": "2026-10-12",
+      "sourceUrl": "https://www.google.com/maps/@-4.452409,-43.8838965,41a,75y,80h,90t/data=!3m7!1e1!3m5!1sKxQ0Du0t5dpwxsYMuC3Ntg!2e0!6shttps:%2F%2Fstreetviewpixels-pa.clients6.google.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D0%26panoid%3DKxQ0Du0t5dpwxsYMuC3Ntg%26yaw%3D80!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI2MTAwNy4wIKXMDSoASAFQAw%3D%3D"
+    },
+    {
+      "id": 25,
+      "pano": "E4-_wBxnGyRONMwsO5YTog",
+      "latitude": -4.4523949,
+      "longitude": -43.883808,
+      "imageryDate": "2025-06",
+      "capturedAt": "2026-10-12",
+      "sourceUrl": "https://www.google.com/maps/@-4.4523949,-43.883808,41a,75y,80h,90t/data=!3m7!1e1!3m5!1sE4-_wBxnGyRONMwsO5YTog!2e0!6shttps:%2F%2Fstreetviewpixels-pa.clients6.google.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D0%26panoid%3DE4-_wBxnGyRONMwsO5YTog%26yaw%3D80!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI2MTAwNy4wIKXMDSoASAFQAw%3D%3D"
+    },
+    {
+      "id": 26,
+      "pano": "TKk5hZiL5eLXoXoWqTJCZg",
+      "latitude": -4.4523795,
+      "longitude": -43.8837193,
+      "imageryDate": "2025-06",
+      "capturedAt": "2026-10-12",
+      "sourceUrl": "https://www.google.com/maps/@-4.4523795,-43.8837193,41a,75y,80h,90t/data=!3m7!1e1!3m5!1sTKk5hZiL5eLXoXoWqTJCZg!2e0!6shttps:%2F%2Fstreetviewpixels-pa.clients6.google.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D0%26panoid%3DTKk5hZiL5eLXoXoWqTJCZg%26yaw%3D80!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI2MTAwNy4wIKXMDSoASAFQAw%3D%3D"
+    },
+    {
+      "id": 27,
+      "pano": "Gl3V-vaVuviTv_NtaFCm0g",
+      "latitude": -4.4523455,
+      "longitude": -43.8835405,
+      "imageryDate": "2025-06",
+      "capturedAt": "2026-10-12",
+      "sourceUrl": "https://www.google.com/maps/@-4.4523455,-43.8835405,40a,75y,80h,90t/data=!3m7!1e1!3m5!1sGl3V-vaVuviTv_NtaFCm0g!2e0!6shttps:%2F%2Fstreetviewpixels-pa.clients6.google.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D0%26panoid%3DGl3V-vaVuviTv_NtaFCm0g%26yaw%3D80!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI2MTAwNy4wIKXMDSoASAFQAw%3D%3D"
+    },
+    {
+      "id": 28,
+      "pano": "jVOUhCPxj6MTHTlweAt3dg",
+      "latitude": -4.4523624,
+      "longitude": -43.8836283,
+      "imageryDate": "2025-06",
+      "capturedAt": "2026-10-12",
+      "sourceUrl": "https://www.google.com/maps/@-4.4523624,-43.8836283,40a,90y,80h,90t/data=!3m7!1e1!3m5!1sjVOUhCPxj6MTHTlweAt3dg!2e0!6shttps:%2F%2Fstreetviewpixels-pa.clients6.google.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D0%26panoid%3DjVOUhCPxj6MTHTlweAt3dg%26yaw%3D80!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI2MTAwNy4wIKXMDSoASAFQAw%3D%3D"
+    },
+    {
+      "id": 29,
+      "pano": "UqXsj-ZYjX1dJe8rc8-xFQ",
+      "latitude": -4.4523176,
+      "longitude": -43.8834375,
+      "imageryDate": "2025-06",
+      "capturedAt": "2026-10-12",
+      "sourceUrl": "https://www.google.com/maps/@-4.4523176,-43.8834375,40a,75y,80h,90t/data=!3m7!1e1!3m5!1sUqXsj-ZYjX1dJe8rc8-xFQ!2e0!6shttps:%2F%2Fstreetviewpixels-pa.clients6.google.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D0%26panoid%3DUqXsj-ZYjX1dJe8rc8-xFQ%26yaw%3D80!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI2MTAwNy4wIKXMDSoASAFQAw%3D%3D"
+    }
+  ],
+  "source": "Google Street View; panoramas visitados sequencialmente pela interface do Google Maps",
+  "imageryDate": "2025-06",
+  "extensions": [
+    {
+      "fromPoint": 1,
+      "toPoint": 9,
+      "routePointOrder": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "fromStreet": "Rua Simeão de Macedo",
+      "toStreet": "Rua Fernando Carvalho",
+      "startLandmark": "Praça do Cinema",
+      "direction": "Oeste, sentido oposto à Rua Antônio Alexandre",
+      "capturedAt": "2026-10-10",
+      "imageryDate": "2025-06",
+      "source": "Google Street View; coordenadas efetivas dos panoramas observadas na URL",
+      "endPoint": 9,
+      "endSourceUrl": "https://www.google.com/maps/@-4.4526356,-43.8856738,3a,75y,270h,90t/data=!3m4!1e1!3m2!1slomRw8xn5PN_Kj007gZQ8A!2e0",
+      "notes": "Nove panoramas consecutivos. O ponto 9 documenta o cruzamento, sem avançar pelo quarteirão seguinte. Coordenadas de cada panorama lidas na URL do Street View; nome da transversal confirmado no mapa."
+    },
+    {
+      "fromPoint": 10,
+      "toPoint": 18,
+      "routePointOrder": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        9
+      ],
+      "fromStreet": "Praça Alcebíades Silva",
+      "toStreet": "Rua Fernando Carvalho",
+      "endPoint": 18,
+      "connectionPoint": 9,
+      "capturedAt": "2026-10-11",
+      "imageryDate": "2025-06",
+      "sourceUrl": "https://www.google.com/maps/@-4.4526068,-43.8864364,45a,75y,162.34h,90t/data=!3m7!1e1!3m5!1s6EHpJN61DPJveMI4-DXkeA!2e0!6shttps:%2F%2Fstreetviewpixels-pa.clients6.google.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D0%26panoid%3D6EHpJN61DPJveMI4-DXkeA%26yaw%3D162.34!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI2MTAwNy4wIKXMDSoASAFQAw%3D%3D",
+      "endSourceUrl": "https://www.google.com/maps/@-4.4525972,-43.8857751,45a,75y,90h,90t/data=!3m7!1e1!3m5!1svwfWi6En4noFzD0fhseTPA!2e0!6shttps:%2F%2Fstreetviewpixels-pa.clients6.google.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D0%26panoid%3DvwfWi6En4noFzD0fhseTPA%26yaw%3D90!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI2MTAwNy4wIKXMDSoASAFQAw%3D%3D",
+      "reusedPoints": [
+        10,
+        9
+      ],
+      "notes": "Retorno para leste. O ponto 10 reutiliza Alcebíades/15; 11–18 são oito avanços capturados, 64 fotos novas. Parada na boca oeste do cruzamento com Fernando, diante da Uniodonto e do 2º Ofício; a face oposta já está documentada no ponto 9, preservado. Não prossegue pelo quarteirão seguinte."
+    },
+    {
+      "name": "Antônio Alexandre até Rua Coelho Neto",
+      "endPoint": 29,
+      "routePointOrder": [
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        28,
+        27,
+        29
+      ],
+      "imageryDate": "2025-06",
+      "capturedAt": "2026-10-12",
+      "source": "Google Street View: avanço pelos panoramas vizinhos e conferência no Google Maps",
+      "sourceUrl": "https://www.google.com/maps/@-4.4523176,-43.8834375,40a,75y,80h,90t/data=!3m7!1e1!3m5!1sUqXsj-ZYjX1dJe8rc8-xFQ!2e0!6shttps:%2F%2Fstreetviewpixels-pa.clients6.google.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D0%26panoid%3DUqXsj-ZYjX1dJe8rc8-xFQ%26yaw%3D80!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI2MTAwNy4wIKXMDSoASAFQAw%3D%3D",
+      "notes": "Ponto 19 reutiliza Antônio Alexandre/20. Ponto 28 recupera o panorama entre 26 e 27 após resposta HTTP 503, sem renumerar os IDs. A Coelho Neto é representada somente na interseção.",
+      "fromPoint": 19,
+      "toPoint": 29,
+      "fromStreet": "Rua Antônio Alexandre",
+      "toStreet": "Rua Coelho Neto",
+      "endSourceUrl": "https://www.google.com/maps/@-4.4523176,-43.8834375,40a,75y,80h,90t/data=!3m7!1e1!3m5!1sUqXsj-ZYjX1dJe8rc8-xFQ!2e0!6shttps:%2F%2Fstreetviewpixels-pa.clients6.google.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D0%26panoid%3DUqXsj-ZYjX1dJe8rc8-xFQ%26yaw%3D80!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI2MTAwNy4wIKXMDSoASAFQAw%3D%3D",
+      "direction": "Leste, da Antônio Alexandre até a Coelho Neto"
+    }
+  ],
+  "roadType": "rua",
+  "sidewalkType": "calcada-de-rua"
+}

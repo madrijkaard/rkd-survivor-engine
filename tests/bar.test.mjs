@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { BAR, insideBar } from '../src/bar-layout.js';
+import { BAR, BAR_SHIFT, insideBar } from '../src/bar-layout.js';
 import { findPath, clearLine, walkable, moveActor } from '../src/world.js';
 
 function follow(start,destination){
@@ -22,9 +22,9 @@ test('é possível entrar no bar pela rua, contornar as mesas, chegar ao balcão
   const outside=follow(customer,BAR.exit);assert.equal(insideBar(outside.x,outside.y),false);
 });
 test('as duas portas abertas são transitáveis; o resto da fachada impede a passagem',()=>{
-  for(const d of BAR.doors){const y=d.y+d.w/2;assert.ok(clearLine({x:-70,y},{x:-105,y}));}
-  assert.equal(clearLine({x:-70,y:1960},{x:-105,y:1960}),false);
-  assert.equal(walkable(-83,1960),false);
+  for(const d of BAR.doors){const y=d.y+d.w/2;assert.ok(clearLine({x:-70+BAR_SHIFT,y},{x:-105+BAR_SHIFT,y}));}
+  assert.equal(clearLine({x:-70+BAR_SHIFT,y:1960},{x:-105+BAR_SHIFT,y:1960}),false);
+  assert.equal(walkable(-83+BAR_SHIFT,1960),false);
 });
 test('mesas, balcão e Péricles não podem ser atravessados',()=>{
   for(const table of BAR.tables)assert.equal(walkable(table.x+table.w/2,table.y+table.h/2),false);

@@ -1,8 +1,10 @@
+import { SIMEAO_ROAD } from './road-profiles.js';
+import { parkingOffset } from './road-dimensions.js';
 import { simeaoPoints } from './simeao-points.js';
 
 // Point 31 is on the approach to the photographed Henrique Figueiredo crossing.
 export const SIMEAO_END = simeaoPoints.at(-1).y + 90;
-export const HENRIQUE_ROAD = {x:-320,y:SIMEAO_END-60,w:750,h:120};
+export const HENRIQUE_ROAD = {x:-320,y:SIMEAO_END-SIMEAO_ROAD.outerHalfWidth,w:750,h:SIMEAO_ROAD.totalWidth};
 const opening=(kind,u,w,bottom,h,extra={})=>({kind,u,w,bottom,h,...extra});
 const door=(u,w,extra={})=>opening('door',u,w,0,.73,extra);
 const win=(u,w,extra={})=>opening('window',u,w,.30,.42,extra);
@@ -38,7 +40,7 @@ export const simeaoExtensionBuildings = [
     signs:[sign(.08,.09,.82,.22,'TADEU SANTOS',{sub:'ADVOGADOS',color:'#36413e',ink:'#d3d5c7'})]}),
   // Split one continuous wall into adjoining sprites so foreground fading and
   // tree occlusion remain local; these are not separate photographed houses.
-  ...Array.from({length:5},(_,i)=>front(`w22-muro-${i+1}`,'west',3310+i*(SIMEAO_END-60-3310)/5,3310+(i+1)*(SIMEAO_END-60-3310)/5,Math.min(31,24+i*2),{
+  ...Array.from({length:5},(_,i)=>front(`w22-muro-${i+1}`,'west',3310+i*(SIMEAO_END-SIMEAO_ROAD.outerHalfWidth-3310)/5,3310+(i+1)*(SIMEAO_END-SIMEAO_ROAD.outerHalfWidth-3310)/5,Math.min(31,24+i*2),{
     name:'Muro chapiscado com árvores e tela alta',residential:false,x:-98,depth:18,height:49,roof:'none',color:'#888c7c',base:'#6e7b65',wear:1,detail:'sm-net-wall',
     ...(i===4?{signs:[sign(.70,.2,.22,.60,'PROIBIDO',{sub:'JOGAR LIXO',color:'#ad5349',ink:'#e0dbbd'})]}:{}),
   })),
@@ -63,13 +65,13 @@ export const simeaoExtensionBuildings = [
   front('e25-garagem-antiga','east',3750,3840,27,{name:'Fachada antiga de garagem branca e platibanda',roof:'hidden-tile',height:60,color:'#b5af95',wear:.9,pattern:'horizontal',
     openings:[gate(.05,.44,{color:'#b7b9a1',grille:'diagonal',bars:'#d5d5bf',solid:.7})]}),
   front('e26-parede-alta','east',3840,3930,28,{name:'Parede alta de reboco sem pintura',residential:false,height:93,roof:'none',color:'#a9a693',wear:.9}),
-  ...Array.from({length:3},(_,i)=>front(`e27-muro-${i+1}`,'east',3930+i*(SIMEAO_END-60-3930)/3,3930+(i+1)*(SIMEAO_END-60-3930)/3,29+i,{
+  ...Array.from({length:3},(_,i)=>front(`e27-muro-${i+1}`,'east',3930+i*(SIMEAO_END-SIMEAO_ROAD.outerHalfWidth-3930)/3,3930+(i+1)*(SIMEAO_END-SIMEAO_ROAD.outerHalfWidth-3930)/3,29+i,{
     name:'Muro de reboco com tijolos expostos',residential:false,x:80,depth:18,height:45,roof:'none',color:'#a29a82',base:'#938e76',wear:1,detail:'sm-brick-wall',
     openings:i===0?[gate(.3,.36,{color:'#b5b8aa',solid:1,grille:'vertical'})]:[],
   })),
-  front('final-bar','west',SIMEAO_END+65,SIMEAO_END+190,31,{name:'Bar da esquina com Henrique Figueiredo',photoDirection:1,refs:[[31,1],[31,8]],residential:false,color:'#c38e72',base:'#394442',baseHeight:.31,roof:'tile',height:51,
+  front('final-bar','west',SIMEAO_END+SIMEAO_ROAD.outerHalfWidth,SIMEAO_END+190,31,{name:'Bar da esquina com Henrique Figueiredo',photoDirection:1,refs:[[31,1],[31,8]],residential:false,color:'#c38e72',base:'#394442',baseHeight:.31,roof:'tile',height:51,
     openings:[door(.1,.20,{open:true}),door(.64,.23,{open:true})],crossFacade:{face:'minY',street:'simeao',point:31,photoDirection:1,openings:[door(.1,.20,{open:true}),door(.62,.2,{open:true})],signs:[]}}),
-  front('final-casa-verde','east',SIMEAO_END+65,SIMEAO_END+190,31,{name:'Casa verde da esquina com base cinza',photoDirection:1,refs:[[31,1],[31,2]],color:'#aecb93',base:'#99a9ae',baseHeight:.28,roof:'hidden-tile',height:58,
+  front('final-casa-verde','east',SIMEAO_END+SIMEAO_ROAD.outerHalfWidth,SIMEAO_END+190,31,{name:'Casa verde da esquina com base cinza',photoDirection:1,refs:[[31,1],[31,2]],color:'#aecb93',base:'#99a9ae',baseHeight:.28,roof:'hidden-tile',height:58,
     openings:[door(.12,.18,{grille:'vertical'}),win(.55,.22,{grille:'square'})],crossFacade:{face:'minY',street:'simeao',point:31,photoDirection:1,openings:[win(.1,.3,{grille:'square'}),door(.6,.13,{grille:'square'}),win(.82,.12,{grille:'square'})],signs:[]}}),
 ];
 
@@ -79,4 +81,6 @@ export const simeaoExtensionTrees = [
   {x:213,y:SIMEAO_END+128,size:54,height:83,seed:419},
 ];
 export const simeaoExtensionPoles = [2570,2990,3450,3905,4310].map((y,i)=>({x:-72,y,height:146+i%2*8}));
-export const simeaoExtensionCars = [{x:48,y:2695,color:'#b7beba',seed:410},{x:46,y:3110,color:'#9da89f',seed:411},{x:46,y:3760,color:'#899288',seed:412}];
+export const simeaoExtensionCars = [{x:parkingOffset(SIMEAO_ROAD),y:2695,color:'#b7beba',seed:410},{x:parkingOffset(SIMEAO_ROAD),y:3110,color:'#9da89f',seed:411},{x:parkingOffset(SIMEAO_ROAD),y:3760,color:'#899288',seed:412}];
+
+for (const b of simeaoExtensionBuildings) { if (!['cinema','pavilion'].includes(b.id)) b.x += (b.side === 'west' ? -1 : 1) * (SIMEAO_ROAD.outerHalfWidth - 80); }

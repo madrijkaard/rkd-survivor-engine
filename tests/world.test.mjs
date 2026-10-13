@@ -1,3 +1,4 @@
+import { SIMEAO_ROAD } from '../src/road-profiles.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readdir, stat } from 'node:fs/promises';
@@ -27,13 +28,13 @@ test('a rua tem passagem contínua da praça à Henrique Figueiredo, nos 31 pont
 test('paredes, canteiros, carros e limites impedem atravessar o cenário', () => {
   for (const p of [[126, 26], [-49, 140], [120, 800], [-140, 1700], [600, 100]]) assert.equal(walkable(...p), false);
   const actor = { x: 0, y: 800 }; moveActor(actor, 500, 0);
-  assert.ok(actor.x < 76); assert.ok(walkable(actor.x, actor.y));
+  assert.ok(actor.x < SIMEAO_ROAD.outerHalfWidth-4); assert.ok(walkable(actor.x, actor.y));
   const towardCar = { x: -49, y: 30 }; moveActor(towardCar, 0, 180);
   assert.ok(towardCar.y < 108, 'Subpassos impedem atravessar o carro');
 });
 test('o trajeto por clique contorna o canteiro e mantém todos os segmentos transitáveis', () => {
   // Continue past the planter to paving, outside the relocated monument base.
-  const start = { x: 74, y: 26 }, destination = { x: 185, y: 80 };
+  const start = { x: 74, y: 26 }, destination = { x: 185, y: CINEMA_MONUMENT.y+50 };
   assert.equal(clearLine(start, destination), false);
   const path = findPath(start, destination); assert.ok(path?.length > 1);
   let position = start;

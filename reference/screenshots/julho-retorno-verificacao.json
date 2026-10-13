@@ -1,0 +1,224 @@
+{
+  "photos": [
+    {
+      "state": {
+        "time": "21:26",
+        "lampsOn": "true",
+        "clockSynced": "true",
+        "neighborhood": "Centro",
+        "insideBar": "false",
+        "talking": "false",
+        "point": "10",
+        "playerX": "-2223.00",
+        "playerY": "-95.00",
+        "overview": "false",
+        "moving": "false",
+        "movementMode": "idle",
+        "movementSpeed": "0",
+        "arrived": "true",
+        "view": "west-fronts",
+        "street": "vinte-e-oito-de-julho",
+        "ready": "true",
+        "loadedPhotos": "303"
+      },
+      "title": "Rua Vinte e Oito de Julho · Ponto 10",
+      "src": "maps/vinte-e-oito-de-julho/ponto-10/1.jpg",
+      "directions": 8
+    },
+    {
+      "title": "Rua Vinte e Oito de Julho · Ponto 14",
+      "images": [
+        "maps/vinte-e-oito-de-julho/ponto-14/1.jpg",
+        "maps/vinte-e-oito-de-julho/ponto-14/2.jpg",
+        "maps/vinte-e-oito-de-julho/ponto-14/3.jpg",
+        "maps/vinte-e-oito-de-julho/ponto-14/4.jpg",
+        "maps/vinte-e-oito-de-julho/ponto-14/5.jpg",
+        "maps/vinte-e-oito-de-julho/ponto-14/6.jpg",
+        "maps/vinte-e-oito-de-julho/ponto-14/7.jpg",
+        "maps/vinte-e-oito-de-julho/ponto-14/8.jpg"
+      ]
+    },
+    {
+      "title": "Rua Vinte e Oito de Julho · Ponto 18",
+      "images": [
+        "maps/vinte-e-oito-de-julho/ponto-18/1.jpg",
+        "maps/vinte-e-oito-de-julho/ponto-18/2.jpg",
+        "maps/vinte-e-oito-de-julho/ponto-18/3.jpg",
+        "maps/vinte-e-oito-de-julho/ponto-18/4.jpg",
+        "maps/vinte-e-oito-de-julho/ponto-18/5.jpg",
+        "maps/vinte-e-oito-de-julho/ponto-18/6.jpg",
+        "maps/vinte-e-oito-de-julho/ponto-18/7.jpg",
+        "maps/vinte-e-oito-de-julho/ponto-18/8.jpg"
+      ]
+    },
+    {
+      "title": "Rua Vinte e Oito de Julho · Ponto 09",
+      "images": [
+        "maps/vinte-e-oito-de-julho/ponto-09/1.jpg",
+        "maps/vinte-e-oito-de-julho/ponto-09/2.jpg",
+        "maps/vinte-e-oito-de-julho/ponto-09/3.jpg",
+        "maps/vinte-e-oito-de-julho/ponto-09/4.jpg",
+        "maps/vinte-e-oito-de-julho/ponto-09/5.jpg",
+        "maps/vinte-e-oito-de-julho/ponto-09/6.jpg",
+        "maps/vinte-e-oito-de-julho/ponto-09/7.jpg",
+        "maps/vinte-e-oito-de-julho/ponto-09/8.jpg"
+      ]
+    },
+    {
+      "title": "Rua Vinte e Oito de Julho · Ponto 10",
+      "images": [
+        "maps/vinte-e-oito-de-julho/ponto-10/1.jpg",
+        "maps/vinte-e-oito-de-julho/ponto-10/2.jpg",
+        "maps/vinte-e-oito-de-julho/ponto-10/3.jpg",
+        "maps/vinte-e-oito-de-julho/ponto-10/4.jpg",
+        "maps/vinte-e-oito-de-julho/ponto-10/5.jpg",
+        "maps/vinte-e-oito-de-julho/ponto-10/6.jpg",
+        "maps/vinte-e-oito-de-julho/ponto-10/7.jpg",
+        "maps/vinte-e-oito-de-julho/ponto-10/8.jpg"
+      ]
+    },
+    {
+      "title": "Praça Alcebíades Silva · Ponto 14",
+      "images": [
+        "maps/praca-alcebiades-silva/ponto-14/1.jpg",
+        "maps/praca-alcebiades-silva/ponto-14/2.jpg",
+        "maps/praca-alcebiades-silva/ponto-14/3.jpg",
+        "maps/praca-alcebiades-silva/ponto-14/4.jpg",
+        "maps/praca-alcebiades-silva/ponto-14/5.jpg",
+        "maps/praca-alcebiades-silva/ponto-14/6.jpg",
+        "maps/praca-alcebiades-silva/ponto-14/7.jpg",
+        "maps/praca-alcebiades-silva/ponto-14/8.jpg"
+      ]
+    }
+  ],
+  "cameras": [
+    "east-fronts",
+    "north-west-view",
+    "north-east-view",
+    "west-fronts"
+  ],
+  "errors": [],
+  "walk": {
+    "time": "21:26",
+    "lampsOn": "true",
+    "clockSynced": "true",
+    "neighborhood": "Centro",
+    "insideBar": "false",
+    "talking": "false",
+    "point": "11",
+    "playerX": "-2185.52",
+    "playerY": "-76.79",
+    "overview": "false",
+    "moving": "true",
+    "movementMode": "walk",
+    "movementSpeed": "100",
+    "arrived": "true",
+    "view": "west-fronts",
+    "street": "vinte-e-oito-de-julho",
+    "ready": "true",
+    "loadedPhotos": "303"
+  },
+  "click": {
+    "time": "21:30",
+    "lampsOn": "true",
+    "clockSynced": "true",
+    "neighborhood": "Centro",
+    "insideBar": "false",
+    "talking": "false",
+    "point": "18",
+    "playerX": "-1337.60",
+    "playerY": "-95.00",
+    "overview": "false",
+    "moving": "false",
+    "movementMode": "idle",
+    "movementSpeed": "0",
+    "arrived": "false",
+    "view": "west-fronts",
+    "street": "vinte-e-oito-de-julho",
+    "ready": "true",
+    "loadedPhotos": "303"
+  },
+  "fernando": {
+    "time": "21:30",
+    "lampsOn": "true",
+    "clockSynced": "true",
+    "neighborhood": "Centro",
+    "insideBar": "false",
+    "talking": "false",
+    "point": "9",
+    "playerX": "-1202.00",
+    "playerY": "-95.00",
+    "overview": "false",
+    "moving": "false",
+    "movementMode": "idle",
+    "movementSpeed": "0",
+    "arrived": "true",
+    "view": "west-fronts",
+    "street": "vinte-e-oito-de-julho",
+    "ready": "true",
+    "loadedPhotos": "303"
+  },
+  "return": {
+    "time": "21:31",
+    "lampsOn": "true",
+    "clockSynced": "true",
+    "neighborhood": "Centro",
+    "insideBar": "false",
+    "talking": "false",
+    "point": "10",
+    "playerX": "-2223.00",
+    "playerY": "-95.00",
+    "overview": "false",
+    "moving": "false",
+    "movementMode": "idle",
+    "movementSpeed": "0",
+    "arrived": "true",
+    "view": "west-fronts",
+    "street": "vinte-e-oito-de-julho",
+    "ready": "true",
+    "loadedPhotos": "303"
+  },
+  "praca": {
+    "time": "21:31",
+    "lampsOn": "true",
+    "clockSynced": "true",
+    "neighborhood": "Centro",
+    "insideBar": "false",
+    "talking": "false",
+    "point": "14",
+    "playerX": "-2223.00",
+    "playerY": "149.10",
+    "overview": "false",
+    "moving": "false",
+    "movementMode": "idle",
+    "movementSpeed": "0",
+    "arrived": "true",
+    "view": "west-fronts",
+    "street": "praca-alcebiades-silva",
+    "ready": "true",
+    "loadedPhotos": "303"
+  },
+  "date": "2026-10-11",
+  "street": "Rua Vinte e Oito de Julho",
+  "extensionPoints": [
+    10,
+    18
+  ],
+  "newCaptures": 64,
+  "reusedImages": 8,
+  "totalPoints": 146,
+  "totalImages": 1168,
+  "decodedImages": 72,
+  "dimensions": [
+    900,
+    600
+  ],
+  "testCount": 80,
+  "testsPassed": 80,
+  "renderHours": [
+    720,
+    1200
+  ],
+  "generatorReproducible": true,
+  "sourceUrl": "https://www.google.com/maps/@-4.4525972,-43.8857751,45a,75y,90h,90t/data=!3m7!1e1!3m5!1svwfWi6En4noFzD0fhseTPA!2e0!6shttps:%2F%2Fstreetviewpixels-pa.clients6.google.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D0%26panoid%3DvwfWi6En4noFzD0fhseTPA%26yaw%3D90!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI2MTAwNy4wIKXMDSoASAFQAw%3D%3D"
+}

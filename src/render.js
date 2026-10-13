@@ -1,3 +1,15 @@
+import { drawBeneditoGround, drawBeneditoFurniture } from './benedito-render.js';
+import { beneditoPoles, beneditoShrubs, beneditoBikes, beneditoShelter, beneditoBarriers, beneditoSignal, beneditoPhone } from './benedito-data.js';
+import { drawMendoncaBeneditoGround } from './mendonca-benedito-render.js';
+import { mendoncaBeneditoShrubs, mendoncaBeneditoBikes, BENEDITO_X } from './mendonca-benedito.js';
+import { drawCoelhoGround, drawCoelhoTruck } from './coelho-render.js';
+import { coelhoPoles, coelhoShrubs, coelhoBikes, coelhoTruck } from './coelho-data.js';
+import { drawJulhoEastGround } from './julho-east-render.js';
+import { JULHO_EAST } from './julho-east.js';
+import { withCarFrame } from './projection.js';
+import { FERNANDO_PROFILE } from './road-profiles.js';
+import { SIMEAO_ROAD, MENDONCA_ROAD, JULHO_PROFILE } from './road-profiles.js';
+import { CAR_WIDTH, CAR_LENGTH } from './road-dimensions.js';
 import { drawTree, drawPlanter, drawLampBench, drawGardenWall, drawDemolition, drawBrickRecess, drawShrub, drawBin, drawBillboard } from './street-details.js';
 import { makeDetailedFacade as makeFacade } from './facades.js';
 import { drawDetailedBuilding as drawBuilding } from './architecture.js';
@@ -8,8 +20,20 @@ import { createBarScene } from './bar-render.js';
 import { CAMERA_VIEWS, withCameraView, withCrossStreetFrame, PROJECTION } from './projection.js';
 import { drawMendoncaGround, drawChurchTower, drawChurchNave, drawPlazaSeat, drawPlazaStatue } from './mendonca-render.js';
 import { CHURCH_PLAZA, PLAZA_CHURCH, CHURCH_TOWER, plazaSeats, plazaStatue } from './mendonca-data.js';
-import { drawAntonioGround, drawAntonioCactus } from './antonio-render.js';
+import { drawAntonioGround, drawAntonioCactus, drawMatrizExtensionGround } from './antonio-render.js';
 import { antonioPoles, antonioShrubs, antonioBikes, antonioCacti } from './antonio-data.js';
+import { matrizPoles, matrizShrubs } from './antonio-matriz.js';
+import { fernandoPoles, fernandoShrubs, fernandoBikes, FERNANDO_X } from './fernando-data.js';
+import { drawAlcebiadesGround } from './alcebiades-render.js';
+import { alcebiadesPoles, alcebiadesShrubs, alcebiadesBikes, ALCEBIADES_END, ALCEBIADES_CARDOSO_POINT } from './alcebiades-data.js';
+import { alcebiadesFence, alcebiadesSports } from './alcebiades-julho.js';
+import { drawAlcebiadesSport } from './alcebiades-julho-render.js';
+import { drawMendoncaPracaGround } from './mendonca-praca-render.js';
+import { mendoncaPracaShrubs, mendoncaPracaBikes, MENDONCA_WEST_END } from './mendonca-praca.js';
+import { drawMendoncaWestGround } from './mendonca-west-render.js';
+import { drawFernandoGround } from './fernando-render.js';
+import { julhoPoles, julhoShrubs, julhoBikes } from './julho-data.js';
+import { drawJulhoGround, drawJulhoBankRails } from './julho-render.js';
 import { buildingPlanPoint } from './building-geometry.js';
 import { CINEMA_PLAZA } from './cinema-plaza.js';
 import { poleLamps } from './lighting.js';
@@ -76,7 +100,7 @@ function rectAt(ctx, x, y, w, h, z, color) { poly(ctx, [[x, y, z], [x + w, y, z]
 function drawCar(ctx, c) {
   const { x, y } = c;
   for (const xx of [-16, 16]) for (const yy of [-19, 20]) { const p = P(x + xx, y + yy, 4); ctx.fillStyle = '#26312d'; ctx.beginPath(); ctx.ellipse(p.x, p.y, 4, 7, -.2, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = '#7b8477'; ctx.fillRect(p.x - 1, p.y - 2, 2, 4); }
-  const w = 31, l = 65;
+  const w = CAR_WIDTH, l = CAR_LENGTH;
   wallPanel(ctx, [x - w / 2, y - l / 2], [x + w / 2, y - l / 2], 14, shade(c.color, -20), shade(c.color, -29));
   const nearX=PROJECTION.c>0?1:-1;
   wallPanel(ctx, [x + nearX*w / 2, y - l / 2], [x + nearX*w / 2, y + l / 2], 14, c.color, shade(c.color, -25));
@@ -99,9 +123,9 @@ function drawPole(ctx, p) {
   const base = P(p.x, p.y), top = P(p.x, p.y, p.height);
   if(p.lamp){
     line(ctx,[p.x,p.y,0],[p.x,p.y,p.height],'#a8af91',3);
-    for(const [dx,dy] of [[-13,0],[13,0],[0,-13],[0,13]]){
-      line(ctx,[p.x,p.y,p.height-5],[p.x+dx,p.y+dy,p.height],'#bfc4a2',1.5);
-      const q=P(p.x+dx,p.y+dy,p.height);ctx.fillStyle='#ccd1ac';ctx.fillRect(q.x-4,q.y-2,8,4);ctx.fillStyle='#728476';ctx.fillRect(q.x-3,q.y-1,6,2);
+    for(const lamp of poleLamps(p)){
+      line(ctx,[p.x,p.y,p.height-5],[lamp.x,lamp.y,lamp.z],'#bfc4a2',1.5);
+      const q=P(lamp.x,lamp.y,lamp.z);ctx.fillStyle='#ccd1ac';ctx.fillRect(q.x-4,q.y-2,8,4);ctx.fillStyle='#728476';ctx.fillRect(q.x-3,q.y-1,6,2);
     }
     return;
   }
@@ -135,8 +159,9 @@ function boundsFor(x, y, w, l, h = 0, building=null) {
 
 export async function createScene(onProgress) {
   const photos = new Map(); let completed = 0;
-  const requests=allPoints.flatMap(p=>(p.street==='conego-mendonca'?[1,5]:[3,7]).map(direction=>({point:p.id,street:p.street,direction})));
+  const requests=allPoints.flatMap(p=>(['conego-mendonca','vinte-e-oito-de-julho'].includes(p.street)?[1,5]:[3,7]).map(direction=>({point:p.id,street:p.street,direction})));
   requests.push(...buildings.filter(b=>b.photoDirection).map(b=>({point:b.point,street:b.street,direction:b.photoDirection})));
+  for(const building of buildings){const b=building.local??building;for(const f of [b.crossFacade,b.backFacade])if(f?.street)requests.push({point:f.point,street:f.street,direction:f.photoDirection??(f.face==='minY'?1:5)});}
   const resources=[...new Map(requests.map(r=>[`${r.street}-${r.point}-${r.direction}`,r])).values()];
   await Promise.all(resources.map(({ point, street, direction }) => new Promise(resolve => {
     const im = new Image(); im.onload = () => { photos.set(`${street}-${point}-${direction}`, im); onProgress(++completed / resources.length*.78); resolve(); }; im.onerror = () => { onProgress(++completed / resources.length*.78); resolve(); }; im.src = imagePath(point, direction, street);
@@ -180,38 +205,67 @@ function bakeScene(photos) {
     if(b.axis==='x')withCrossStreetFrame(b.originY??CROSS_Y,()=>bakeBuilding(b.local,b.street));
     else bakeBuilding(b,b.street||'simeao');
   }
+  for(const obj of [...alcebiadesFence.map(p=>({...p,kind:'fence'})),...alcebiadesSports,{...beneditoShelter,kind:'shelter'}]){
+    const depth=P(obj.x+obj.w/2,PROJECTION.d>0?obj.y+obj.h:obj.y).y;
+    sprites.push(bake(c=>drawAlcebiadesSport(c,obj),boundsFor(obj.x-20,obj.y-12,obj.w+40,obj.h+24,obj.height+15),depth,obj.id||'as-fence'));
+  }
+  sprites.push(bake(drawJulhoBankRails,boundsFor(-1173+FERNANDO_PROFILE.outerHalfWidth-55,-282,32,115,23),P(-1157+FERNANDO_PROFILE.outerHalfWidth-55,-225).y,'jl-bank-rails'));
   const church=PLAZA_CHURCH,tower=CHURCH_TOWER;
   sprites.push(bake(drawChurchNave,boundsFor(church.x-8,church.y-8,church.w+16,church.h+16,210),P(church.x+church.w/2,PROJECTION.d>0?church.y+church.h:church.y).y,'church-nave'));
   sprites.push(bake(drawChurchTower,boundsFor(tower.x-8,tower.y-8,tower.w+16,tower.h+16,368),P(tower.x+tower.w/2,PROJECTION.d>0?tower.y+tower.h:tower.y).y,'church-tower'));
   for(const s of plazaSeats)sprites.push(bake(c=>drawPlazaSeat(c,s),boundsFor(s.x,s.y,s.w,s.h,24),P(s.x+s.w/2,PROJECTION.d>0?s.y+s.h:s.y).y,'plaza-seat'));
   sprites.push(bake(c=>drawPlazaStatue(c,plazaStatue),boundsFor(plazaStatue.x-5,plazaStatue.y-5,plazaStatue.w+10,plazaStatue.h+10,80),P(plazaStatue.x+12,plazaStatue.y+12).y,'plaza-statue'));
-  sprites.push(bake(drawGardenWall, boundsFor(-91, gardenWall.y-5, 20, gardenWall.length+10, 65), P(-81,gardenWall.y).y, 'garden-wall'));
+  sprites.push(bake(drawGardenWall, boundsFor(gardenWall.x-10, gardenWall.y-5, 20, gardenWall.length+10, 65), P(gardenWall.x,gardenWall.y).y, 'garden-wall'));
   sprites.push(bake(drawDemolition, boundsFor(demolitionLot.x-6,demolitionLot.y-5,demolitionLot.depth+12,demolitionLot.length+10,65), P(demolitionLot.x+demolitionLot.depth/2,demolitionLot.y).y, 'demolition'));
   sprites.push(bake(drawBrickRecess, boundsFor(brickRecess.x-8,brickRecess.y-7,brickRecess.depth+16,brickRecess.length+14,65), P(brickRecess.x+brickRecess.depth/2,brickRecess.y).y, 'brick-recess'));
   sprites.push(bake(drawLampBench,boundsFor(279,133,64,64,16),P(311,165).y,'lamp-bench'));
-  for(const shrub of [...flowerShrubs,...antonioShrubs]) sprites.push(bake(c=>drawShrub(c,shrub),boundsFor(shrub.x-shrub.r-4,shrub.y-shrub.r-4,shrub.r*2+8,shrub.r*2+8,35),P(shrub.x,shrub.y).y,'flower-shrub'));
+  for(const shrub of [...beneditoShrubs,...mendoncaBeneditoShrubs,...coelhoShrubs,...flowerShrubs,...antonioShrubs,...matrizShrubs,...julhoShrubs,...fernandoShrubs,...mendoncaPracaShrubs,...alcebiadesShrubs]) sprites.push(bake(c=>drawShrub(c,shrub),boundsFor(shrub.x-shrub.r-4,shrub.y-shrub.r-4,shrub.r*2+8,shrub.r*2+8,35),P(shrub.x,shrub.y).y,'flower-shrub'));
   for(const cactus of antonioCacti)sprites.push(bake(c=>drawAntonioCactus(c,cactus),boundsFor(cactus.x-13,cactus.y-2,26,4,cactus.height+3),P(cactus.x,cactus.y).y,'aa-cactus'));
   for(const bin of bins) sprites.push(bake(c=>drawBin(c,bin),boundsFor(bin.x-12,bin.y-9,24,18,42),P(bin.x,bin.y).y,'bin'));
   for (const p of planters) sprites.push(bake(ctx => drawPlanter(ctx, p), boundsFor(p.x - p.r - 7, p.y - p.r - 7, p.r * 2 + 14, p.r * 2 + 14, p.monument ? p.height : 25), P(p.x, p.y).y, p.id||'planter'));
   for (const b of benches) sprites.push(bake(ctx => drawBench(ctx, b), boundsFor(b.x - 5, b.y - 5, b.w + 10, b.h + 10, 36), P(b.x + b.w / 2, b.y).y, 'bench'));
-  for (const c of cars) sprites.push(bake(ctx => drawCar(ctx, c), boundsFor(c.x - 22, c.y - 39, 44, 78, 30), P(c.x, c.y).y, 'car'));
+  for (const c of cars) {
+    withCarFrame(c,()=>sprites.push(bake(ctx=>drawCar(ctx,{...c,x:0,y:0}),boundsFor(-22,-39,44,78,30),P(0,0).y,'car')));
+  }
   for (const t of trees) {
     const p = P(t.x, t.y); sprites.push(bake(ctx => drawTree(ctx, t), { minX: p.x - t.size, maxX: p.x + t.size, minY: p.y - Math.max(t.size*1.6,(t.height||t.size*.8)+t.size*.5+8), maxY: p.y + 10 }, p.y, 'tree'));
   }
   for (const p of poles) sprites.push({ ...bake(ctx => drawPole(ctx, p), boundsFor(p.x - 29, p.y - 20, 58, 40, p.height + 18), P(p.x, p.y).y, 'pole'), pole: p });
   sprites.push(bake(drawBillboard, boundsFor(97, 480, 194, 28, 87), P(192, 495).y, 'billboard'));
   sprites.push(bake(ctx => { drawMotorcycle(ctx, 50, 2195); drawMotorcycle(ctx, 55, 2217); }, boundsFor(36, 2177, 40, 60, 28), P(55, 2205).y, 'motorcycles'));
-  for(const b of antonioBikes)sprites.push(bake(c=>drawMotorcycle(c,b.x,b.y),boundsFor(b.x-10,b.y-15,20,30,26),P(b.x,b.y).y,'aa-motorcycle'));
+  for(const b of [...beneditoBikes,...mendoncaBeneditoBikes,...coelhoBikes,...antonioBikes,...fernandoBikes,...mendoncaPracaBikes,...alcebiadesBikes])sprites.push(bake(c=>drawMotorcycle(c,b.x,b.y),boundsFor(b.x-10,b.y-15,20,30,26),P(b.x,b.y).y,'motorcycle'));
+  for(const obj of [...beneditoBarriers,beneditoSignal,beneditoPhone])sprites.push(bake(c=>drawBeneditoFurniture(c,obj),boundsFor(obj.x-15,obj.y-12,obj.w+30,obj.h+24,obj.height+15),P(obj.x,obj.y).y,'sb-street-furniture'));
+  const truck=coelhoTruck;
+  sprites.push(bake(drawCoelhoTruck,boundsFor(truck.x-4,truck.y-4,truck.w+8,truck.h+8,truck.height+5),P(truck.x+truck.w/2,PROJECTION.d>0?truck.y+truck.h:truck.y).y,truck.id));
   const wires = bake(ctx => {
-    const sequence = poles.filter(p => !p.lamp && p.x<0).sort((a,b)=>a.y-b.y);
+    for(let i=1;i<beneditoPoles.length;i++)for(const d of [-9,-3,3,9]){const prev=beneditoPoles[i-1],next=beneditoPoles[i],a=P(prev.x+d,prev.y,prev.height),b=P(next.x+d,next.y,next.height);ctx.strokeStyle='#374a40b0';ctx.lineWidth=.7;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.quadraticCurveTo((a.x+b.x)/2,(a.y+b.y)/2+13,b.x,b.y);ctx.stroke();}
+    const coelhoWire=[julhoPoles.at(-1),...coelhoPoles];
+    ctx.strokeStyle='#3d443cbb';ctx.lineWidth=.7;
+    for(let i=1;i<coelhoWire.length;i++)for(const d of [-8,-3,3,8]){const prev=coelhoWire[i-1],next=coelhoWire[i],a=P(prev.x+d,prev.y,prev.height),b=P(next.x+d,next.y,next.height);ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.quadraticCurveTo((a.x+b.x)/2,(a.y+b.y)/2+14,b.x,b.y);ctx.stroke();}
+
+    const sequence = poles.filter(p => !p.lamp && p.x<0&&p.street!=='vinte-e-oito-de-julho'&&p.street!=='fernando-carvalho'&&p.street!=='conego-mendonca'&&p.street!=='praca-alcebiades-silva'&&p.street!=='sao-benedito').sort((a,b)=>a.y-b.y);
     ctx.strokeStyle = '#273931ba'; ctx.lineWidth = .7;
     for (let i = 1; i < sequence.length; i++) for (const shift of [-12, 0, 12]) {
       const a = P(sequence[i - 1].x + shift, sequence[i - 1].y, sequence[i - 1].height), b = P(sequence[i].x + shift, sequence[i].y, sequence[i].height);
       ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.quadraticCurveTo((a.x + b.x) / 2, (a.y + b.y) / 2 + 15, b.x, b.y); ctx.stroke();
     }
-    const crossPoles=poles.filter(p=>p.x>0&&!p.lamp&&p.y>2390);
-    for(let i=1;i<antonioPoles.length;i++)for(const shift of [-9,0,9]){
-      const prev=antonioPoles[i-1],next=antonioPoles[i],a=P(prev.x+shift,prev.y,prev.height),b=P(next.x+shift,next.y,next.height);
+    const fernandoWire=[julhoPoles.find(p=>p.x===-1155),...fernandoPoles];
+    for(let i=1;i<fernandoWire.length;i++)for(const shift of [-9,-3,3,9]){
+      const prev=fernandoWire[i-1],next=fernandoWire[i],a=P(prev.x+shift,prev.y,prev.height),b=P(next.x+shift,next.y,next.height);
+      ctx.strokeStyle='#3d443cd0';ctx.lineWidth=.8;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.quadraticCurveTo((a.x+b.x)/2,(a.y+b.y)/2+15,b.x,b.y);ctx.stroke();
+    }
+    const crossPoles=poles.filter(p=>(p.x>0||p.street==='conego-mendonca')&&!p.lamp&&p.y>2390).sort((a,b)=>a.x-b.x);
+    for(let i=1;i<julhoPoles.length;i++)for(const shift of [-9,-3,3,9]){
+      const prev=julhoPoles[i-1],next=julhoPoles[i],a=P(prev.x,prev.y+shift,prev.height),b=P(next.x,next.y+shift,next.height);
+      ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.quadraticCurveTo((a.x+b.x)/2,(a.y+b.y)/2+13,b.x,b.y);ctx.stroke();
+    }
+    for(let i=1;i<alcebiadesPoles.length;i++)for(const shift of [-9,0,9]){
+      const prev=alcebiadesPoles[i-1],next=alcebiadesPoles[i],a=P(prev.x+shift,prev.y,prev.height),b=P(next.x+shift,next.y,next.height);
+      ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.quadraticCurveTo((a.x+b.x)/2,(a.y+b.y)/2+14,b.x,b.y);ctx.stroke();
+    }
+    const parallelPoles=[...antonioPoles,...matrizPoles].sort((a,b)=>a.y-b.y);
+    for(let i=1;i<parallelPoles.length;i++)for(const shift of [-9,0,9]){
+      const prev=parallelPoles[i-1],next=parallelPoles[i],a=P(prev.x+shift,prev.y,prev.height),b=P(next.x+shift,next.y,next.height);
       ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.quadraticCurveTo((a.x+b.x)/2,(a.y+b.y)/2+15,b.x,b.y);ctx.stroke();
     }
     for(let i=1;i<crossPoles.length;i++)for(const shift of [-7,0,7]){
@@ -239,10 +293,11 @@ function drawGround(ctx) {
     rect(ctx, x, y, 105, 145, ['#858969', '#788261', '#999177'][Math.floor(random() * 3)], '#656c5750');
     for (let n = 0; n < 25; n++) disk(ctx, x + random() * 100, y + random() * 140, 2 + random() * 7, '#697a5659');
   }
-  rect(ctx, -78, -120, 156, 2490, paving);
-  rect(ctx, -60, -125, 120, 2500, asphalt);
-  rect(ctx, -370, -118, 1010, 69, asphalt);
-  rect(ctx, -370, 2291, 920, 110, asphalt);
+  rect(ctx, -SIMEAO_ROAD.outerHalfWidth, -120, SIMEAO_ROAD.totalWidth, 2490, paving);
+  rect(ctx, -SIMEAO_ROAD.halfWidth, -125, SIMEAO_ROAD.width, 2500, asphalt);
+  rect(ctx, -370, -95-JULHO_PROFILE.halfWidth, 1010, JULHO_PROFILE.width, asphalt);
+  rect(ctx, -370, CROSS_Y-MENDONCA_ROAD.outerHalfWidth, 920, MENDONCA_ROAD.totalWidth, paving);
+  rect(ctx, -370, CROSS_Y-MENDONCA_ROAD.halfWidth, 920, MENDONCA_ROAD.width, asphalt);
   rect(ctx, CINEMA_PLAZA.x, CINEMA_PLAZA.y, CINEMA_PLAZA.w, CINEMA_PLAZA.h, paving);
   rect(ctx, 76, 379, 215, 224, dirt);
   // Dark flowing lines of the Portuguese paving, visible in the plaza photos.
@@ -251,32 +306,32 @@ function drawGround(ctx) {
     for(let y=-35;y<365;y+=3){const next=[x+Math.sin(y/17)*9,y,0];if(previous)line(ctx,previous,next,'#626b5166',1.7);previous=next;}
   }
   // Square paving modules and seams along the two sidewalks.
-  for (let y = -40; y < 2290; y += 17) for (const x of [-77, 62]) {
-    rect(ctx, x, y, 15, 16, random() > .85 ? '#848c7959' : null, '#626f594d');
+  for (let y = -40; y < 2290; y += 17) for (const x of [-SIMEAO_ROAD.outerHalfWidth+1, SIMEAO_ROAD.halfWidth+2]) {
+    rect(ctx, x, y, SIMEAO_ROAD.sidewalkWidth-3, 16, random() > .85 ? '#848c7959' : null, '#626f594d');
     if (random() > .78) rect(ctx, x + 2, y + 2, 10, 6, '#bfc0a24d');
   }
-  for (const x of [-61, 60]) {
-    line(ctx, [x, -49, 1], [x, 2290, 1], '#ccd0af', 3);
+  for (const x of [-SIMEAO_ROAD.halfWidth,SIMEAO_ROAD.halfWidth]) {
+    line(ctx, [x, -95+JULHO_PROFILE.halfWidth, 1], [x, CROSS_Y-MENDONCA_ROAD.halfWidth, 1], '#ccd0af', 3);
     line(ctx, [x + (x < 0 ? 2 : -2), -49], [x + (x < 0 ? 2 : -2), 2290], '#384d3e7a', 1.5);
     for (let y = -40; y < 2280; y += 26) line(ctx, [x - 1, y], [x + 2, y], '#515e496f', 1);
   }
   for(const b of buildings.filter(b=>b.paving && !b.street && b.axis!=='x')){
-    const x=b.side==='east'?62:-78;
-    for(let y=b.y;y<b.y+b.length;y+=5)for(let xx=x;xx<x+16;xx+=5){
+    const x=b.side==='east'?SIMEAO_ROAD.halfWidth+2:-SIMEAO_ROAD.outerHalfWidth;
+    for(let y=b.y;y<b.y+b.length;y+=5)for(let xx=x;xx<x+SIMEAO_ROAD.sidewalkWidth-2;xx+=5){
       const n=Math.round((y-b.y)/5)+Math.round((xx-x)/5);
       rect(ctx,xx,y,4.7,4.7,b.paving==='red-checker'?(n%2?'#a47769':'#b7b6a0'):(n%2?'#bdb397':'#c9c1a3'),'#78876b32');
     }
   }
   // Irregular repairs, grit and long cracks in the asphalt.
   for (let i = 0; i < 1600; i++) {
-    const x = -58 + random() * 116, y = -35 + random() * 2310, p = P(x, y);
+    const x = -SIMEAO_ROAD.halfWidth+2 + random() * (SIMEAO_ROAD.width-4), y = -35 + random() * 2310, p = P(x, y);
     ctx.fillStyle = random() > .55 ? '#c1c1a329' : '#243c2f28'; ctx.fillRect(p.x, p.y, 1 + random() * 4, 1 + random() * 2);
   }
   for (let i = 0; i < 90; i++) {
-    let x = -49 + random() * 98, y = random() * 2290;
+    let x = -SIMEAO_ROAD.halfWidth+10 + random() * (SIMEAO_ROAD.width-20), y = random() * 2290;
     for (let j = 0; j < 5; j++) { const nx = x - 5 + random() * 10, ny = y + 4 + random() * 9; line(ctx, [x, y], [nx, ny], '#303f3060', .8); x = nx; y = ny; }
   }
-  for (let i = 0; i < 26; i++) { const x = -44 + random() * 85, y = random() * 2280; poly(ctx, [[x, y], [x + 17, y + 4], [x + 13, y + 37], [x - 7, y + 29]], i % 2 ? '#4c59494a' : '#b3ac8630'); }
+  for (let i = 0; i < 26; i++) { const x = -SIMEAO_ROAD.halfWidth+10 + random() * (SIMEAO_ROAD.width-30), y = random() * 2280; poly(ctx, [[x, y], [x + 17, y + 4], [x + 13, y + 37], [x - 7, y + 29]], i % 2 ? '#4c59494a' : '#b3ac8630'); }
   for (let i = 0; i < 400; i++) {
     const x = 66 + random() * 330, y = -20 + random() * 535;
     if (y < 350 && random() < .75) continue;
@@ -287,30 +342,43 @@ function drawGround(ctx) {
   for (let i = 0; i < 250; i++) { const p = P(demolitionLot.x + random() * demolitionLot.depth, demolitionLot.y + random() * demolitionLot.length); ctx.fillStyle = random() > .5 ? '#665e4739' : '#d6ba8b4b'; ctx.fillRect(p.x, p.y, 3, 2); }
   drawAntonioGround(ctx,asphalt,paving,dirt,buildings);
   drawMendoncaGround(ctx,asphalt,paving);
+  drawMatrizExtensionGround(ctx,asphalt,paving);
+  drawJulhoGround(ctx,asphalt,paving);
+  drawJulhoEastGround(ctx,asphalt,paving);
+  drawCoelhoGround(ctx,asphalt,paving);
+  drawFernandoGround(ctx,asphalt,paving);
+  drawMendoncaWestGround(ctx,asphalt,paving);
+  drawMendoncaPracaGround(ctx,asphalt,paving);
+  drawAlcebiadesGround(ctx,asphalt,paving);
+  drawMendoncaBeneditoGround(ctx,asphalt,paving);
+  drawBeneditoGround(ctx,asphalt,paving);
   // Continue straight through Cônego to the next surveyed crossing.
-  rect(ctx,-78,CROSS_Y+50,156,SIMEAO_END+60-CROSS_Y-50,paving);
-  rect(ctx,-60,CROSS_Y+48,120,SIMEAO_END+62-CROSS_Y-48,asphalt);
+  rect(ctx,-SIMEAO_ROAD.outerHalfWidth,CROSS_Y+MENDONCA_ROAD.outerHalfWidth,SIMEAO_ROAD.totalWidth,SIMEAO_END+60-CROSS_Y-MENDONCA_ROAD.outerHalfWidth,paving);
+  rect(ctx,-SIMEAO_ROAD.halfWidth,CROSS_Y+MENDONCA_ROAD.halfWidth,SIMEAO_ROAD.width,SIMEAO_END+62-CROSS_Y-MENDONCA_ROAD.halfWidth,asphalt);
   rect(ctx,HENRIQUE_ROAD.x,HENRIQUE_ROAD.y,HENRIQUE_ROAD.w,HENRIQUE_ROAD.h,paving);
-  rect(ctx,HENRIQUE_ROAD.x,HENRIQUE_ROAD.y+10,HENRIQUE_ROAD.w,HENRIQUE_ROAD.h-20,asphalt);
-  for(const x of [-61,60]) {
-    line(ctx,[x,CROSS_Y+65,1],[x,SIMEAO_END-60,1],'#c0c4a8',2);
-    for(let y=CROSS_Y+65;y<SIMEAO_END-60;y+=18)line(ctx,[x<0?-78:62,y],[x<0?-62:78,y],'#737d6855',.7);
+  rect(ctx,HENRIQUE_ROAD.x,HENRIQUE_ROAD.y+SIMEAO_ROAD.sidewalkWidth,HENRIQUE_ROAD.w,SIMEAO_ROAD.width,asphalt);
+  rect(ctx,-SIMEAO_ROAD.halfWidth,HENRIQUE_ROAD.y,SIMEAO_ROAD.width,SIMEAO_ROAD.outerHalfWidth+SIMEAO_ROAD.halfWidth,asphalt);
+  for(const x of [-SIMEAO_ROAD.halfWidth,SIMEAO_ROAD.halfWidth]) {
+    line(ctx,[x,CROSS_Y+MENDONCA_ROAD.halfWidth,1],[x,SIMEAO_END-SIMEAO_ROAD.halfWidth,1],'#c0c4a8',2);
+    for(let y=CROSS_Y+MENDONCA_ROAD.outerHalfWidth;y<SIMEAO_END-60;y+=18)line(ctx,[x<0?-SIMEAO_ROAD.outerHalfWidth:SIMEAO_ROAD.halfWidth+2,y],[x<0?-SIMEAO_ROAD.halfWidth-2:SIMEAO_ROAD.outerHalfWidth,y],'#737d6855',.7);
   }
   for(let i=0;i<1300;i++) {
-    const y=CROSS_Y+70+random()*(SIMEAO_END-CROSS_Y-135),x=-55+random()*110,p=P(x,y);
+    const y=CROSS_Y+70+random()*(SIMEAO_END-CROSS_Y-135),x=-SIMEAO_ROAD.halfWidth+3+random()*(SIMEAO_ROAD.width-6),p=P(x,y);
     ctx.fillStyle=i%3?'#b9b49832':'#36423540';ctx.fillRect(p.x,p.y,2+random()*4,1+random()*2);
   }
   for(let y=3320;y<SIMEAO_END-65;y+=11)for(const x of [-76,67]) {
     const p=P(x+random()*6,y);ctx.fillStyle='#70854e88';ctx.fillRect(p.x,p.y,2+random()*5,2);
   }
+  // The Simeão axis also remains continuous across both cross-street sidewalks.
+  rect(ctx,-SIMEAO_ROAD.halfWidth,CROSS_Y-MENDONCA_ROAD.outerHalfWidth,SIMEAO_ROAD.width,MENDONCA_ROAD.totalWidth,asphalt);
   // Utility covers, weeds at the curb, and a narrow storm drain.
   for (let y = 380; y < 2100; y += 430) {
     disk(ctx, 14, y, 9, '#5c6653', 0, '#374839');
     for (let n = -5; n <= 5; n += 3) line(ctx, [8, y + n], [20, y + n], '#354a394d', 1);
-    rect(ctx, -56, y + 70, 8, 26, '#35483a');
-    for (let yy = y + 71; yy < y + 95; yy += 4) line(ctx, [-55, yy], [-49, yy], '#8d987d', 1);
+    rect(ctx, -SIMEAO_ROAD.halfWidth+4, y + 70, 8, 26, '#35483a');
+    for (let yy = y + 71; yy < y + 95; yy += 4) line(ctx, [-SIMEAO_ROAD.halfWidth+5, yy], [-SIMEAO_ROAD.halfWidth+11, yy], '#8d987d', 1);
   }
-  for (let i = 0; i < 210; i++) { const y = random() * 2240, x = (random() > .5 ? -1 : 1) * (60 + random() * 5), p = P(x, y); ctx.fillStyle = '#6e815246'; ctx.fillRect(p.x, p.y, 1, 2 + random() * 4); }
+  for (let i = 0; i < 210; i++) { const y = random() * 2240, x = (random() > .5 ? -1 : 1) * (SIMEAO_ROAD.halfWidth + random() * 5), p = P(x, y); ctx.fillStyle = '#6e815246'; ctx.fillRect(p.x, p.y, 1, 2 + random() * 4); }
   // Contact shadows for the circular planters.
   for (const p of planters) {
     if(p.monument)rect(ctx,p.x-p.r,p.y-p.r,p.r*2,p.r*2,'#243e2c36');
@@ -375,12 +443,13 @@ export function renderWorld(ctx, scene, camera, actor, frames, options) {
   if (overview) {
     ctx.textAlign = 'center'; ctx.font = `${11 / camera.zoom}px Georgia`; ctx.fillStyle = '#f0e5c1'; ctx.shadowColor = '#14271e'; ctx.shadowBlur = 5;
     const labels = [], lineHeight = 15 / camera.zoom;
-    for (const [x, y, label] of [[350, 330, 'PRAÇA DO CINEMA'], [0, 1180, 'RUA SIMEÃO DE MACEDO'], [0,3400,'SIMEÃO · CONTINUAÇÃO'],[80,SIMEAO_END,'R. HENRIQUE FIGUEIREDO'],[950,1250,'R. ANTÔNIO ALEXANDRE'],[680,-105,'R. VINTE E OITO DE JULHO'], [850, CROSS_Y, 'R. CÔNEGO MENDONÇA'],[CHURCH_PLAZA.x+CHURCH_PLAZA.w/2,CHURCH_PLAZA.y+CHURCH_PLAZA.h*.55,'PRAÇA DA IGREJA']]) {
+    for (const [x, y, label] of [[BENEDITO_X,1450,'AV. SÃO BENEDITO'],[2150, 1320, 'R. COELHO NETO'],[1560,-95,'VINTE E OITO · COELHO'],[350, 330, 'PRAÇA DO CINEMA'], [0, 1180, 'RUA SIMEÃO DE MACEDO'], [0,3400,'SIMEÃO · CONTINUAÇÃO'],[80,SIMEAO_END,'R. HENRIQUE FIGUEIREDO'],[950,1250,'R. ANTÔNIO ALEXANDRE'],[-560,-95,'R. VINTE E OITO DE JULHO'],[FERNANDO_X,1200,'R. FERNANDO CARVALHO'], [MENDONCA_WEST_END.x-280,1720,'PÇA. ALCEBÍADES SILVA'],[ALCEBIADES_CARDOSO_POINT.x+50,ALCEBIADES_CARDOSO_POINT.y,'TV. Z. CARDOSO'],[ALCEBIADES_END.x-80,ALCEBIADES_END.y-35,'VINTE E OITO · PRAÇA'],[-610,CROSS_Y,'CÔNEGO · FERNANDO'],[850, CROSS_Y, 'R. CÔNEGO MENDONÇA'],[CHURCH_PLAZA.x+CHURCH_PLAZA.w/2,CHURCH_PLAZA.y+CHURCH_PLAZA.h*.55,'PRAÇA DA IGREJA']]) {
       const p = P(x, y), halfWidth = ctx.measureText(label).width / 2 + 4 / camera.zoom;
+      const labelX = Math.max(camera.x-(width/2-8)/camera.zoom+halfWidth,Math.min(camera.x+(width/2-8)/camera.zoom-halfWidth,p.x));
       let baseline = p.y - 17 / camera.zoom;
-      while (labels.some(other => Math.abs(p.x - other.x) < halfWidth + other.halfWidth && Math.abs(baseline - other.baseline) < lineHeight)) baseline -= lineHeight;
-      labels.push({x:p.x, halfWidth, baseline});
-      ctx.fillText(label, p.x, baseline);
+      while (labels.some(other => Math.abs(labelX - other.x) < halfWidth + other.halfWidth && Math.abs(baseline - other.baseline) < lineHeight)) baseline -= lineHeight;
+      labels.push({x:labelX, halfWidth, baseline});
+      ctx.fillText(label, labelX, baseline);
     }
     ctx.shadowBlur = 0;
   }

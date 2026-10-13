@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-11",
+  "checks": [
+    "Rua Cônego Mendonça · Ponto 31",
+    "Praça Alcebíades Silva · Ponto 02",
+    "Praça Alcebíades Silva × Travessa Z. Cardoso",
+    "Praça Alcebíades Silva · Ponto 10",
+    "Praça Alcebíades Silva · Ponto 06",
+    "Retorno pela praça até Cônego/31",
+    {
+      "keyboardDistance": 11.660000000000515
+    },
+    {
+      "views": [
+        "east-fronts",
+        "north-west-view",
+        "north-east-view",
+        "west-fronts"
+      ]
+    },
+    {
+      "groundClick": {
+        "x": "-2223.00",
+        "y": "1534.20",
+        "street": "praca-alcebiades-silva"
+      }
+    }
+  ],
+  "errors": []
+}

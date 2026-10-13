@@ -1,3 +1,7 @@
+import { beneditoPoints, BENEDITO_END } from './benedito-data.js';
+import { MENDONCA_BENEDITO_END, BENEDITO_X } from './mendonca-benedito.js';
+import { coelhoPoints } from './coelho-data.js';
+import { JULHO_EAST } from './julho-east.js';
 import { directionFromScreen } from './actor-animation.js';
 import { project, unproject, routes, allPoints, locationAt, START, DIRECTIONS, imagePath, moveActor, findPath, CROSS_Y, MENDONCA_END, WORLD_BOUNDS } from './world.js';
 import { loadMapManifests } from './map-manifests.js';
@@ -6,8 +10,11 @@ import { BAR, insideBar } from './bar-layout.js';
 import { CAMERA_VIEWS, getCameraView, setCameraView } from './projection.js';
 import { createClickNavigation, WALK_SPEED, RUN_SPEED } from './click-navigation.js';
 import { CHURCH_PLAZA, PLAZA_CHURCH, plazaRoads, mendoncaPoints } from './mendonca-data.js';
-import { antonioPoints, ANTONIO_END, CINEMA_GARDEN } from './antonio-data.js';
+import { antonioPath as antonioPoints, ANTONIO_END, ANTONIO_NORTH, CINEMA_GARDEN } from './antonio-data.js';
 import { SIMEAO_END } from './simeao-extension.js';
+import { fernandoPoints, FERNANDO_END, FERNANDO_CROSS, FERNANDO_TRAVESSA } from './fernando-data.js';
+import { alcebiadesPoints, ALCEBIADES_END, ALCEBIADES_CARDOSO_POINT } from './alcebiades-data.js';
+import { JULHO_END, julhoPath } from './julho-data.js';
 import { lightingAt, formatTime } from './lighting.js';
 import { createServerClock } from './server-clock.js';
 
@@ -113,11 +120,30 @@ function rotateCamera() {
   notify(CAMERA_VIEWS[next].label);
   surface.focus({preventScroll:true});
 }
-function miniProject(x, y) { return { x: 12 + x * (mini.width-28)/(MENDONCA_END+300) + y * .0018, y: mini.height-16 - y * (mini.height-32)/Math.max(3360,SIMEAO_END+180) }; }
+const MINIMAP_MIN_X=Math.min(JULHO_END.x,MENDONCA_BENEDITO_END.x-180);
+function miniProject(x, y) { return { x: 12 + (x-MINIMAP_MIN_X+60) * (mini.width-28)/(Math.max(MENDONCA_END,JULHO_EAST.x)-MINIMAP_MIN_X+360), y: mini.height-16 - (y+110) * (mini.height-32)/(Math.max(3360,SIMEAO_END+180)+110) }; }
 function drawMinimap() {
   const c = miniCtx; c.clearRect(0, 0, mini.width, mini.height);
   c.lineCap = 'round';
   const start = miniProject(0, -60), corner=miniProject(0,CROSS_Y),end = miniProject(MENDONCA_END,CROSS_Y);
+  const julhoEnd=miniProject(JULHO_END.x,JULHO_END.y);
+  for(const [color,width] of [['#536c63',7],['#a2b295',1]]){c.strokeStyle=color;c.lineWidth=width;c.beginPath();coelhoPoints.forEach((p,i)=>{const q=miniProject(p.x,p.y);i?c.lineTo(q.x,q.y):c.moveTo(q.x,q.y);});c.stroke();}
+  const eastEnd=miniProject(JULHO_EAST.x,JULHO_EAST.y);
+  c.strokeStyle='#82968a';c.lineWidth=3;c.beginPath();c.moveTo(eastEnd.x,eastEnd.y-8);c.lineTo(eastEnd.x,eastEnd.y+6);c.stroke();
+  c.fillStyle='#bac6b3';c.font='8px Arial';c.fillText('J29',eastEnd.x-14,eastEnd.y-10);
+  const westEnd=miniProject(MENDONCA_BENEDITO_END.x,CROSS_Y);
+  for(const [color,width] of [['#536c63',8],['#a2b295',2]]){c.strokeStyle=color;c.lineWidth=width;c.beginPath();beneditoPoints.forEach((p,i)=>{const q=miniProject(p.x,p.y);i?c.lineTo(q.x,q.y):c.moveTo(q.x,q.y);});c.stroke();}
+  const sbEnd=miniProject(BENEDITO_END.x,BENEDITO_END.y);c.fillStyle='#bac6b3';c.font='8px Arial';c.fillText('B14',sbEnd.x+5,sbEnd.y-6);
+  const benedito=miniProject(BENEDITO_X,CROSS_Y);
+  c.strokeStyle="#82968a";c.lineWidth=3;c.beginPath();c.moveTo(benedito.x,benedito.y-8);c.lineTo(benedito.x,benedito.y+8);c.stroke();
+  for(const [color,width] of [['#536c63',7],['#a2b295',1]]){c.strokeStyle=color;c.lineWidth=width;c.beginPath();alcebiadesPoints.forEach((p,i)=>{const q=miniProject(p.x,p.y);i?c.lineTo(q.x,q.y):c.moveTo(q.x,q.y);});c.stroke();}
+  const alEnd=miniProject(ALCEBIADES_END.x,ALCEBIADES_END.y),alCardoso=miniProject(ALCEBIADES_CARDOSO_POINT.x,ALCEBIADES_CARDOSO_POINT.y);c.strokeStyle='#82968a';c.lineWidth=3;c.beginPath();c.moveTo(alCardoso.x,alCardoso.y);c.lineTo(alCardoso.x+11,alCardoso.y);c.moveTo(alEnd.x-11,alEnd.y);c.lineTo(alEnd.x+11,alEnd.y);c.stroke();c.fillStyle='#bac6b3';c.font='8px Arial';c.fillText('P'+ALCEBIADES_END.id,alEnd.x+5,alEnd.y-8);
+  for(const [color,width] of [['#536c63',7],['#a2b295',1]]){c.strokeStyle=color;c.lineWidth=width;c.beginPath();c.moveTo(westEnd.x,westEnd.y);c.lineTo(corner.x,corner.y);c.stroke();}
+  for(const [color,width] of [['#536c63',7],['#a2b295',1]]){c.strokeStyle=color;c.lineWidth=width;c.beginPath();julhoPath.forEach((p,i)=>{const q=miniProject(p.x,p.y);i?c.lineTo(q.x,q.y):c.moveTo(q.x,q.y);});c.stroke();}
+  c.strokeStyle='#82968a';c.lineWidth=3;c.beginPath();c.moveTo(julhoEnd.x,julhoEnd.y-8);c.lineTo(julhoEnd.x,julhoEnd.y+6);c.stroke();
+  for(const [color,width] of [['#536c63',7],['#a2b295',1]]){c.strokeStyle=color;c.lineWidth=width;c.beginPath();fernandoPoints.forEach((p,i)=>{const q=miniProject(p.x,p.y);i?c.lineTo(q.x,q.y):c.moveTo(q.x,q.y);});c.stroke();}
+  for(const r of [FERNANDO_CROSS,FERNANDO_TRAVESSA]){const a=miniProject(r.x,r.y+r.h/2),b=miniProject(r.x+r.w,r.y+r.h/2);c.strokeStyle='#82968a';c.lineWidth=3;c.beginPath();c.moveTo(a.x,a.y);c.lineTo(b.x,b.y);c.stroke();}
+  const fernandoEnd=miniProject(FERNANDO_END.x,FERNANDO_END.y);c.fillStyle='#bac6b3';c.font='8px Arial';c.fillText('F17',fernandoEnd.x-7,fernandoEnd.y-8);
   for(const [color,width] of [['#536c63',10],['#a2b295',1]]){c.strokeStyle=color;c.lineWidth=width;c.beginPath();c.moveTo(start.x,start.y);c.lineTo(corner.x,corner.y);c.lineTo(end.x,end.y);c.stroke();}
   const simeaoEnd=miniProject(0,SIMEAO_END),henriqueEnd=miniProject(330,SIMEAO_END);
   for(const [color,width] of [['#536c63',7],['#a2b295',1]]){c.strokeStyle=color;c.lineWidth=width;c.beginPath();c.moveTo(corner.x,corner.y);c.lineTo(simeaoEnd.x,simeaoEnd.y);c.lineTo(henriqueEnd.x,henriqueEnd.y);c.stroke();}
@@ -136,8 +162,10 @@ function drawMinimap() {
     c.beginPath(); c.arc(q.x, q.y, active ? 3.6 : 1.5, 0, Math.PI * 2); c.fill();
     if (p.street==='simeao'&&[1,9,17].includes(p.id)) { c.font = '8px Arial'; c.fillStyle = '#bac6b3'; c.fillText(String(p.id).padStart(2, '0'), q.x - 16, q.y + 3); }
   }
-  c.fillStyle='#bac6b3';c.font='8px Arial';c.fillText(`C${mendoncaPoints.length}`,end.x-9,end.y+17);
+  c.fillStyle='#bac6b3';c.font='8px Arial';c.fillText('C15',end.x-9,end.y+17);c.fillText(`C${mendoncaPoints.at(-1).id}`,westEnd.x+5,westEnd.y+16);
   const antonioEnd=miniProject(ANTONIO_END.x,ANTONIO_END.y);c.fillText('A20',antonioEnd.x+6,antonioEnd.y+3);
+  const matrizEnd=miniProject(ANTONIO_NORTH.x,ANTONIO_NORTH.y);c.fillText(`A${ANTONIO_NORTH.id}`,matrizEnd.x+6,matrizEnd.y-5);
+  c.strokeStyle='#82968a';c.lineWidth=3;c.beginPath();c.moveTo(matrizEnd.x-14,matrizEnd.y);c.lineTo(matrizEnd.x+16,matrizEnd.y);c.stroke();
   c.strokeStyle = '#8fa595'; c.lineWidth = 3; c.beginPath(); c.moveTo(end.x,end.y-5); c.lineTo(end.x,end.y+12); c.stroke();
   const a = miniProject(actor.x, actor.y); c.fillStyle = '#efcf83'; c.shadowColor = '#e2c477'; c.shadowBlur = 8;
   c.beginPath(); c.arc(a.x, a.y, 3, 0, Math.PI * 2); c.fill(); c.shadowBlur = 0;
@@ -375,7 +403,7 @@ async function init() {
     surface.dataset.clockSynced = 'true';
     const prepared = await createScene(progress => {
       $('loadFill').style.width = `${progress * 100}%`;
-      $('loadStatus').textContent = progress < .78 ? 'Lendo as fachadas das três ruas…' : 'Preparando as quatro vistas do cenário…';
+      $('loadStatus').textContent = progress < .78 ? 'Lendo as fachadas das ruas…' : 'Preparando as quatro vistas do cenário…';
     });
     sceneViews=prepared.views;scene=sceneViews[getCameraView()];
     frames = createActorFrames(); Object.assign(camera, cameraGoal()); updateHud();

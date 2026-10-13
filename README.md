@@ -6,7 +6,7 @@ Um passeio por ruas de Codó, Maranhão, transformadas em um cenário navegável
 
 **Codó Sobrevive** é um jogo de exploração em terceira pessoa, com visão aérea oblíqua e gráficos 2D pré-renderizados, inspirado na apresentação de jogos como *Parasite Eve*.
 
-O cenário conecta as ruas **Simeão de Macedo**, **Cônego Mendonça** e **Antônio Alexandre**, no bairro **Centro**, com retorno pela Vinte e Oito de Julho. A reconstrução usa 528 fotografias do Google Street View, distribuídas em 66 pontos, para representar casas, fachadas, árvores, praças e estabelecimentos.
+O cenário conecta as ruas **Simeão de Macedo**, **Cônego Mendonça**, **Antônio Alexandre**, **Vinte e Oito de Julho**, **Fernando Carvalho**, **Praça Alcebíades Silva**, **Coelho Neto** e **Avenida São Benedito**, no bairro **Centro**, com retorno pela Vinte e Oito de Julho e volta completa pela Fernando Carvalho e pela Cônego Mendonça até a Simeão. A reconstrução usa 1592 fotografias do Google Street View, distribuídas em 199 pontos, para representar casas, fachadas, árvores, praças e estabelecimentos.
 
 As fotografias orientam cores e detalhes; dimensões e partes não visíveis são aproximações artísticas. O projeto funciona localmente, para um jogador, sem servidor de partidas online.
 
@@ -28,7 +28,9 @@ O jogo não utiliza framework, WebGL ou bibliotecas externas. Os fundos estátic
 ## 3 - Recursos do jogo
 
 - A Simeão atravessa a Cônego Mendonça e segue até a esquina com a Henrique Figueiredo, com 14 novos pontos fotografados e coordenadas WGS84.
-- Três ruas conectadas, com casas individualizadas, fachadas de esquina compartilhadas e construções acompanhando a curva da Antônio Alexandre.
+- A Antônio Alexandre também atravessa a Cônego, passa ao lado da Praça da Matriz e alcança a Henrique Figueiredo. A extensão possui 14 pontos e 112 fotos, preservando as referências anteriores.
+- Oito vias conectadas, com casas individualizadas, fachadas de esquina compartilhadas e construções acompanhando a curva da Antônio Alexandre.
+- A Praça Alcebíades Silva liga a esquina da Metalmar à Vinte e Oito de Julho: quinze pontos, passando pela Policlínica Cortez, biblioteca, Travessa Z. Cardoso, Sicoob, quadra e Crefisa. Pela Vinte e Oito, o retorno até a Fernando está conectado, com farmácia, óticas e fachadas compartilhadas nas esquinas.
 - Quatro orientações de câmera, vista aérea do conjunto e minimapa navegável.
 - Caminhada e corrida com animações em oito direções: o clique orienta a personagem para o trajeto, que desvia dos obstáculos.
 - Interior acessível do **Bar O Péricles**, com três mesas de sinuca, balcão e atendimento: “E aí meu chapa, o que vai querer?”.
@@ -68,8 +70,11 @@ rkd-survive-engine/
 ├── maps/
 │   ├── AGENTS.md              # Contrato dos manifestos e fotografias
 │   ├── simeao-de-macedo/      # 31 pontos e 248 fotos
-│   ├── conego-mendonca/       # 15 pontos e 120 fotos
-│   └── antonio-alexandre/     # 20 pontos e 160 fotos
+│   ├── conego-mendonca/       # 37 pontos e 296 fotos
+│   ├── antonio-alexandre/     # 34 pontos e 272 fotos
+│   ├── vinte-e-oito-de-julho/ # 29 pontos e 232 fotos
+│   ├── fernando-carvalho/     # 17 pontos e 136 fotos
+│   └── praca-alcebiades-silva/ # 10 pontos e 80 fotos
 ├── reference/
 │   ├── AGENTS.md              # Guia das ferramentas e referências
 │   ├── README.md              # Organização e comandos de mapeamento
@@ -129,4 +134,16 @@ npm test
 
 Os testes usam os arquivos locais e não precisam de um servidor iniciado manualmente. O teste do relógio abre e encerra seu próprio servidor em uma porta local temporária. Consulte [tests/AGENTS.md](tests/AGENTS.md) para saber o que cada arquivo verifica.
 
+A largura das pistas segue o tipo explícito `roadType` de cada manifesto: ruas comportam quatro carros lado a lado (128 unidades do jogo) e avenidas, cinco (160). Cada calçada de rua comporta duas pessoas (40 unidades); cada calçada de avenida, quatro (80). O campo obrigatório `sidewalkType` registra `calcada-de-rua` ou `calcada-de-avenida` nos dois lados de todos os trechos da rota. Calçadas ficam fora da largura da pista. Sete rotas estão registradas como ruas e a Avenida São Benedito usa o perfil de avenida; carros, colisões e sombras compartilham a referência de largura de 32 unidades.
+
 A caminhada padrão usa a antiga velocidade rápida (100 unidades/s); a corrida usa 125 unidades/s, 25% a mais. Clique simples/toque e WASD/setas andam rápido; clique duplo/duplo toque ou Shift correm com animação própria de passadas, braços dobrados e inclinação do corpo.
+
+
+A **Rua Coelho Neto** conecta o extremo leste da Vinte e Oito à Cônego Mendonça, junto à Praça da Matriz. São 22 pontos com oito fotos cada, passando pelo ginásio, casas e terrenos arborizados. O acervo total contém 199 pontos e 1592 JPEGs.
+
+A Cônego Mendonça continua para oeste da Praça Alcebíades Silva até a Avenida São Benedito, passando pelo Santander, Cartório Eleitoral e Impacto Calçados. Os seis pontos dessa extensão possuem 48 fotos; o cruzamento conecta a rota própria da avenida descrita abaixo.
+
+
+## Avenida São Benedito — sentido sul
+
+A oitava rota percorre o lado oeste da Praça Alcebíades Silva, da Cônego Mendonça à Vinte e Oito de Julho, junto ao Banco do Brasil. São 14 pontos e 112 arquivos: oito reutilizados de Cônego/37 e 104 fotos novas. O acervo soma 199 pontos e 1592 JPEGs. O acesso intermediário ao terreno anunciado à venda não foi tratado como rua.

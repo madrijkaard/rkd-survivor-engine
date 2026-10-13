@@ -1,15 +1,32 @@
+import { beneditoPoints, beneditoBuildings, withBeneditoFaces, beneditoTrees, beneditoPoles, beneditoLamps, beneditoCars, beneditoBikes, beneditoShelter, beneditoBarriers, beneditoSignal, beneditoPhone, beneditoDescriptions, BENEDITO_WALK, BENEDITO_JULHO } from './benedito-data.js';
+import { MENDONCA_BENEDITO_WALK, BENEDITO_CROSS, BENEDITO_X, mendoncaBeneditoBuildings, withMendoncaBeneditoCorner, mendoncaBeneditoDescriptions, mendoncaBeneditoTrees, mendoncaBeneditoPoles, mendoncaBeneditoCars, mendoncaBeneditoBikes } from './mendonca-benedito.js';
+import { coelhoPoints, coelhoBuildings, withCoelhoCorner, coelhoTrees, coelhoPoles, coelhoCars, coelhoBikes, coelhoTruck, coelhoDescriptions } from './coelho-data.js';
+import { onCoelhoRoad } from './coelho-geometry.js';
+import { JULHO_EAST, JULHO_EAST_WALK, COELHO_MOUTH, julhoEastBuildings, withJulhoEastCorner, julhoEastTrees, julhoEastDescriptions } from './julho-east.js';
+import { roadProfiles, SIMEAO_ROAD, MENDONCA_ROAD, JULHO_PROFILE } from './road-profiles.js';
+import { carFootprint, parkingOffset } from './road-dimensions.js';
 import { streetBuildings, specialBuildings } from './street-data.js';
 import { simeaoPoints } from './simeao-points.js';
 import { SIMEAO_END, HENRIQUE_ROAD, simeaoCornerUpdates, simeaoExtensionBuildings, simeaoExtensionTrees, simeaoExtensionPoles, simeaoExtensionCars } from './simeao-extension.js';
 import { BAR, barWalkAreas, barObstacles } from './bar-layout.js';
-import { antonioPoints, antonioBuildings, antonioCornerFacades, alignAntonioCorner, CINEMA_BACK, onAntonioRoad, CINEMA_GARDEN, JULHO_ROAD, antonioTrees, antonioPoles, antonioCars, antonioBikes } from './antonio-data.js';
+import { antonioPoints, antonioBuildings, antonioCornerFacades, alignAntonioCorner, fitAntonioFrontages, CINEMA_BACK, onAntonioRoad, CINEMA_GARDEN, JULHO_ROAD, antonioTrees, antonioPoles, antonioCars, antonioBikes } from './antonio-data.js';
 import { footprintObstacle, hitsFootprint } from './building-geometry.js';
 import { CINEMA_PLAZA, CINEMA_MONUMENT } from './cinema-plaza.js';
 import { withPlaceName } from './place-names.js';
 import { CROSS_Y, MENDONCA_END, CHURCH_PLAZA, plazaRoads, plazaSeats, plazaStatue, mendoncaPoints, mendoncaBuildings, cornerFacades, mendoncaTrees, mendoncaPoles } from './mendonca-data.js';
 import { WORLD_BOUNDS as baseBounds } from './mendonca-data.js';
+import { MATRIZ_END_ROAD, matrizBuildings, matrizCornerFacades, matrizTrees, matrizPoles, matrizCars, matrizDescriptions } from './antonio-matriz.js';
+import { julhoPath, julhoBuildings, julhoCornerFacade, julhoDescriptions, julhoPoles, julhoCars, julhoBikes, JULHO_WALK, FERNANDO_ROAD } from './julho-data.js';
+import { julhoWestBuildings, withJulhoWestCorner } from './julho-west.js';
+import { fernandoPoints, fernandoDescriptions, fernandoBuildings, fernandoSharedCorner, fernandoTrees, fernandoCars, fernandoPoles, fernandoBikes, FERNANDO_WALK, FERNANDO_CROSS, FERNANDO_TRAVESSA } from './fernando-data.js';
+import { mendoncaWestBuildings, withMendoncaWestCorner, mendoncaWestPoles, mendoncaWestCars, mendoncaWestDescriptions, MENDONCA_WEST_WALK } from './mendonca-west.js';
+import { MENDONCA_WEST_END, MENDONCA_PRACA_WALK, ALCEBIADES_MOUTH, ALCEBIADES_CORNER, mendoncaPracaBuildings, withMendoncaPracaCorner, mendoncaPracaDescriptions, mendoncaPracaTrees, mendoncaPracaPoles, mendoncaPracaCars, mendoncaPracaBikes } from './mendonca-praca.js';
+import { alcebiadesPoints, ALCEBIADES_GARDEN, ALCEBIADES_WALK, ALCEBIADES_CARDOSO, alcebiadesBuildings, withAlcebiadesCorner, alcebiadesTrees, alcebiadesPoles, alcebiadesLamps, alcebiadesCars, alcebiadesBikes, alcebiadesSeats, alcebiadesDescriptions } from './alcebiades-data.js';
 export { CROSS_Y, MENDONCA_END } from './mendonca-data.js';
-export const WORLD_BOUNDS = {...baseBounds,h:Math.max(baseBounds.h,SIMEAO_END+320-baseBounds.y)};
+import { ALCEBIADES_JULHO, alcebiadesJulhoObstacles } from './alcebiades-julho.js';
+const worldMinX=Math.min(JULHO_WALK.x-65,MENDONCA_WEST_END.x-310,ALCEBIADES_GARDEN.x-75,BENEDITO_X-540);
+const worldMinY=Math.min(baseBounds.y,-610);
+export const WORLD_BOUNDS = {...baseBounds,x:worldMinX,y:worldMinY,w:Math.max(baseBounds.x+baseBounds.w,JULHO_EAST.x+440)-worldMinX,h:Math.max(baseBounds.y+baseBounds.h,SIMEAO_END+320)-worldMinY};
 // Unidade de desenho: aproximadamente 14 pixels por metro.
 // Pontos 01–17 originais preservados; 18–31 seguem até a Henrique Figueiredo.
 export const STEP = 140;
@@ -75,7 +92,7 @@ const mendoncaDescriptions=[
   ['O muro de faixas diagonais','O muro bege de esquina tem faixas brancas inclinadas e cerca elétrica.'],
   ['O fim da Cônego Mendonça','A rua termina diante da Academia Figueiredo; as vias ao redor da praça continuam livres.'],
 ];
-export const crossPoints=mendoncaPoints.map((p,i)=>({...p,street:'conego-mendonca',area:'RUA CÔNEGO MENDONÇA',title:mendoncaDescriptions[i][0],detail:mendoncaDescriptions[i][1]}));
+export const crossPoints=mendoncaPoints.map(p=>{const [title,detail]=mendoncaBeneditoDescriptions[p.id]??mendoncaPracaDescriptions[p.id]??mendoncaWestDescriptions[p.id]??mendoncaDescriptions[p.id-1];return {...p,street:'conego-mendonca',area:'RUA CÔNEGO MENDONÇA',title,detail};}).sort((a,b)=>a.x-b.x);
 const antonioDescriptions=[
   ['Da Cônego à Antônio Alexandre','A igreja sobre a praça fica atrás; a clínica amarela e a Igreja Família IDE marcam a entrada.'],
   ['A lateral da clínica','Três portas, janelas gradeadas e degraus na parede amarela; do outro lado, o muro cinza.'],
@@ -98,12 +115,21 @@ const antonioDescriptions=[
   ['Perto da Vinte e Oito','Muro de tijolos de um lado; a parede alta e desgastada do cinema do outro.'],
   ['A esquina da Vinte e Oito de Julho','A clínica Reabilitar fica à frente. A rua transversal permite retornar à Simeão.'],
 ];
-export const parallelPoints=antonioPoints.map((p,i)=>({...p,area:'RUA ANTÔNIO ALEXANDRE',title:antonioDescriptions[i][0],detail:antonioDescriptions[i][1]}));
+export const parallelPoints=antonioPoints.map(p=>{
+  const [title,detail]=matrizDescriptions[p.id]??antonioDescriptions[p.id-1];
+  return {...p,area:'RUA ANTÔNIO ALEXANDRE',title,detail};
+}).sort((a,b)=>b.y-a.y);
 export const routes=[
   {id:'simeao',folder:'simeao-de-macedo',name:'Rua Simeão de Macedo',points},
   {id:'conego-mendonca',folder:'conego-mendonca',name:'Rua Cônego Mendonça',points:crossPoints},
   {id:'antonio-alexandre',folder:'antonio-alexandre',name:'Rua Antônio Alexandre',points:parallelPoints},
+  {id:'vinte-e-oito-de-julho',folder:'vinte-e-oito-de-julho',name:'Rua Vinte e Oito de Julho',points:julhoPath.map(p=>({...p,area:'RUA VINTE E OITO DE JULHO',title:(julhoEastDescriptions[p.id]??julhoDescriptions[p.id-1])[0],detail:(julhoEastDescriptions[p.id]??julhoDescriptions[p.id-1])[1]}))},
+   {id:'fernando-carvalho',folder:'fernando-carvalho',name:'Rua Fernando Carvalho',points:fernandoPoints.map((p,i)=>({...p,area:'RUA FERNANDO CARVALHO',title:fernandoDescriptions[i][0],detail:fernandoDescriptions[i][1]}))},
+  {id:'praca-alcebiades-silva',folder:'praca-alcebiades-silva',name:'Praça Alcebíades Silva',points:alcebiadesPoints.map((p,i)=>({...p,area:'PRAÇA ALCEBÍADES SILVA',title:alcebiadesDescriptions[i][0],detail:alcebiadesDescriptions[i][1]}))},
 ];
+routes.push({id:'coelho-neto',folder:'coelho-neto',name:'Rua Coelho Neto',points:coelhoPoints.map((p,i)=>({...p,area:'RUA COELHO NETO',title:coelhoDescriptions[i][0],detail:coelhoDescriptions[i][1]}))});
+routes.push({id:'sao-benedito',folder:'sao-benedito',name:'Avenida São Benedito',points:beneditoPoints.map((p,i)=>({...p,area:'AVENIDA SÃO BENEDITO',title:beneditoDescriptions[i][0],detail:beneditoDescriptions[i][1]}))});
+for (const route of routes) Object.assign(route,roadProfiles[route.id]);
 export const allPoints=routes.flatMap(route=>route.points);
 export function locationAt(x,y) {
   const distanceToRoute=r=>Math.min(...r.points.slice(1).map((b,i)=>{
@@ -121,24 +147,30 @@ export function locationAt(x,y) {
   return {route,point,city:route.city??null,neighborhood:point.neighborhood??route.neighborhood??null};
 }
 
-export const buildings = [...streetBuildings, ...specialBuildings].map(b=>({...b,
+export const buildings = fitAntonioFrontages([...streetBuildings, ...specialBuildings].map(b=>({...b,
   ...(cornerFacades[b.id]?{crossFacade:cornerFacades[b.id]}:{}),
+  ...(b.id==='w01-casa-porta-verde'?{crossFacade:julhoCornerFacade,y:JULHO_WALK.y+JULHO_WALK.h,length:90-(JULHO_WALK.y+JULHO_WALK.h)}:{}),
   ...(b.id==='e15-autoescola-bom-pastor'?{roof:'tile'}:{}),
   ...(b.id==='corner-shop'?{color:'#40596b',base:'#465e6a',pattern:'small-tile',name:'HMB Chaves e Carimbos',signs:b.signs.map(s=>({...s,text:s.text==='HM'?'HMB':s.text}))}:{}),
   ...(b.id==='cinema'?{depth:370,length:360,backFacade:CINEMA_BACK}:{}),
   ...(simeaoCornerUpdates[b.id]||{}),
-})).concat(mendoncaBuildings.map(b=>{
-  const crossFacade=antonioCornerFacades[b.id];
+ })).map(b=>{
+  if (['corner-wall','corner-shop'].includes(b.id)) { const end=b.y+b.length; return {...b,y:CROSS_Y+MENDONCA_ROAD.outerHalfWidth,length:end-CROSS_Y-MENDONCA_ROAD.outerHalfWidth}; }
+  if (['w15-fc-motos-yamaha','e15-autoescola-bom-pastor'].includes(b.id)) return {...b,length:CROSS_Y-MENDONCA_ROAD.outerHalfWidth-b.y};
+  if (b.id==='cinema') {const end=b.y+b.length; return {...b,y:JULHO_WALK.y+JULHO_WALK.h,length:end-JULHO_WALK.y-JULHO_WALK.h};}
+  return b;
+}).concat(mendoncaBuildings.map(b=>{
+  const crossFacade=antonioCornerFacades[b.id]??matrizCornerFacades[b.id];
   if(!crossFacade)return b;
-  const local={...b.local,crossFacade,...(b.id==='cm-final-clinica'?{depth:288}:{})};
+  const local={...b.local,crossFacade,...(b.id==='cm-final-clinica'?{depth:288}:{}),...(b.id==='cm-n06-jardim-rosa'?{x:-MENDONCA_ROAD.outerHalfWidth-260,depth:260}:{})};
   return {...b,local,y:CROSS_Y-local.x-local.depth,length:local.depth};
-}),antonioBuildings,simeaoExtensionBuildings).map(b=>{
-  if(b.id==='cinema'||b.id==='cm-s05-igreja-familia')return alignAntonioCorner(b,'west',CROSS_Y);
+}),antonioBuildings,simeaoExtensionBuildings,matrizBuildings,julhoBuildings.map(fernandoSharedCorner),julhoWestBuildings,julhoEastBuildings,coelhoBuildings,fernandoBuildings,mendoncaWestBuildings,mendoncaPracaBuildings,alcebiadesBuildings,mendoncaBeneditoBuildings,beneditoBuildings).map(b=>{
+  if(['cinema','cm-s05-igreja-familia','cm-n06-jardim-rosa'].includes(b.id))return alignAntonioCorner(b,'west',CROSS_Y);
   if(b.id==='cm-final-clinica')return alignAntonioCorner(b,'east',CROSS_Y);
   return b;
-}).map(withPlaceName);
+})).map(withMendoncaWestCorner).map(withMendoncaPracaCorner).map(withAlcebiadesCorner).map(withJulhoWestCorner).map(withJulhoEastCorner).map(withCoelhoCorner).map(withMendoncaBeneditoCorner).map(withBeneditoFaces).map(withPlaceName);
 export const planters = [
-  { x: 126, y: 26, r: 28, tiers:3, tree:false },
+  { x: Math.max(126,SIMEAO_ROAD.outerHalfWidth+28), y: Math.max(26,-95+JULHO_PROFILE.outerHalfWidth+28), r: 28, tiers:3, tree:false },
   { x: 132, y: 128, r: 27, tiers:3, tree:true },
   { x: 136, y: 282, r: 27, tiers:2, tree:true },
   { x: 258, y: 226, r: 22, tiers:2, tree:false },
@@ -154,6 +186,14 @@ export const places = [
 export function getPlace(id) { return places.find(place=>place.id===id) ?? null; }
 
 export const trees = [
+  ...beneditoTrees,
+  ...mendoncaBeneditoTrees,
+  ...coelhoTrees,
+  ...julhoEastTrees,
+  ...alcebiadesTrees,
+  ...mendoncaPracaTrees,
+  ...fernandoTrees,
+  ...matrizTrees,
   ...simeaoExtensionTrees,
   ...antonioTrees,
   ...mendoncaTrees,
@@ -171,15 +211,33 @@ export const trees = [
   { x:193,y:1931,size:100,height:133,kind:'palm',seed:61 },
 ];
 export const cars = [
+  ...beneditoCars,
+  ...mendoncaBeneditoCars,
+  ...coelhoCars,
+  ...alcebiadesCars,
+  ...mendoncaPracaCars,
+  ...mendoncaWestCars,
+  ...fernandoCars,
+  ...julhoCars.map(c=>({...c,axis:'x'})),
+  ...matrizCars,
   ...simeaoExtensionCars,
   ...antonioCars,
-  { x: -49, y: 140, color: '#d0d2c6', seed: 7 },
-  { x: -49, y: 244, color: '#355c83', seed: 8 },
-  { x: -49, y: 1527, color: '#41484e', seed: 9 },
-  { x: -49, y: 1710, color: '#bb4940', seed: 10 },
+  { x: -parkingOffset(SIMEAO_ROAD), y: 140, color: '#d0d2c6', seed: 7 },
+  { x: -parkingOffset(SIMEAO_ROAD), y: 244, color: '#355c83', seed: 8 },
+  { x: -parkingOffset(SIMEAO_ROAD), y: 1527, color: '#41484e', seed: 9 },
+  { x: -parkingOffset(SIMEAO_ROAD), y: 1710, color: '#bb4940', seed: 10 },
 ];
-export const benches = [{ x:346,y:289,w:38,h:10 },{ x:379,y:244,w:35,h:10 },{ x:341,y:342,w:35,h:10 }];
+export const benches = [...alcebiadesSeats,{ x:346,y:289,w:38,h:10 },{ x:379,y:244,w:35,h:10 },{ x:341,y:342,w:35,h:10 }];
 export const poles = [
+  ...beneditoPoles,...beneditoLamps,
+  ...mendoncaBeneditoPoles,
+  ...coelhoPoles,
+  ...alcebiadesPoles,...alcebiadesLamps,
+  ...mendoncaPracaPoles,
+  ...mendoncaWestPoles,
+  ...fernandoPoles,
+  ...julhoPoles,
+  ...matrizPoles,
   ...simeaoExtensionPoles,
   ...antonioPoles,
   { x:311,y:165,height:170,lamp:true },
@@ -190,23 +248,45 @@ export const poles = [
 ];
 
 export const walkAreas = [
-  {x:-77,y:CROSS_Y,w:154,h:SIMEAO_END+60-CROSS_Y},HENRIQUE_ROAD,
-  CINEMA_GARDEN,JULHO_ROAD,
-  { x: -77, y: -95, w: 154, h: 2435 },
+  BENEDITO_WALK,BENEDITO_JULHO,
+  MENDONCA_BENEDITO_WALK,BENEDITO_CROSS,
+  JULHO_EAST_WALK,COELHO_MOUTH,
+  ALCEBIADES_JULHO,
+  ALCEBIADES_WALK,ALCEBIADES_CARDOSO,ALCEBIADES_GARDEN,
+  MENDONCA_PRACA_WALK,ALCEBIADES_MOUTH,ALCEBIADES_CORNER,
+  MENDONCA_WEST_WALK,
+  JULHO_WALK,FERNANDO_ROAD,FERNANDO_WALK,FERNANDO_CROSS,FERNANDO_TRAVESSA,
+  MATRIZ_END_ROAD,
+  {x:-SIMEAO_ROAD.outerHalfWidth,y:CROSS_Y,w:SIMEAO_ROAD.totalWidth,h:SIMEAO_END+60-CROSS_Y},HENRIQUE_ROAD,
+  CINEMA_GARDEN,{...JULHO_ROAD,y:JULHO_ROAD.y-JULHO_PROFILE.sidewalkWidth,h:JULHO_PROFILE.totalWidth},
+  { x: -SIMEAO_ROAD.outerHalfWidth, y: -95, w: SIMEAO_ROAD.totalWidth, h: 2435 },
   CINEMA_PLAZA,
   { x: 60, y: 360, w: 230, h: 243 },
   { x: -320, y: -110, w: 870, h: 60 },
-  { x: -320, y: 2290, w: 660, h: 108 },
-  { x: 0, y: CROSS_Y-65, w: MENDONCA_END+70, h:130 },
+  { x: -370, y: CROSS_Y-MENDONCA_ROAD.outerHalfWidth, w: 710, h: MENDONCA_ROAD.totalWidth },
+  { x: 0, y: CROSS_Y-MENDONCA_ROAD.outerHalfWidth, w: MENDONCA_END+70, h:MENDONCA_ROAD.totalWidth },
   ...plazaRoads,
   CHURCH_PLAZA,
   ...barWalkAreas,
 ];
 export const obstacles = [
+  ...[beneditoSignal,beneditoPhone].map(p=>({x:p.x,y:p.y,r:3,id:'sb-street-post'})),
+  ...beneditoBikes.map(b=>({x:b.x-6,y:b.y-12,w:12,h:24,id:'sb-motorcycle'})),
+  ...beneditoBarriers.map(b=>({...b,id:'sb-barrier'})),
+  ...[beneditoShelter.x,beneditoShelter.x+beneditoShelter.w].flatMap(x=>[beneditoShelter.y,beneditoShelter.y+beneditoShelter.h].map(y=>({x,y,r:2.5,id:'sb-canopy-post'}))),
+  ...mendoncaBeneditoBikes.map(b=>({x:b.x-6,y:b.y-12,w:12,h:24,id:'cb-motorcycle'})),
+  coelhoTruck,
+  ...coelhoBikes.map(b=>({x:b.x-6,y:b.y-12,w:12,h:24,id:"cn-motorcycle"})),
+  ...alcebiadesJulhoObstacles,
+  ...alcebiadesBikes.map(b=>({x:b.x-6,y:b.y-12,w:12,h:24,id:'as-motorcycle'})),
+  {x:ALCEBIADES_GARDEN.x+225,y:1692,r:41,id:'as-blue-basin'},
+  ...mendoncaPracaBikes.map(b=>({x:b.x-6,y:b.y-12,w:12,h:24,id:'cm-p-motorcycle'})),
+  ...fernandoBikes.map(b=>({x:b.x-6,y:b.y-12,w:12,h:24,id:'fc-motorcycle'})),
+  ...julhoBikes.map(b=>({x:b.x-6,y:b.y-12,w:12,h:24,id:'jl-motorcycle'})),
   ...antonioBikes.map(b=>({x:b.x-6,y:b.y-12,w:12,h:24,id:'aa-motorcycle'})),
   ...buildings.filter(b=>b.id!==BAR.buildingId).map(footprintObstacle),
   ...barObstacles,
-  ...cars.map(c => ({ x: c.x - 16, y: c.y - 32, w: 32, h: 64, id: 'car' })),
+  ...cars.map(carFootprint),
   ...benches.map(b => ({ ...b, id: 'bench' })),
   ...planters.map(p => p.monument?{x:p.x-p.r,y:p.y-p.r,w:p.r*2,h:p.r*2,id:p.id}:{ x: p.x, y: p.y, r: p.r, id: 'planter' }),
   ...trees.map(t => ({ x: t.x, y: t.y, r: 5, id: 'tree' })),
@@ -220,7 +300,7 @@ function inRect(x, y, r, padding = 0) { return x > r.x - padding && x < r.x + r.
 export function walkable(x, y, radius = 5) {
   if (!Number.isFinite(x) || !Number.isFinite(y)) return false;
   // Samples also keep the actor's feet away from the outer edge of a sidewalk.
-  if (![[0, 0], [-radius, 0], [radius, 0], [0, -radius], [0, radius]].every(([dx, dy]) => walkAreas.some(a => inRect(x + dx, y + dy, a)) || onAntonioRoad(x+dx,y+dy))) return false;
+  if (![[0, 0], [-radius, 0], [radius, 0], [0, -radius], [0, radius]].every(([dx, dy]) => walkAreas.some(a => inRect(x + dx, y + dy, a)) || onAntonioRoad(x+dx,y+dy) || onCoelhoRoad(x+dx,y+dy))) return false;
   return !obstacles.some(o => o.polygon ? hitsFootprint(x,y,o,radius) : o.r ? Math.hypot(x - o.x, y - o.y) < o.r + radius : inRect(x, y, o, radius));
 }
 export function moveActor(actor, dx, dy) {
@@ -251,19 +331,29 @@ export function findPath(start, destination) {
   const heuristic = (x, y) => Math.hypot(x - gx, y - gy);
   const startNode = { x: sx, y: sy, g: 0, f: heuristic(sx, sy), parent: null };
   const open = [startNode], costs = new Map([[key(sx, sy), 0]]), closed = new Set();
+  const gridWalkable=new Map();
+  const canStep=(x,y)=>{
+    const k=key(x,y);
+    if(!gridWalkable.has(k))gridWalkable.set(k,walkable(x*cell,y*cell));
+    return gridWalkable.get(k);
+  };
   const steps = [[0, 1], [0, -1], [1, 0], [-1, 0], [1, 1], [1, -1], [-1, 1], [-1, -1]];
   let found = null;
-  for (let iteration = 0; open.length && iteration < 18000; iteration++) {
+  // Walkable areas bound the finite grid. A fixed pop limit incorrectly rejected
+  // valid longer routes after adding streets; repeated nodes also consumed it.
+  while (open.length) {
     let best = 0; for (let i = 1; i < open.length; i++) if (open[i].f < open[best].f) best = i;
     const node = open.splice(best, 1)[0], k = key(node.x, node.y);
     if (closed.has(k)) continue; closed.add(k);
     if (Math.hypot(node.x * cell - destination.x, node.y * cell - destination.y) < cell * 1.7 && clearLine({ x: node.x * cell, y: node.y * cell }, destination)) { found = node; break; }
     for (const [dx, dy] of steps) {
       const x = node.x + dx, y = node.y + dy, nextKey = key(x, y);
-      if (closed.has(nextKey) || !walkable(x * cell, y * cell)) continue;
-      if (dx && dy && (!walkable((node.x + dx) * cell, node.y * cell) || !walkable(node.x * cell, (node.y + dy) * cell))) continue;
+      if (closed.has(nextKey) || !canStep(x,y)) continue;
+      if (dx && dy && (!canStep(node.x+dx,node.y) || !canStep(node.x,node.y+dy))) continue;
       const g = node.g + Math.hypot(dx, dy);
       if (g >= (costs.get(nextKey) ?? Infinity)) continue;
+      // Endpoints alone cannot detect a sloping wall between adjacent grid cells.
+      if (!clearLine({x:node.x*cell,y:node.y*cell},{x:x*cell,y:y*cell})) continue;
       costs.set(nextKey, g); open.push({ x, y, g, f: g + heuristic(x, y), parent: node });
     }
   }

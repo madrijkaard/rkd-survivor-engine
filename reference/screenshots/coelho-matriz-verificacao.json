@@ -1,0 +1,346 @@
+{
+  "errors": [],
+  "routes": [
+    {
+      "target": {
+        "id": 11,
+        "pano": "SvViQJ1cQiCfDqO4oe60vA",
+        "latitude": -4.4514685,
+        "longitude": -43.8837546,
+        "x": 2154.55,
+        "y": 1118.43,
+        "street": "coelho-neto"
+      },
+      "ok": true,
+      "remaining": 0,
+      "steps": 245,
+      "actor": {
+        "x": 2154.55,
+        "y": 1118.43
+      },
+      "street": "RUA COELHO NETO"
+    },
+    {
+      "target": {
+        "id": 22,
+        "pano": "2iApaYV6C61SZac0f2Ldtg",
+        "latitude": -4.4505831,
+        "longitude": -43.8841528,
+        "x": 2010.59,
+        "y": 2383.73,
+        "street": "coelho-neto"
+      },
+      "ok": true,
+      "remaining": 0,
+      "steps": 255,
+      "actor": {
+        "x": 2010.59,
+        "y": 2383.73
+      },
+      "street": "RUA COELHO NETO"
+    },
+    {
+      "target": {
+        "id": 13,
+        "pano": "MJdqd7dcdcC8ROxm3aCFjw",
+        "latitude": -4.4506719,
+        "longitude": -43.8844129,
+        "x": 1721,
+        "y": 2345
+      },
+      "ok": true,
+      "remaining": 0,
+      "steps": 59,
+      "actor": {
+        "x": 1721,
+        "y": 2345
+      },
+      "street": "RUA CÔNEGO MENDONÇA"
+    },
+    {
+      "target": {
+        "id": 1,
+        "pano": "UqXsj-ZYjX1dJe8rc8-xFQ",
+        "latitude": -4.4523176,
+        "longitude": -43.8834375,
+        "x": 2292.6,
+        "y": -95,
+        "street": "coelho-neto"
+      },
+      "ok": true,
+      "remaining": 0,
+      "steps": 524,
+      "actor": {
+        "x": 2292.6,
+        "y": -95
+      },
+      "street": "RUA VINTE E OITO DE JULHO"
+    }
+  ],
+  "photos": [
+    {
+      "title": "Rua Vinte e Oito de Julho · Ponto 29",
+      "images": [
+        {
+          "src": "maps/vinte-e-oito-de-julho/ponto-29/1.jpg",
+          "width": 900,
+          "height": 600
+        },
+        {
+          "src": "maps/vinte-e-oito-de-julho/ponto-29/1.jpg",
+          "width": 900,
+          "height": 600
+        },
+        {
+          "src": "maps/vinte-e-oito-de-julho/ponto-29/2.jpg",
+          "width": 900,
+          "height": 600
+        },
+        {
+          "src": "maps/vinte-e-oito-de-julho/ponto-29/3.jpg",
+          "width": 900,
+          "height": 600
+        },
+        {
+          "src": "maps/vinte-e-oito-de-julho/ponto-29/4.jpg",
+          "width": 900,
+          "height": 600
+        },
+        {
+          "src": "maps/vinte-e-oito-de-julho/ponto-29/5.jpg",
+          "width": 900,
+          "height": 600
+        },
+        {
+          "src": "maps/vinte-e-oito-de-julho/ponto-29/6.jpg",
+          "width": 900,
+          "height": 600
+        },
+        {
+          "src": "maps/vinte-e-oito-de-julho/ponto-29/7.jpg",
+          "width": 900,
+          "height": 600
+        },
+        {
+          "src": "maps/vinte-e-oito-de-julho/ponto-29/8.jpg",
+          "width": 900,
+          "height": 600
+        }
+      ]
+    },
+    {
+      "title": "Rua Coelho Neto · Ponto 11",
+      "images": [
+        {
+          "src": "maps/coelho-neto/ponto-11/1.jpg",
+          "width": 900,
+          "height": 600
+        },
+        {
+          "src": "maps/coelho-neto/ponto-11/1.jpg",
+          "width": 900,
+          "height": 600
+        },
+        {
+          "src": "maps/coelho-neto/ponto-11/2.jpg",
+          "width": 900,
+          "height": 600
+        },
+        {
+          "src": "maps/coelho-neto/ponto-11/3.jpg",
+          "width": 900,
+          "height": 600
+        },
+        {
+          "src": "maps/coelho-neto/ponto-11/4.jpg",
+          "width": 900,
+          "height": 600
+        },
+        {
+          "src": "maps/coelho-neto/ponto-11/5.jpg",
+          "width": 900,
+          "height": 600
+        },
+        {
+          "src": "maps/coelho-neto/ponto-11/6.jpg",
+          "width": 900,
+          "height": 600
+        },
+        {
+          "src": "maps/coelho-neto/ponto-11/7.jpg",
+          "width": 900,
+          "height": 600
+        },
+        {
+          "src": "maps/coelho-neto/ponto-11/8.jpg",
+          "width": 900,
+          "height": 600
+        }
+      ]
+    },
+    {
+      "title": "Rua Coelho Neto · Ponto 22",
+      "images": [
+        {
+          "src": "maps/coelho-neto/ponto-22/1.jpg",
+          "width": 900,
+          "height": 600
+        },
+        {
+          "src": "maps/coelho-neto/ponto-22/1.jpg",
+          "width": 900,
+          "height": 600
+        },
+        {
+          "src": "maps/coelho-neto/ponto-22/2.jpg",
+          "width": 900,
+          "height": 600
+        },
+        {
+          "src": "maps/coelho-neto/ponto-22/3.jpg",
+          "width": 900,
+          "height": 600
+        },
+        {
+          "src": "maps/coelho-neto/ponto-22/4.jpg",
+          "width": 900,
+          "height": 600
+        },
+        {
+          "src": "maps/coelho-neto/ponto-22/5.jpg",
+          "width": 900,
+          "height": 600
+        },
+        {
+          "src": "maps/coelho-neto/ponto-22/6.jpg",
+          "width": 900,
+          "height": 600
+        },
+        {
+          "src": "maps/coelho-neto/ponto-22/7.jpg",
+          "width": 900,
+          "height": 600
+        },
+        {
+          "src": "maps/coelho-neto/ponto-22/8.jpg",
+          "width": 900,
+          "height": 600
+        }
+      ]
+    },
+    {
+      "title": "Rua Cônego Mendonça · Ponto 13",
+      "images": [
+        {
+          "src": "maps/conego-mendonca/ponto-13/1.jpg",
+          "width": 900,
+          "height": 600
+        },
+        {
+          "src": "maps/conego-mendonca/ponto-13/1.jpg",
+          "width": 900,
+          "height": 600
+        },
+        {
+          "src": "maps/conego-mendonca/ponto-13/2.jpg",
+          "width": 900,
+          "height": 600
+        },
+        {
+          "src": "maps/conego-mendonca/ponto-13/3.jpg",
+          "width": 900,
+          "height": 600
+        },
+        {
+          "src": "maps/conego-mendonca/ponto-13/4.jpg",
+          "width": 900,
+          "height": 600
+        },
+        {
+          "src": "maps/conego-mendonca/ponto-13/5.jpg",
+          "width": 900,
+          "height": 600
+        },
+        {
+          "src": "maps/conego-mendonca/ponto-13/6.jpg",
+          "width": 900,
+          "height": 600
+        },
+        {
+          "src": "maps/conego-mendonca/ponto-13/7.jpg",
+          "width": 900,
+          "height": 600
+        },
+        {
+          "src": "maps/conego-mendonca/ponto-13/8.jpg",
+          "width": 900,
+          "height": 600
+        }
+      ]
+    }
+  ],
+  "groundClick": {
+    "selected": 1,
+    "steps": 24,
+    "remaining": 0,
+    "x": 2141.2299937202642,
+    "y": 1235.4699841600238,
+    "street": "RUA COELHO NETO"
+  },
+  "minimapClick": {
+    "selected": 1,
+    "steps": 232,
+    "remaining": 0,
+    "x": 2010.59,
+    "y": 2383.73,
+    "street": "RUA COELHO NETO"
+  },
+  "cameraControls": [
+    "2/4",
+    "3/4",
+    "4/4",
+    "1/4"
+  ],
+  "keyboard": {
+    "before": {
+      "x": 2010.59,
+      "y": 2383.73
+    },
+    "after": {
+      "x": 2001.6452418621575,
+      "y": 2407.0857573599233
+    }
+  },
+  "date": "2026-10-12",
+  "street": "Rua Coelho Neto",
+  "start": "Rua Vinte e Oito de Julho",
+  "end": "Rua Cônego Mendonça, junto à Praça da Matriz",
+  "points": 22,
+  "jpeg": 176,
+  "newJpeg": 168,
+  "reusedJpeg": 8,
+  "projectPoints": 179,
+  "projectJpeg": 1432,
+  "tests": {
+    "command": "npm test",
+    "passed": 89,
+    "failed": 0
+  },
+  "visualInspection": {
+    "contactSheets": 22,
+    "directionsPerPoint": 8,
+    "views": 4,
+    "sections": [
+      "sul",
+      "meio",
+      "norte"
+    ],
+    "lightingMinutes": [
+      660,
+      1200
+    ],
+    "overview": true,
+    "notes": "Pranchas com renderWorld e lightingAt apenas no navegador de QA; relógio do sistema e fonte do jogo não alterados. Cliques reais em canvas/minimapa; passos do percurso acelerados pela função step(.05)."
+  },
+  "limitations": "Profundidades, alturas e partes ocultas são aproximações artísticas; pista e calçadas seguem o perfil do projeto."
+}

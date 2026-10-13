@@ -1,0 +1,186 @@
+{
+  "schemaVersion": 1,
+  "roadType": "avenida",
+  "sidewalkType": "calcada-de-avenida",
+  "city": "Codó",
+  "street": "Avenida São Benedito",
+  "neighborhood": "Centro",
+  "coordinateSystem": "WGS84",
+  "directions": [
+    "N",
+    "NE",
+    "L",
+    "SE",
+    "S",
+    "SO",
+    "O",
+    "NO"
+  ],
+  "points": [
+    {
+      "id": 1,
+      "pano": "3tgKt-o2TJxNZ_TY2ywPnQ",
+      "latitude": -4.4515245,
+      "longitude": -43.8873042,
+      "imageryDate": "2025-06",
+      "capturedAt": "2026-10-12",
+      "sourceUrl": "https://www.google.com/maps/@-4.4515245,-43.8873042,46a,75y,160h,90t/data=!3m7!1e1!3m5!1s3tgKt-o2TJxNZ_TY2ywPnQ!2e0!6shttps:%2F%2Fstreetviewpixels-pa.clients6.google.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D0%26panoid%3D3tgKt-o2TJxNZ_TY2ywPnQ%26yaw%3D160!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI2MTAwNy4wIKXMDSoASAFQAw%3D%3D",
+      "reusedFrom": {
+        "street": "conego-mendonca",
+        "point": 37
+      }
+    },
+    {
+      "id": 2,
+      "pano": "Dvwmp80rUfRsyE_p0X1YNw",
+      "latitude": -4.4515741,
+      "longitude": -43.8872356,
+      "imageryDate": "2025-06",
+      "capturedAt": "2026-10-12",
+      "sourceUrl": "https://www.google.com/maps/@-4.4515741,-43.8872356,46a,75y,160h,90t/data=!3m7!1e1!3m5!1sDvwmp80rUfRsyE_p0X1YNw!2e0!6shttps:%2F%2Fstreetviewpixels-pa.clients6.google.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D0%26panoid%3DDvwmp80rUfRsyE_p0X1YNw%26yaw%3D160!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI2MTAwNy4wIKXMDSoASAFQAw%3D%3D"
+    },
+    {
+      "id": 3,
+      "pano": "-AEnNjUWX3umYqJ3T1-V6A",
+      "latitude": -4.4516658,
+      "longitude": -43.8872103,
+      "imageryDate": "2025-06",
+      "capturedAt": "2026-10-12",
+      "sourceUrl": "https://www.google.com/maps/@-4.4516658,-43.8872103,46a,75y,160h,90t/data=!3m7!1e1!3m5!1s-AEnNjUWX3umYqJ3T1-V6A!2e0!6shttps:%2F%2Fstreetviewpixels-pa.clients6.google.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D0%26panoid%3D-AEnNjUWX3umYqJ3T1-V6A%26yaw%3D160!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI2MTAwNy4wIKXMDSoASAFQAw%3D%3D"
+    },
+    {
+      "id": 4,
+      "pano": "TZe7bXIVOflMseV2qAqc_Q",
+      "latitude": -4.4517518,
+      "longitude": -43.8871781,
+      "imageryDate": "2025-06",
+      "capturedAt": "2026-10-12",
+      "sourceUrl": "https://www.google.com/maps/@-4.4517518,-43.8871781,46a,75y,160h,90t/data=!3m7!1e1!3m5!1sTZe7bXIVOflMseV2qAqc_Q!2e0!6shttps:%2F%2Fstreetviewpixels-pa.clients6.google.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D0%26panoid%3DTZe7bXIVOflMseV2qAqc_Q%26yaw%3D160!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI2MTAwNy4wIKXMDSoASAFQAw%3D%3D"
+    },
+    {
+      "id": 5,
+      "pano": "EwsUYR0bNKc-eQLJZHJk7g",
+      "latitude": -4.4518376,
+      "longitude": -43.8871476,
+      "imageryDate": "2025-06",
+      "capturedAt": "2026-10-12",
+      "sourceUrl": "https://www.google.com/maps/@-4.4518376,-43.8871476,47a,75y,160h,90t/data=!3m7!1e1!3m5!1sEwsUYR0bNKc-eQLJZHJk7g!2e0!6shttps:%2F%2Fstreetviewpixels-pa.clients6.google.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D0%26panoid%3DEwsUYR0bNKc-eQLJZHJk7g%26yaw%3D160!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI2MTAwNy4wIKXMDSoASAFQAw%3D%3D"
+    },
+    {
+      "id": 6,
+      "pano": "VkuWf3HbH1JrP3XAgDcrxw",
+      "latitude": -4.4519245,
+      "longitude": -43.8871222,
+      "imageryDate": "2025-06",
+      "capturedAt": "2026-10-12",
+      "sourceUrl": "https://www.google.com/maps/@-4.4519245,-43.8871222,47a,75y,160h,90t/data=!3m7!1e1!3m5!1sVkuWf3HbH1JrP3XAgDcrxw!2e0!6shttps:%2F%2Fstreetviewpixels-pa.clients6.google.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D0%26panoid%3DVkuWf3HbH1JrP3XAgDcrxw%26yaw%3D160!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI2MTAwNy4wIKXMDSoASAFQAw%3D%3D"
+    },
+    {
+      "id": 7,
+      "pano": "odIzo5h1lHF5W_1JBicnlg",
+      "latitude": -4.4520112,
+      "longitude": -43.8870985,
+      "imageryDate": "2025-06",
+      "capturedAt": "2026-10-12",
+      "sourceUrl": "https://www.google.com/maps/@-4.4520112,-43.8870985,47a,75y,160h,90t/data=!3m7!1e1!3m5!1sodIzo5h1lHF5W_1JBicnlg!2e0!6shttps:%2F%2Fstreetviewpixels-pa.clients6.google.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D0%26panoid%3DodIzo5h1lHF5W_1JBicnlg%26yaw%3D160!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI2MTAwNy4wIKXMDSoASAFQAw%3D%3D"
+    },
+    {
+      "id": 8,
+      "pano": "aBd-_lxHiGuQpA0xNFlSIg",
+      "latitude": -4.4520996,
+      "longitude": -43.8870742,
+      "imageryDate": "2025-06",
+      "capturedAt": "2026-10-12",
+      "sourceUrl": "https://www.google.com/maps/@-4.4520996,-43.8870742,47a,75y,160h,90t/data=!3m7!1e1!3m5!1saBd-_lxHiGuQpA0xNFlSIg!2e0!6shttps:%2F%2Fstreetviewpixels-pa.clients6.google.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D0%26panoid%3DaBd-_lxHiGuQpA0xNFlSIg%26yaw%3D160!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI2MTAwNy4wIKXMDSoASAFQAw%3D%3D"
+    },
+    {
+      "id": 9,
+      "pano": "TPyvjuHHkepmujuGKzrWew",
+      "latitude": -4.4521892,
+      "longitude": -43.8870514,
+      "imageryDate": "2025-06",
+      "capturedAt": "2026-10-12",
+      "sourceUrl": "https://www.google.com/maps/@-4.4521892,-43.8870514,47a,75y,160h,90t/data=!3m7!1e1!3m5!1sTPyvjuHHkepmujuGKzrWew!2e0!6shttps:%2F%2Fstreetviewpixels-pa.clients6.google.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D0%26panoid%3DTPyvjuHHkepmujuGKzrWew%26yaw%3D160!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI2MTAwNy4wIKXMDSoASAFQAw%3D%3D"
+    },
+    {
+      "id": 10,
+      "pano": "81IwuIwIIux5SmnW-jpOUA",
+      "latitude": -4.4522785,
+      "longitude": -43.8870218,
+      "imageryDate": "2025-06",
+      "capturedAt": "2026-10-12",
+      "sourceUrl": "https://www.google.com/maps/@-4.4522785,-43.8870218,47a,75y,160h,90t/data=!3m7!1e1!3m5!1s81IwuIwIIux5SmnW-jpOUA!2e0!6shttps:%2F%2Fstreetviewpixels-pa.clients6.google.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D0%26panoid%3D81IwuIwIIux5SmnW-jpOUA%26yaw%3D160!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI2MTAwNy4wIKXMDSoASAFQAw%3D%3D"
+    },
+    {
+      "id": 11,
+      "pano": "MUfJcfczTAtOu-dvIipmXw",
+      "latitude": -4.4523653,
+      "longitude": -43.8869906,
+      "imageryDate": "2025-06",
+      "capturedAt": "2026-10-12",
+      "sourceUrl": "https://www.google.com/maps/@-4.4523653,-43.8869906,47a,75y,160h,90t/data=!3m7!1e1!3m5!1sMUfJcfczTAtOu-dvIipmXw!2e0!6shttps:%2F%2Fstreetviewpixels-pa.clients6.google.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D0%26panoid%3DMUfJcfczTAtOu-dvIipmXw%26yaw%3D160!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI2MTAwNy4wIKXMDSoASAFQAw%3D%3D"
+    },
+    {
+      "id": 12,
+      "pano": "cPWV03zOZ3SPOQUXVmLCzA",
+      "latitude": -4.4524472,
+      "longitude": -43.8869668,
+      "imageryDate": "2025-06",
+      "capturedAt": "2026-10-12",
+      "sourceUrl": "https://www.google.com/maps/@-4.4524472,-43.8869668,47a,75y,160h,90t/data=!3m7!1e1!3m5!1scPWV03zOZ3SPOQUXVmLCzA!2e0!6shttps:%2F%2Fstreetviewpixels-pa.clients6.google.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D0%26panoid%3DcPWV03zOZ3SPOQUXVmLCzA%26yaw%3D160!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI2MTAwNy4wIKXMDSoASAFQAw%3D%3D"
+    },
+    {
+      "id": 13,
+      "pano": "B6DFFTtqJbx2RsijSjKJoQ",
+      "latitude": -4.4525344,
+      "longitude": -43.8869432,
+      "imageryDate": "2025-06",
+      "capturedAt": "2026-10-12",
+      "sourceUrl": "https://www.google.com/maps/@-4.4525344,-43.8869432,47a,75y,160h,90t/data=!3m7!1e1!3m5!1sB6DFFTtqJbx2RsijSjKJoQ!2e0!6shttps:%2F%2Fstreetviewpixels-pa.clients6.google.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D0%26panoid%3DB6DFFTtqJbx2RsijSjKJoQ%26yaw%3D160!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI2MTAwNy4wIKXMDSoASAFQAw%3D%3D"
+    },
+    {
+      "id": 14,
+      "pano": "tmUZjaD99JbHyjIXCJ7LVA",
+      "latitude": -4.4526182,
+      "longitude": -43.8869192,
+      "imageryDate": "2025-06",
+      "capturedAt": "2026-10-12",
+      "sourceUrl": "https://www.google.com/maps/@-4.4526182,-43.8869192,47a,75y,160h,90t/data=!3m7!1e1!3m5!1stmUZjaD99JbHyjIXCJ7LVA!2e0!6shttps:%2F%2Fstreetviewpixels-pa.clients6.google.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D0%26panoid%3DtmUZjaD99JbHyjIXCJ7LVA%26yaw%3D160!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI2MTAwNy4wIKXMDSoASAFQAw%3D%3D"
+    }
+  ],
+  "source": "Google Street View; navegação observada no navegador, um panorama por avanço",
+  "extensions": [
+    {
+      "fromPoint": 1,
+      "toPoint": 14,
+      "routePointOrder": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14
+      ],
+      "fromStreet": "Rua Cônego Mendonça",
+      "toStreet": "Rua Vinte e Oito de Julho",
+      "endPoint": 14,
+      "direction": "sul, lado oeste da Praça Alcebíades Silva",
+      "imageryDate": "2025-06",
+      "capturedAt": "2026-10-12",
+      "sourceUrl": "https://www.google.com/maps/@-4.4515245,-43.8873042,46a,75y,160h,90t/data=!3m7!1e1!3m5!1s3tgKt-o2TJxNZ_TY2ywPnQ!2e0!6shttps:%2F%2Fstreetviewpixels-pa.clients6.google.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D0%26panoid%3D3tgKt-o2TJxNZ_TY2ywPnQ%26yaw%3D160!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI2MTAwNy4wIKXMDSoASAFQAw%3D%3D",
+      "endSourceUrl": "https://www.google.com/maps/@-4.4526182,-43.8869192,47a,75y,160h,90t/data=!3m7!1e1!3m5!1stmUZjaD99JbHyjIXCJ7LVA!2e0!6shttps:%2F%2Fstreetviewpixels-pa.clients6.google.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D0%26panoid%3DtmUZjaD99JbHyjIXCJ7LVA%26yaw%3D160!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI2MTAwNy4wIKXMDSoASAFQAw%3D%3D",
+      "reusedPoints": [
+        1
+      ],
+      "notes": "Oito fotos reutilizadas de Cônego/37; 104 fotos novas nos pontos 2–14. Abertura junto à SP Closet observada como acesso a terreno anunciado à venda, sem interseção viária confirmada. Para na Vinte e Oito, junto ao Banco do Brasil; não percorre a transversal."
+    }
+  ]
+}

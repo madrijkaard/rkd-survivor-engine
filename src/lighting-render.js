@@ -1,8 +1,17 @@
+import { beneditoShrubs, beneditoBikes, beneditoShelter, beneditoBarriers, beneditoSignal, beneditoPhone } from './benedito-data.js';
+import { mendoncaBeneditoShrubs, mendoncaBeneditoBikes } from './mendonca-benedito.js';
+import { coelhoShrubs, coelhoBikes, coelhoTruck } from './coelho-data.js';
+import { carFootprint } from './road-dimensions.js';
 import { project } from './projection.js';
 import { buildings, trees, cars, benches, planters, poles } from './world.js';
 import { buildingFootprint } from './building-geometry.js';
 import { CHURCH_TOWER, plazaSeats, plazaStatue } from './mendonca-data.js';
 import { antonioShrubs, antonioCacti, antonioBikes } from './antonio-data.js';
+import { matrizShrubs } from './antonio-matriz.js';
+import { fernandoShrubs, fernandoBikes } from './fernando-data.js';
+import { julhoShrubs, julhoBikes } from './julho-data.js';
+import { alcebiadesShrubs, alcebiadesBikes } from './alcebiades-data.js';
+import { alcebiadesSports, alcebiadesFence } from './alcebiades-julho.js';
 import { gardenWall, demolitionLot, brickRecess, flowerShrubs, bins } from './street-data.js';
 import { convexHull, shadowPoint, poleLamps, actorLampLight } from './lighting.js';
 import { CINEMA_PLAZA } from './cinema-plaza.js';
@@ -24,22 +33,30 @@ const cinemaShadowScale = (p, radius = 0) => {
 
 // Ground shadow volumes share the world's footprints, including curved lots.
 const casters = [
+  ...[beneditoSignal,beneditoPhone].map(p=>volume(circle(p.x,p.y,3),p.height)),
+  volume(rectangle(beneditoShelter.x,beneditoShelter.y,beneditoShelter.w,beneditoShelter.h),beneditoShelter.height,beneditoShelter.height),
+  ...beneditoBarriers.map(b=>volume(rectangle(b.x,b.y,b.w,b.h),b.height)),
+  ...alcebiadesSports.map(p=>volume(rectangle(p.x,p.y,p.w,p.h),p.height,p.kind==='shelter'?p.height:0)),
+  ...alcebiadesFence.flatMap(p=>[volume(rectangle(p.x,p.y,p.w,p.h),15),...Array.from({length:Math.floor(Math.hypot(p.w,p.h)/80)+1},(_,i)=>volume(circle(p.x+p.w*(i*80/Math.hypot(p.w,p.h)),p.y+p.h*(i*80/Math.hypot(p.w,p.h)),1.3),p.height))]),
+  volume(rectangle(coelhoTruck.x,coelhoTruck.y,coelhoTruck.w,coelhoTruck.h),coelhoTruck.height),
   ...buildings.map(b => volume(buildingFootprint(b), b.height * cinemaShadowScale({ x: b.x + b.depth / 2, y: b.y + b.length / 2 }))),
   volume(rectangle(CHURCH_TOWER.x, CHURCH_TOWER.y, CHURCH_TOWER.w, CHURCH_TOWER.h), 350),
   ...trees.flatMap(t => {
     // Preserve the previous Matriz adjustment; also shorten Cinema plaza trees.
     const height = (t.height || t.size * .8) * (t.plaza ? .7 : cinemaShadowScale(t, t.size * .5));
+    if(t.kind==='pollarded')return [volume(circle(t.x,t.y,6),height),volume(circle(t.x,t.y,14),height,height*.58)];
     return [volume(circle(t.x, t.y, 2.5), height), volume(circle(t.x, t.y, t.size * .5), height, height)];
   }),
-  ...cars.map(c => volume(rectangle(c.x - 16, c.y - 32, 32, 64), 25)),
+  ...cars.map(c => {const r=carFootprint(c);return volume(r.polygon??rectangle(r.x,r.y,r.w,r.h),25);}),
   ...poles.map(p => volume(circle(p.x, p.y, 2), p.height * cinemaShadowScale(p))),
   ...[...benches, ...plazaSeats].map(b => volume(rectangle(b.x, b.y, b.w, b.h), 24 * cinemaShadowScale(b))),
   volume(rectangle(plazaStatue.x, plazaStatue.y, plazaStatue.w, plazaStatue.h), 70),
   ...planters.filter(p => !p.monument).map(p => volume(circle(p.x, p.y, p.r), (p.tiers || 2) * 6 * cinemaShadowScale(p, p.r))),
-  ...[...flowerShrubs, ...antonioShrubs].map(p => volume(circle(p.x, p.y, p.r), 22 * cinemaShadowScale(p, p.r))),
+  ...[...beneditoShrubs,...mendoncaBeneditoShrubs,...coelhoShrubs,...flowerShrubs, ...antonioShrubs, ...matrizShrubs, ...julhoShrubs, ...fernandoShrubs, ...alcebiadesShrubs].map(p => volume(circle(p.x, p.y, p.r), 22 * cinemaShadowScale(p, p.r))),
+  ...alcebiadesBikes.map(p=>volume(rectangle(p.x-6,p.y-12,12,24),22)),
   ...antonioCacti.map(p => volume(circle(p.x, p.y, 6), p.height)),
   ...bins.map(p => volume(circle(p.x, p.y, 9), 30)),
-  ...[...antonioBikes, { x: 50, y: 2195 }, { x: 55, y: 2217 }].map(p => volume(rectangle(p.x - 5, p.y - 12, 10, 24), 18)),
+  ...[...beneditoBikes,...mendoncaBeneditoBikes,...coelhoBikes,...antonioBikes,...julhoBikes,...fernandoBikes, { x: 50, y: 2195 }, { x: 55, y: 2217 }].map(p => volume(rectangle(p.x - 5, p.y - 12, 10, 24), 18)),
   volume(rectangle(gardenWall.x, gardenWall.y, 4, gardenWall.length), gardenWall.height + 16),
   ...[demolitionLot, brickRecess].flatMap(p => [
     volume(rectangle(p.x, p.y, p.depth, 3), 50),

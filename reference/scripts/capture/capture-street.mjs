@@ -1,4 +1,4 @@
-// node --use-system-ca reference/scripts/capture/capture-street.mjs <pasta> "Rua" "Bairro" <pano> <latitude> <longitude>
+// node --use-system-ca reference/scripts/capture/capture-street.mjs <pasta> "Rua" "Bairro" <pano> <latitude> <longitude> [rua|avenida]
 // Panorama e coordenadas devem vir da posição observada no Street View.
 import fs from 'node:fs/promises';
 import path from 'node:path';
@@ -10,7 +10,7 @@ const projectRoot = fileURLToPath(new URL('../../../', import.meta.url));
 
 setDefaultAutoSelectFamilyAttemptTimeout(2000);
 
-export async function capturePoint({folder, street, neighborhood, pano, latitude, longitude, city = 'Codó'}) {
+export async function capturePoint({folder, street, neighborhood, pano, latitude, longitude, city = 'Codó', roadType}) {
   if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(folder ?? '')) throw new Error('Informe uma pasta de rua válida, por exemplo simeao-de-macedo');
   if (typeof neighborhood !== 'string' || !neighborhood.trim()) throw new Error('Informe o bairro do ponto capturado');
   if (![latitude, longitude].every(value => (typeof value === 'number' || (typeof value === 'string' && value.trim())) && Number.isFinite(Number(value)))) {
@@ -21,9 +21,13 @@ export async function capturePoint({folder, street, neighborhood, pano, latitude
   try { manifest = validateMapManifest(JSON.parse(await fs.readFile(manifestPath, 'utf8')), manifestPath); }
   catch (error) {
     if (error.code !== 'ENOENT') throw error;
-    manifest = {schemaVersion:1, city, street, neighborhood, coordinateSystem:'WGS84', capturedAt:new Date().toISOString().slice(0,10), directions:[...MAP_DIRECTIONS], points:[]};
+    const inferredType=/^(Rua|R\.)\s/i.test(street)?'rua':/^(Avenida|Av\.)\s/i.test(street)?'avenida':undefined;
+    const type=roadType??inferredType;
+    if (!['rua','avenida'].includes(type)) throw new Error('Informe roadType (rua ou avenida) para a nova via');
+    manifest = {schemaVersion:1, roadType:type, sidewalkType:`calcada-de-${type}`,  city, street, neighborhood, coordinateSystem:'WGS84', capturedAt:new Date().toISOString().slice(0,10), directions:[...MAP_DIRECTIONS], points:[]};
   }
   if (manifest.city !== city || manifest.street !== street) throw new Error('A cidade ou rua informada não corresponde ao manifesto existente');
+  if (roadType!==undefined && manifest.roadType!==roadType) throw new Error('Tipo informado difere do manifesto existente');
   let point = manifest.points.find(p => p.pano === pano);
   if (!point) { point = {id:manifest.points.length + 1}; manifest.points.push(point); }
   Object.assign(point, {pano, latitude:Number(latitude), longitude:Number(longitude)});
@@ -69,6 +73,6 @@ export async function captureKnownStreet(folder, street) {
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
-  const [folder, street, neighborhood, pano, latitude, longitude] = process.argv.slice(2);
-  await capturePoint({folder, street, neighborhood, pano, latitude, longitude});
+  const [folder, street, neighborhood, pano, latitude, longitude, roadType] = process.argv.slice(2);
+  await capturePoint({folder, street, neighborhood, pano, latitude, longitude, roadType});
 }

@@ -1,9 +1,13 @@
+import { ANTONIO_ROAD, JULHO_PROFILE } from './road-profiles.js';
+import { offsetRoadPath } from './road-dimensions.js';
 import { project as P } from './projection.js';
-import { antonioPoints, antonioCenter, CINEMA_GARDEN, JULHO_ROAD } from './antonio-data.js';
+import { antonioPath as antonioPoints, antonioCenter, CINEMA_GARDEN, JULHO_ROAD, ANTONIO_NORTH } from './antonio-data.js';
+import { MATRIZ_END_ROAD } from './antonio-matriz.js';
 function poly(c,vertices,fill){c.beginPath();vertices.forEach((v,i)=>{const p=P(...v);i?c.lineTo(p.x,p.y):c.moveTo(p.x,p.y);});c.closePath();c.fillStyle=fill;c.fill();}
 function rect(c,x,y,w,h,color,z=0){poly(c,[[x,y,z],[x+w,y,z],[x+w,y+h,z],[x,y+h,z]],color);}
 function line(c,a,b,color,width=1){const p=P(...a),q=P(...b);c.strokeStyle=color;c.lineWidth=width;c.beginPath();c.moveTo(p.x,p.y);c.lineTo(q.x,q.y);c.stroke();}
-function strip(c,width,fill){poly(c,[...antonioPoints.map(p=>[p.x-width,p.y]),...antonioPoints.toReversed().map(p=>[p.x+width,p.y])],fill);}
+function strip(c,width,fill){poly(c,[...offsetRoadPath(antonioPoints,-width),...offsetRoadPath(antonioPoints,width).toReversed()].map(p=>[p.x,p.y]),fill);}
+function edge(y,side){const path=offsetRoadPath(antonioPoints,side*ANTONIO_ROAD.halfWidth);for(let i=1;i<path.length;i++){const a=path[i-1],b=path[i];if(y<=a.y&&y>=b.y)return b.x+(a.x-b.x)*(y-b.y)/(a.y-b.y);}return y>path[0].y?path[0].x:path.at(-1).x;}
 export function drawAntonioCactus(c,b){
   c.lineCap='round';
   line(c,[b.x,b.y,0],[b.x,b.y,b.height],'#3e6448',4);
@@ -39,22 +43,25 @@ export function drawAntonioGround(c,asphalt,paving,dirt,buildings=[]){
     c.fillStyle=['#496c41','#779453','#98a165','#586f4388'][i%4];
     c.fillRect(p.x,p.y-2,2+(i%4),2+(i%5));
   }
-  strip(c,79,paving);strip(c,59,asphalt);
+  strip(c,ANTONIO_ROAD.outerHalfWidth,paving);strip(c,ANTONIO_ROAD.halfWidth,asphalt);
   // Fill each sidewalk up to the actual frontage, including the corner lots.
   for(const b of buildings.filter(b=>b.antonioSide&&!b.setback)){
     const east=b.antonioSide==='east',a=b.footprint[east?0:1],z=b.footprint[east?3:2],sign=east?1:-1;
     const ys=[a[1],...antonioPoints.map(p=>p.y).filter(y=>y>a[1]&&y<z[1]),z[1]].sort((a,b)=>b-a);
-    poly(c,[a,z,...ys.map(y=>[antonioCenter(y)+sign*60,y])],paving);
+    poly(c,[a,z,...ys.map(y=>[edge(y,sign),y])],paving);
   }
-  const r=JULHO_ROAD;rect(c,r.x,r.y,r.w,r.h,asphalt);
+  const r=JULHO_ROAD;rect(c,r.x,r.y-JULHO_PROFILE.sidewalkWidth,r.w,r.h+2*JULHO_PROFILE.sidewalkWidth,paving);rect(c,r.x,r.y,r.w,r.h,asphalt);
+  // Keep the south junction open through its sidewalk.
+  rect(c,antonioCenter(-31)-ANTONIO_ROAD.halfWidth,-95,ANTONIO_ROAD.width,JULHO_PROFILE.outerHalfWidth,asphalt);
   for(let i=1;i<antonioPoints.length;i++)for(const side of [-1,1]){
-    const a=antonioPoints[i-1],b=antonioPoints[i];
+    const rail=offsetRoadPath(antonioPoints,side*ANTONIO_ROAD.halfWidth);
+    const a=rail[i-1],b=rail[i];
     // No curb across either intersection.
-    line(c,[a.x+side*60,a.y,1],[b.x+side*60,b.y,1],'#bec2a2',2);
+    line(c,[a.x,a.y,1],[b.x,b.y,1],'#bec2a2',2);
   }
-  for(let y=-20;y<2280;y+=19){
+  for(let y=-20;y<ANTONIO_NORTH.y-55;y+=19){
     const x=antonioCenter(y);
-    for(const side of [-1,1])line(c,[x+side*63,y],[x+side*76,y],'#65755c77',.7);
+    for(const side of [-1,1])line(c,[edge(y,side)+side*2,y],[edge(y,side)+side*(ANTONIO_ROAD.sidewalkWidth-1),y],'#65755c77',.7);
     if(y%5===0)poly(c,[[x-33,y],[x+7,y+5],[x+19,y+27],[x-26,y+39]],'#b2ab872e');
     if(y%3===0)line(c,[x-24,y],[x+15,y+18],'#3948385a',.6);
   }
@@ -62,4 +69,21 @@ export function drawAntonioGround(c,asphalt,paving,dirt,buildings=[]){
     const x=antonioCenter(y)+12;poly(c,Array.from({length:16},(_,i)=>[x+Math.cos(i*Math.PI/8)*8,y+Math.sin(i*Math.PI/8)*8]),'#4b5949');
     for(let j=-4;j<6;j+=3)line(c,[x-5,y+j],[x+5,y+j],'#909c7c',.6);
   }
+}
+// Draw after the old square so its obsolete northern paving does not cover the
+// garden behind the church. The existing church volume remains untouched.
+export function drawMatrizExtensionGround(c,asphalt,paving){
+  rect(c,1347,3125,500,235,'#70815b');
+  rect(c,1347,3360,520,720,'#798365');
+  // A short continuation indicates the fourth arm of the junction only.
+  rect(c,ANTONIO_NORTH.x-ANTONIO_ROAD.outerHalfWidth,ANTONIO_NORTH.y,ANTONIO_ROAD.totalWidth,140,paving);
+  rect(c,ANTONIO_NORTH.x-ANTONIO_ROAD.halfWidth,ANTONIO_NORTH.y,ANTONIO_ROAD.width,140,asphalt);
+  const r=MATRIZ_END_ROAD;rect(c,r.x,r.y,r.w,r.h,paving);rect(c,r.x,r.y+ANTONIO_ROAD.sidewalkWidth,r.w,ANTONIO_ROAD.width,asphalt);rect(c,ANTONIO_NORTH.x-ANTONIO_ROAD.halfWidth,r.y,ANTONIO_ROAD.width,r.h,asphalt);
+  for(const y of [r.y-9,r.y+r.h]){
+    rect(c,r.x,y,ANTONIO_NORTH.x-ANTONIO_ROAD.outerHalfWidth-r.x,9,paving);
+    rect(c,ANTONIO_NORTH.x+ANTONIO_ROAD.outerHalfWidth,y,r.x+r.w-ANTONIO_NORTH.x-ANTONIO_ROAD.outerHalfWidth,9,paving);
+  }
+  // Small planted corner visible across Henrique; no invented continuation.
+  rect(c,ANTONIO_NORTH.x+85,r.y+r.h+8,110,70,'#71865b');
+  rect(c,ANTONIO_NORTH.x+85,r.y+r.h+8,110,7,'#b6bea4');
 }

@@ -20,6 +20,15 @@ function shade(hex,n){const v=parseInt(hex.slice(1),16);return `rgb(${Math.max(0
 function wall(c,a,b,h,color,base,ratio=.22) {poly(c,[[...a,0],[...b,0],[...b,h],[...a,h]],color,'#414f3a77');if(ratio)poly(c,[[...a,0],[...b,0],[...b,h*ratio],[...a,h*ratio]],base);}
 function roof(c,x,y,w,l,h,kind,color,seed) {
   const r=rng(seed), rx=x-3,ry=y-3,rw=w+6,rl=l+6;
+  if(kind==='barrel') {
+    const z=t=>h+Math.sin(t*Math.PI)*29;
+    for(let i=0;i<18;i++){
+      const a=i/18,b=(i+1)/18;
+      poly(c,[[rx+rw*a,ry,z(a)],[rx+rw*b,ry,z(b)],[rx+rw*b,ry+rl,z(b)],[rx+rw*a,ry+rl,z(a)]],i<9?'#a8b1a9':'#c3c9bc','#7e8980');
+    }
+    for(const yy of [ry,ry+rl])poly(c,Array.from({length:19},(_,i)=>[rx+rw*i/18,yy,z(i/18)]),'#b5bdb0','#758578');
+    return;
+  }
   if(kind==='flat') {
     poly(c,[[rx,ry,h],[rx+rw,ry,h],[rx+rw,ry+rl,h],[rx,ry+rl,h]],'#a4a18b','#6c7562');
     for(let i=0;i<500;i++) {const p=P(rx+r()*rw,ry+r()*rl,h);c.fillStyle=i%3?'#4a62502b':'#d6cfaa45';c.fillRect(p.x,p.y,2+r()*5,1+r()*3);}
@@ -40,6 +49,31 @@ function roof(c,x,y,w,l,h,kind,color,seed) {
 function plant(c,x,y,z,size,seed) {
   const r=rng(seed),p=P(x,y,z);line(c,[x,y,0],[x,y,z],'#65634a',1.4);
   for(let i=0;i<28;i++){const a=r()*Math.PI*2,len=size*(.4+r()*.6);c.strokeStyle=i%3?'#587448':'#91a266';c.lineWidth=1.1;c.beginPath();c.moveTo(p.x,p.y);c.quadraticCurveTo(p.x+Math.cos(a)*len*.55,p.y-9+Math.sin(a)*len*.3,p.x+Math.cos(a)*len,p.y+Math.sin(a)*len*.55);c.stroke();}
+}
+function libraryRoof(c,x,y,w,l,h){
+  // Hipped clay roofs around the raised, ventilated central roof lantern.
+  function hip(xx,yy,ww,ll,z,rise,ridge=false){
+    const ix=xx+ww*(ridge?.5:.19),iy=yy+ll*.13,iw=ridge?0:ww*.62,il=ll*.74;
+    for(const [a,b,d,e,color] of [
+      [[xx,yy,z],[xx+ww,yy,z],[ix+iw,iy,z+rise],[ix,iy,z+rise],'#ab8059'],
+      [[xx+ww,yy,z],[xx+ww,yy+ll,z],[ix+iw,iy+il,z+rise],[ix+iw,iy,z+rise],'#b88a5e'],
+      [[xx+ww,yy+ll,z],[xx,yy+ll,z],[ix,iy+il,z+rise],[ix+iw,iy+il,z+rise],'#976c49'],
+      [[xx,yy+ll,z],[xx,yy,z],[ix,iy,z+rise],[ix,iy+il,z+rise],'#896344']]){
+      poly(c,[a,b,d,e],color,'#69573e');
+      const count=Math.max(8,Math.round(Math.hypot(b[0]-a[0],b[1]-a[1])/5));
+      for(let n=0;n<=count;n++){const t=n/count;line(c,a.map((v,k)=>v+(b[k]-v)*t),e.map((v,k)=>v+(d[k]-v)*t),'#dab18577',.9);}
+      for(const t of [.25,.5,.75])line(c,a.map((v,k)=>v+(e[k]-v)*t),b.map((v,k)=>v+(d[k]-v)*t),'#66513b77',.65);
+    }
+    poly(c,[[ix,iy,z+rise],[ix+iw,iy,z+rise],[ix+iw,iy+il,z+rise],[ix,iy+il,z+rise]],'#b38d63');
+  }
+  hip(x-5,y-5,w+10,l+10,h,18);
+  const ix=x+w*.17,iy=y+l*.12,iw=w*.66,il=l*.76,z=h+18;
+  for(const xx of [ix,ix+iw]){
+    poly(c,[[xx,iy,z],[xx,iy+il,z],[xx,iy+il,z+20],[xx,iy,z+20]],'#625d49');
+    for(let yy=iy;yy<iy+il;yy+=45)poly(c,[[xx,yy,z],[xx,Math.min(yy+7,iy+il),z],[xx,Math.min(yy+7,iy+il),z+20],[xx,yy,z+20]],'#c4bfa2');
+  }
+  for(const yy of [iy,iy+il])poly(c,[[ix,yy,z],[ix+iw,yy,z],[ix+iw,yy,z+20],[ix,yy,z+20]],'#9b957b');
+  hip(ix-4,iy-4,iw+8,il+8,z+20,12,true);
 }
 function fence(c,b,x,y,l) {
   const f=b.fence,h=f.height,gateStart=f.gate*l,gateEnd=gateStart+l*.14;
@@ -85,7 +119,14 @@ export function drawDetailedBuilding(c,b,texture,crossTexture,backTexture,lightP
 }
 function drawBuilding(c,b,texture,crossTexture,backTexture,lightPass) {
   const {x,y,depth:w,length:l,height:h}=b;
-  if(b.roof==='garden'){garden(c,b);return;}
+  if(b.roof==='garden'){
+    garden(c,b);
+    if(crossTexture&&(b.crossFacade.face==='maxY'?PROJECTION.d>0:PROJECTION.d<0)){
+      const yy=b.crossFacade.face==='maxY'?y+l:y;
+      surface(c,crossTexture,[x,yy,h],[x+w,yy,h],[x,yy,0],lightPass);
+    }
+    return;
+  }
   const inset=b.frontSetback||(b.fence?24:0),front=b.side==='west'?x+w-inset:x+inset,street=b.side==='west'?x+w:x;
   const rx=b.side==='east'?x+inset:x,rw=w-inset;
   const side=b.sideColor||b.color,ratio=b.baseHeight??.22;
@@ -95,6 +136,10 @@ function drawBuilding(c,b,texture,crossTexture,backTexture,lightPass) {
   wall(c,[rx,farY],[rx+rw,farY],h,shade(side,-17),shade(b.base,-13),ratio);
   wall(c,[rx,nearY],[rx+rw,nearY],h,shade(side,-7),shade(b.base,-6),ratio);
   wall(c,[nearX,y],[nearX,y+l],h,shade(side,PROJECTION.c>0?-3:-15),b.base,ratio);
+  if(b.detail==='am-electric-wall'){
+    for(let yy=y+5;yy<y+l;yy+=45)line(c,[street,yy,h],[street,yy,h+16],'#465145',1);
+    for(const z of [h+5,h+10,h+15])line(c,[street,y,z],[street,y+l,z],'#657064',.55);
+  }
   if(b.detail==='school') {for(const [a,d] of [[[x,y],[x+w,y]],[[nearX,y],[nearX,y+l]]])poly(c,[[...a,h*.6],[...d,h*.6],[...d,h],[...a,h]],'#cda17e');}
   if(b.roof==='courtyard') {
     poly(c,[[x+4,y+4,1],[x+w-4,y+4,1],[x+w-4,y+l-4,1],[x+4,y+l-4,1]],'#afa68a');
@@ -102,7 +147,18 @@ function drawBuilding(c,b,texture,crossTexture,backTexture,lightPass) {
     roof(c,backX,y+5,w*.52,l-10,h-9,'tile',b.roofColor,b.point*117);
     // The photographed frontage is a wall; the roof is set back behind its yard.
     wall(c,[x,y],[x+w,y],h*.78,shade(side,-6),b.base,ratio);
+  } else if(b.detail==='as-library') {
+    libraryRoof(c,rx,y,rw,l,h);
+  } else if(b.detail==='cm-p-metalmar') {
+    // One corner volume: visible tiles west, weathered parapet on the eastern wing.
+    roof(c,rx,y,rw,l*.46,h,'tile',b.roofColor,b.point*137+x);
+    roof(c,rx,y+l*.46,rw,l*.54,h,'flat',b.roofColor,b.point*137+x+1);
   } else if(b.roof!=='none')roof(c,rx,y,rw,l,b.roof==='hidden-tile'?h-17:h,b.roof==='hidden-tile'?'tile':b.roof,b.roofColor,b.point*137+x);
+  if(b.detail==='jl-e-porch') {
+    const canopyX=b.side==='west'?front:x;
+    roof(c,canopyX,y,inset,l,h-4,'shed',b.roofColor,b.point*137);
+    for(const u of [.015,.35,.65,.985])line(c,[street,y+l*u,0],[street,y+l*u,h-2],'#8c8268',2.4);
+  }
   if(b.detail==='raised-roof') {
     const xx=x+33;
     wall(c,[xx,y+13],[xx,y+l-11],h+15,'#dfdbc6','#c3c3a9',.04);
@@ -110,8 +166,18 @@ function drawBuilding(c,b,texture,crossTexture,backTexture,lightPass) {
     for(let z=h+8;z<h+32;z+=7)line(c,[xx,y+20,z],[xx,y+l-20,z],'#b3b49b',.7);
     line(c,[xx,y+13,h+16],[xx,y+l*.57,h+44],'#917f62',2);
   }
-  if(crossTexture && (b.crossFacade.face==='maxY'?PROJECTION.d>0:PROJECTION.d<0)) {
-    const yy=b.crossFacade.face==='maxY'?y+l:y;
+  if(b.detail==='jl-ceo-side'){
+    // Caixa cilíndrica elevada observada atrás do anexo; pertence ao mesmo lote.
+    const tx=x+w*.66,ty=y+l*.88,z=h+22,r=13;
+    for(const dx of [-9,9])for(const dy of [-9,9])line(c,[tx+dx,ty+dy,h],[tx+dx,ty+dy,z],'#cbcdbd',2);
+    for(let i=0;i<20;i++){const a=i*Math.PI/10,aa=(i+1)*Math.PI/10;
+      poly(c,[[tx+Math.cos(a)*r,ty+Math.sin(a)*r,z],[tx+Math.cos(aa)*r,ty+Math.sin(aa)*r,z],[tx+Math.cos(aa)*r,ty+Math.sin(aa)*r,z+25],[tx+Math.cos(a)*r,ty+Math.sin(a)*r,z+25]],i<10?'#c4c8b8':'#daddcb');
+    }
+    poly(c,Array.from({length:20},(_,i)=>[tx+Math.cos(i*Math.PI/10)*r,ty+Math.sin(i*Math.PI/10)*r,z+25]),'#dce0ce','#a0aa96');
+  }
+  if(crossTexture && (b.detail==='as-library'||(b.crossFacade.face==='maxY'?PROJECTION.d>0:PROJECTION.d<0))) {
+    // Both photographed short ends of the library use the arched composition.
+    const yy=b.detail==='as-library'?nearY:b.crossFacade.face==='maxY'?y+l:y;
     surface(c,crossTexture,[x,yy,h],[x+w,yy,h],[x,yy,0],lightPass);
   }
   if(!frontVisible) {
@@ -144,6 +210,15 @@ function drawBuilding(c,b,texture,crossTexture,backTexture,lightPass) {
   if(b.trim==='curved') {
     const vertices=[[front,y,h],[front,y+l*.5,h+4],[front,y+l,h+10],[front,y+l,h-1],[front,y,h-1]];
     poly(c,vertices,b.color);line(c,[front,y,h],[front,y+l*.5,h+4],'#a6a28a',1.5);
+  }
+  if(b.detail==='sb-school') {
+    // Dois frontões fotografados nos extremos da fachada, acima dos beirais.
+    for(const u of [.14,.84]){
+      const cy=y+l*u,half=l*.065;
+      const outline=[[front,cy-half,h],[front,cy-half*.80,h+9],[front,cy-half*.40,h+13],[front,cy-half*.48,h+19],[front,cy,h+23],[front,cy+half*.48,h+19],[front,cy+half*.40,h+13],[front,cy+half*.80,h+9],[front,cy+half,h]];
+      poly(c,outline,'#dcdcc8','#aeb4a0');
+      line(c,[front,cy-half*.8,h+8],[front,cy+half*.8,h+8],'#ece9d5',1.7);
+    }
   }
   const stepSide=b.side==='west'?1:-1;
   for(const o of b.openings.filter(o=>['door','gate','shutter','porch'].includes(o.kind))) {

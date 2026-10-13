@@ -35,3 +35,11 @@ export function withCrossStreetFrame(originY,draw) {
   PROJECTION={...previous,a:-b,b:a,c:-d,d:c,tx:b*originY,ty:d*originY};
   try{return draw();}finally{PROJECTION=previous;}
 }
+// Local car frame: share heading with its footprint and shadow on curved roads.
+export function withCarFrame(car,draw) {
+  const previous=PROJECTION, {a,b,c,d}=previous;
+  const angle=car.angle??(car.axis==='x'?Math.PI/2:0), cos=Math.cos(angle),sin=Math.sin(angle);
+  const origin=project(car.x,car.y);
+  PROJECTION={...previous,a:a*cos-b*sin,b:a*sin+b*cos,c:c*cos-d*sin,d:c*sin+d*cos,tx:origin.x,ty:origin.y};
+  try {return draw();} finally {PROJECTION=previous;}
+}

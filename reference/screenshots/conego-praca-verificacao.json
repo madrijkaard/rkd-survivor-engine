@@ -1,0 +1,27 @@
+{
+  "date": "2026-10-11",
+  "checks": [
+    "Rua Cônego Mendonça · Ponto 23",
+    "Rua Cônego Mendonça · Ponto 31",
+    "Rua Cônego Mendonça · Ponto 28",
+    {
+      "keyboardDistance": 19.999999999999822
+    },
+    {
+      "views": [
+        "east-fronts",
+        "north-west-view",
+        "north-east-view",
+        "west-fronts"
+      ]
+    },
+    {
+      "groundClick": {
+        "x": "-2015.00",
+        "y": "2345.00",
+        "point": "30"
+      }
+    }
+  ],
+  "errors": []
+}

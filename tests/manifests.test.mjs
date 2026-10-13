@@ -12,6 +12,12 @@ test('cada rua tem manifesto com bairro, rua, coordenadas e oito fotos por ponto
   for (const route of routes) {
     const manifest = validateMapManifest(await readManifest(route.folder));
     assert.equal(manifest.city, 'Codó');
+    assert.equal(manifest.roadType,route.id==='sao-benedito'?'avenida':'rua');
+    assert.equal(manifest.sidewalkType,`calcada-de-${manifest.roadType}`);
+    assert.equal(route.sidewalkType,manifest.sidewalkType);
+    assert.equal(route.sidewalkWidth,route.id==='sao-benedito'?80:40);
+    assert.equal(route.roadType,manifest.roadType);
+    assert.equal(route.width,route.id==='sao-benedito'?160:128);
     assert.equal(manifest.neighborhood, 'Centro');
     assert.equal(manifest.street, route.name);
     const folders = (await readdir(new URL(`../maps/${route.folder}/`, import.meta.url))).filter(name => /^ponto-\d+$/.test(name));
@@ -23,7 +29,7 @@ test('cada rua tem manifesto com bairro, rua, coordenadas e oito fotos por ponto
     }
     total += manifest.points.length;
   }
-  assert.equal(total, 66);
+  assert.equal(total, 199);
 });
 
 test('carregar os manifestos preserva as posições e as referências do cenário', async () => {
@@ -68,6 +74,12 @@ test('manifestos incompletos ou com coordenadas inválidas são rejeitados antes
   const base = await readManifest('simeao-de-macedo');
   for (const change of [
     m => { delete m.neighborhood; },
+    m => { delete m.roadType; },
+    m => { delete m.sidewalkType; },
+    m => { m.sidewalkType='rua'; },
+    m => { m.sidewalkType='calcada-de-avenida'; },
+    m => { m.roadType='travessa'; },
+    m => { m.roadType='Rua'; },
     m => { m.points[0].latitude = null; },
     m => { m.points[0].longitude = 181; },
     m => { m.points[0].neighborhood = ''; },

@@ -1,10 +1,13 @@
 from pathlib import Path
+import sys
 from PIL import Image, ImageDraw
 root = Path(__file__).resolve().parents[3]
 out = root / 'reference' / 'streets' / 'antonio-alexandre' / 'comparacoes'
 out.mkdir(parents=True, exist_ok=True)
 directions = ['N','NE','L','SE','S','SO','O','NO']
 for folder in sorted((root/'maps'/'antonio-alexandre').glob('ponto-*')):
+    if int(folder.name.split('-')[-1]) < int(sys.argv[1] if len(sys.argv)>1 else 1):
+        continue
     sheet = Image.new('RGB',(1200,1720),'#192320')
     draw = ImageDraw.Draw(sheet)
     for i, direction in enumerate(directions):

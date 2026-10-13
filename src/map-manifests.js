@@ -1,3 +1,4 @@
+import { manifestRoadProfile } from './road-dimensions.js';
 export const MAP_DIRECTIONS = Object.freeze(['N', 'NE', 'L', 'SE', 'S', 'SO', 'O', 'NO']);
 
 const hasText = value => typeof value === 'string' && value.trim().length > 0;
@@ -6,6 +7,7 @@ const hasText = value => typeof value === 'string' && value.trim().length > 0;
 export function validateMapManifest(manifest, source = 'manifest.json') {
   const fail = message => { throw new Error(`${source}: ${message}`); };
   if (!manifest || typeof manifest !== 'object') fail('manifesto inválido');
+  try { manifestRoadProfile(manifest); } catch (error) { fail(error.message); }
   if (manifest.schemaVersion !== 1) fail('schemaVersion deve ser 1');
   for (const field of ['city', 'street', 'neighborhood']) {
     if (!hasText(manifest[field])) fail(`informe ${field}`);
@@ -43,6 +45,7 @@ export async function loadMapManifests(routes, fetchManifest = fetch) {
   // parte do mundo com metadados novos e outra parte com os antigos.
   for (const { route, manifest } of loaded) {
     route.name = manifest.street;
+    Object.assign(route, manifestRoadProfile(manifest));
     route.city = manifest.city;
     route.neighborhood = manifest.neighborhood;
     const records = new Map(manifest.points.map(point => [point.id, point]));

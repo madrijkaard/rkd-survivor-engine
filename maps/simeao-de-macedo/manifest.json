@@ -215,5 +215,7 @@
       "source": "Google Street View",
       "endSourceUrl": "https://www.google.com/maps/@?api=1&map_action=pano&pano=TggOZk5xNgGSEQ-pUB8PDQ&viewpoint=-4.4497823,-43.8859137"
     }
-  ]
+  ],
+  "roadType": "rua",
+  "sidewalkType": "calcada-de-rua"
 }

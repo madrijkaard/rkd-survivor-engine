@@ -10,12 +10,13 @@ npm test
 
 O comando corresponde a `node --test tests/*.test.mjs`. Usa o executor `node:test`, assertivas e módulos nativos do Node, sem framework externo. Requer Node.js 20 ou posterior; não precisa de `npm install`, navegador, servidor HTTP iniciado manualmente nem acesso ao Street View. O teste do endpoint inicia e encerra um servidor em porta efêmera de `127.0.0.1`.
 
-Os testes importam a implementação real de `src/` e leem fotografias e manifestos locais em `maps/`. Não há uma pasta separada de fixtures. A suíte contém atualmente **12 arquivos de testes, com 57 casos**; `AGENTS.md` é este guia e não é executado pelo runner.
+Os testes importam a implementação real de `src/` e leem fotografias e manifestos locais em `maps/`. Não há uma pasta separada de fixtures. A suíte contém atualmente **23 arquivos de testes, com 95 casos**; `AGENTS.md` é este guia e não é executado pelo runner.
 
 ## Função e cobertura de cada arquivo
 
 | Arquivo | Casos atuais | O que verifica |
 | --- | --- | --- |
+| `alcebiades.test.mjs` | 4 | Quinze panoramas, 112 fotos novas e esquina reutilizada; preservação da Cônego; chegada desde START, caminhada/clique nas quatro câmeras, fotos corretas, retorno e limites da Cardoso/Vinte e Oito; dez posições antigas preservadas, praça e quadra acessíveis, grades/rampas sólidas, Sicoob e Crefisa únicos, retorno pela Vinte e Oito conectado e limite da Cardoso preservado. |
 | `world.test.mjs` | 7 | Existência das oito fotos dos 31 pontos da Simeão; ida e volta da projeção dos cliques; continuidade da rua; limites e obstáculos; busca de caminho desviando de canteiro; percurso completo de ida e volta; base inteira do Cruzeiro do Sul dentro da praça e passagem ao redor. |
 | `simeao-extension.test.mjs` | 3 | Preservação dos 17 pontos originais, 112 novas imagens JPEG distintas, coordenadas e limites; travessia da Cônego, chegada/retorno da Henrique Figueiredo; localização das fotos, colisões e unicidade das esquinas compartilhadas. |
 | `home-lighting.test.mjs` | 2 | Proporção de casas selecionadas, estabilidade da seleção por ID, exclusão de comércio/serviços e de fachadas sem janelas, incluindo casas transversais. |
@@ -25,9 +26,15 @@ Os testes importam a implementação real de `src/` e leem fotografias e manifes
 | `camera.test.mjs` | 4 | Recuperação dos destinos da rua/bar nas duas primeiras perspectivas; troca de profundidade sem espelhar o mundo; preservação da personagem, construções, colisões e caminho ao girar; restauração da câmera depois de preparar outra vista. |
 | `actor-animation.test.mjs` | 3 | Oito setores de direção, preservação da postura ao parar e orientação do destino clicado nas quatro câmeras. |
 | `click-navigation.test.mjs` | 5 | Primeiro clique anda rápido e segundo clique rápido corre ao mesmo destino mesmo com deslocamento de câmera; cliques lentos, distantes ou em outra superfície não iniciam corrida; reset do gesto e duplo toque; deslocamentos de corrida respeitam mesas e portas; velocidades de 100/125 unidades/s, com avanço efetivo de 25% a mais na corrida. |
-| `mendonca.test.mjs` | 5 | Quinze panoramas, 120 fotos distintas e coordenadas; igreja inteira dentro da praça e ruas de contorno livres; percurso conectado com a Simeão; mudança de fotos/numeração na esquina preservando os 17 pontos originais; projeção transversal nas quatro câmeras e restauração do estado. |
-| `antonio.test.mjs` | 9 | Vinte pontos, 160 fotos distintas e coordenadas; volta pelas três ruas e Vinte e Oito de Julho; associação de fotos nas quatro câmeras; volumes compartilhados e obstáculos da escola; encontro das fachadas nas divisas; lotes fora da faixa da rua; colisões em paredes inclinadas e plantas de esquina; alinhamento da casa rosa; recorte do muro azul na entrada coberta da escola. |
-| `manifests.test.mjs` | 4 | Esquema dos três manifestos, bairro e oito imagens por ponto; carregamento preservando `x/y` e referências; mudança de bairro por ponto e retorno ao bairro da rua vizinha; rejeição de manifestos inválidos/falhas de carregamento sem aplicar metadados parcialmente. |
+| `mendonca-praca.test.mjs` | 3 | Preserva as 22 posições antigas; reutilização byte a byte da esquina e 64 fotos novas; ida e volta desde a Fernando nas quatro câmeras; acesso desde o início; boca da praça, limites do trecho, fotos e volumes compartilhados. |
+| `mendonca-west.test.mjs` | 3 | IDs e posições históricas preservados; ordem espacial; percurso de ida e volta até a Fernando nas quatro câmeras; fotos/localização e ausência de lotes sobre pista e passeios; quatro esquinas compartilhadas únicas. |
+| `mendonca.test.mjs` | 5 | 37 panoramas, 296 fotos distintas e coordenadas; igreja inteira dentro da praça, acessos livres e ausência de rua atravessando o muro ao norte; percurso conectado com a Simeão; mudança de fotos/numeração na esquina preservando os 17 pontos originais; projeção transversal nas quatro câmeras e restauração do estado. |
+| `antonio.test.mjs` | 9 | 34 pontos, 272 fotos distintas e coordenadas; volta pelas três ruas e Vinte e Oito de Julho; associação de fotos nas quatro câmeras; volumes compartilhados e obstáculos da escola; encontro das fachadas nas divisas; lotes fora da faixa da rua; colisões em paredes inclinadas e plantas de esquina; alinhamento da casa rosa; recorte do muro azul na entrada coberta da escola. |
+| `julho-east.test.mjs` | 3 | Pontos 1–18 preservados, sequência 19–29 e reutilização da esquina; cliques/caminhada com retorno nas quatro câmeras; lotes fora dos passeios, esquinas únicas, Coelho livre e limites da expansão. |
+| `julho.test.mjs` | 5 | 29 panoramas e 232 JPEGs distintos; percurso entre as praças passando por Fernando nas quatro vistas; lotes livres, preservação dos nove pontos anteriores, reutilização da esquina, ordem espacial independente, quatro volumes compartilhados e iluminação residencial correta. |
+| `road-width.test.mjs` | 5 | Tipo explícito no JSON e perfis de 4/5 carros e passeios de 2/4 pessoas; largura perpendicular nas curvas; pista livre dos lotes e navegável nas oito rotas; planta do carro idêntica na projeção e colisão; faixa completa dos dois passeios fora dos lotes em todos os segmentos mapeados. |
+| `manifests.test.mjs` | 4 | Esquema dos oito manifestos, bairro e oito imagens por ponto; carregamento preservando `x/y` e referências; mudança de bairro por ponto e retorno ao bairro da rua vizinha; rejeição de manifestos inválidos/falhas de carregamento sem aplicar metadados parcialmente. |
+| `antonio-matriz.test.mjs` | 3 | Preserva os vinte pontos antigos; ordena os IDs da extensão; percorre até a Henrique e retorna, com seleção de fotos, colisões dos muros inclinados, braços do cruzamento e volumes únicos da igreja e jardim de esquina. |
 
 As verificações de fotos incluem existência/estrutura e, nas ruas adicionadas, comparação de conteúdo para identificar duplicações. Elas não interpretam visualmente se a imagem representa a casa correta. O validador de manifestos também não comprova que uma coordenada válida corresponde à foto: essa conferência depende do mapeamento.
 
@@ -75,4 +82,14 @@ Quando uma alteração afetar desenho ou interação de tela, abra `npm start` e
 
 8. Personagem sob postes à noite: conferir luz quente na roupa e pele, transição gradual ao entrar/sair do alcance, direção nas quatro câmeras, vista aérea e ocultação por objetos à frente. Dentro do bar e durante o dia, a personagem não recebe essa contribuição dos postes.
 
-Use somente os itens relevantes à mudança. Uma suíte aprovada confirma os contratos cobertos, mas não substitui essa inspeção visual. Alterações nos scripts de `reference/` também exigem conferência própria de seus arquivos de saída; não estão cobertas integralmente pelos 57 casos atuais.
+Use somente os itens relevantes à mudança. Uma suíte aprovada confirma os contratos cobertos, mas não substitui essa inspeção visual. Alterações nos scripts de `reference/` também exigem conferência própria de seus arquivos de saída; não estão cobertas integralmente pelos 95 casos atuais.
+
+`fernando.test.mjs` acrescenta três casos: 17 panoramas e 136 fotos distintas dentro da rua, com reutilização byte a byte do início; caminhada/clique até a Cônego e retorno nas quatro câmeras; lotes fora da faixa, colisões, braços livres, preservação das esquinas e ausência de ligação artificial com trecho não mapeado.
+
+
+`coelho.test.mjs` acrescenta três casos: 22 panoramas e 176 fotos distintas, reutilização byte a byte da esquina, GPS/referências válidas; caminhada e cliques nas quatro câmeras até a Cônego e retorno, com troca correta de fotos; passeios livres, esquinas únicas, ruína/ginásio sem luz residencial e colisão do caminhão. O teste de largura inclui a área inclinada `onCoelhoRoad`.
+
+`mendonca-benedito.test.mjs` tem três casos: preservação de 31 posições, 48 JPEGs novos e metadados da avenida; ida/volta nas quatro câmeras e limites da captura; larguras de pista/passeios, volumes únicos e colisões. Execute `node --test tests/mendonca-benedito.test.mjs tests/mendonca-praca.test.mjs tests/road-width.test.mjs` para a verificação focada e `npm test` para integração.
+
+
+`benedito.test.mjs` acrescenta três casos: 14 panoramas, 104 fotos novas e oito reutilizadas; preservação da Cônego; ida e volta com cliques nas quatro câmeras, seleção de fotos, acesso pela praça e limites; esquinas únicas, lotes sólidos, cobertura aberta e usos sem emissão residencial. O teste geral de largura cobre a pista de cinco carros e os passeios da oitava rota. Execute `node --test tests/benedito.test.mjs tests/road-width.test.mjs tests/manifests.test.mjs` e `npm test`.

@@ -1,0 +1,280 @@
+{
+  "routes": [
+    {
+      "target": 34,
+      "ok": true,
+      "steps": 87,
+      "remaining": 0,
+      "x": -2655,
+      "y": 2345,
+      "street": "RUA CÔNEGO MENDONÇA"
+    },
+    {
+      "target": 37,
+      "ok": true,
+      "steps": 90,
+      "remaining": 0,
+      "x": -3102,
+      "y": 2345,
+      "street": "RUA CÔNEGO MENDONÇA"
+    },
+    {
+      "target": 31,
+      "ok": true,
+      "steps": 176,
+      "remaining": 0,
+      "x": -2223,
+      "y": 2345,
+      "street": "RUA CÔNEGO MENDONÇA"
+    }
+  ],
+  "photos": [
+    {
+      "title": "Rua Cônego Mendonça · Ponto 31",
+      "images": [
+        {
+          "src": "maps/conego-mendonca/ponto-31/1.jpg",
+          "width": 900,
+          "height": 600
+        },
+        {
+          "src": "maps/conego-mendonca/ponto-31/1.jpg",
+          "width": 900,
+          "height": 600
+        },
+        {
+          "src": "maps/conego-mendonca/ponto-31/2.jpg",
+          "width": 900,
+          "height": 600
+        },
+        {
+          "src": "maps/conego-mendonca/ponto-31/3.jpg",
+          "width": 900,
+          "height": 600
+        },
+        {
+          "src": "maps/conego-mendonca/ponto-31/4.jpg",
+          "width": 900,
+          "height": 600
+        },
+        {
+          "src": "maps/conego-mendonca/ponto-31/5.jpg",
+          "width": 900,
+          "height": 600
+        },
+        {
+          "src": "maps/conego-mendonca/ponto-31/6.jpg",
+          "width": 900,
+          "height": 600
+        },
+        {
+          "src": "maps/conego-mendonca/ponto-31/7.jpg",
+          "width": 900,
+          "height": 600
+        },
+        {
+          "src": "maps/conego-mendonca/ponto-31/8.jpg",
+          "width": 900,
+          "height": 600
+        }
+      ]
+    },
+    {
+      "title": "Rua Cônego Mendonça · Ponto 34",
+      "images": [
+        {
+          "src": "maps/conego-mendonca/ponto-34/1.jpg",
+          "width": 900,
+          "height": 600
+        },
+        {
+          "src": "maps/conego-mendonca/ponto-34/1.jpg",
+          "width": 900,
+          "height": 600
+        },
+        {
+          "src": "maps/conego-mendonca/ponto-34/2.jpg",
+          "width": 900,
+          "height": 600
+        },
+        {
+          "src": "maps/conego-mendonca/ponto-34/3.jpg",
+          "width": 900,
+          "height": 600
+        },
+        {
+          "src": "maps/conego-mendonca/ponto-34/4.jpg",
+          "width": 900,
+          "height": 600
+        },
+        {
+          "src": "maps/conego-mendonca/ponto-34/5.jpg",
+          "width": 900,
+          "height": 600
+        },
+        {
+          "src": "maps/conego-mendonca/ponto-34/6.jpg",
+          "width": 900,
+          "height": 600
+        },
+        {
+          "src": "maps/conego-mendonca/ponto-34/7.jpg",
+          "width": 900,
+          "height": 600
+        },
+        {
+          "src": "maps/conego-mendonca/ponto-34/8.jpg",
+          "width": 900,
+          "height": 600
+        }
+      ]
+    },
+    {
+      "title": "Rua Cônego Mendonça · Ponto 37",
+      "images": [
+        {
+          "src": "maps/conego-mendonca/ponto-37/1.jpg",
+          "width": 900,
+          "height": 600
+        },
+        {
+          "src": "maps/conego-mendonca/ponto-37/1.jpg",
+          "width": 900,
+          "height": 600
+        },
+        {
+          "src": "maps/conego-mendonca/ponto-37/2.jpg",
+          "width": 900,
+          "height": 600
+        },
+        {
+          "src": "maps/conego-mendonca/ponto-37/3.jpg",
+          "width": 900,
+          "height": 600
+        },
+        {
+          "src": "maps/conego-mendonca/ponto-37/4.jpg",
+          "width": 900,
+          "height": 600
+        },
+        {
+          "src": "maps/conego-mendonca/ponto-37/5.jpg",
+          "width": 900,
+          "height": 600
+        },
+        {
+          "src": "maps/conego-mendonca/ponto-37/6.jpg",
+          "width": 900,
+          "height": 600
+        },
+        {
+          "src": "maps/conego-mendonca/ponto-37/7.jpg",
+          "width": 900,
+          "height": 600
+        },
+        {
+          "src": "maps/conego-mendonca/ponto-37/8.jpg",
+          "width": 900,
+          "height": 600
+        }
+      ]
+    }
+  ],
+  "groundClick": {
+    "selected": 1,
+    "steps": 28,
+    "remaining": 0,
+    "x": -2655.000003172807,
+    "y": 2344.999989908375
+  },
+  "minimapClick": {
+    "selected": 1,
+    "steps": 90,
+    "remaining": 0,
+    "x": -3102,
+    "y": 2345
+  },
+  "cameras": [
+    "2/4",
+    "3/4",
+    "4/4",
+    "1/4"
+  ],
+  "keyboard": {
+    "before": {
+      "x": -3102,
+      "y": 2345
+    },
+    "after": {
+      "x": -3108.555674396906,
+      "y": 2362.117594258589
+    }
+  },
+  "plazaJunction": {
+    "street": "PRAÇA ALCEBÍADES SILVA",
+    "title": "Praça Alcebíades Silva · Ponto 02",
+    "imagesLoaded": 9
+  },
+  "scene": [
+    {
+      "view": "west-fronts",
+      "photos": 384,
+      "sources": 384
+    },
+    {
+      "view": "east-fronts",
+      "photos": 384,
+      "sources": 384
+    },
+    {
+      "view": "north-west-view",
+      "photos": 384,
+      "sources": 384
+    },
+    {
+      "view": "north-east-view",
+      "photos": 384,
+      "sources": 384
+    }
+  ],
+  "date": "2026-10-12",
+  "street": "Rua Cônego Mendonça",
+  "start": "Praça Alcebíades Silva",
+  "end": "Avenida São Benedito",
+  "fromPoint": 32,
+  "toPoint": 37,
+  "newPoints": 6,
+  "newJpeg": 48,
+  "conegoPoints": 37,
+  "conegoJpeg": 296,
+  "projectPoints": 185,
+  "projectJpeg": 1480,
+  "previousPointsPreserved": true,
+  "generatorIdempotent": true,
+  "tests": {
+    "command": "npm test",
+    "passed": 92,
+    "failed": 0
+  },
+  "visualInspection": {
+    "contactSheets": [
+      32,
+      33,
+      34,
+      35,
+      36,
+      37
+    ],
+    "directionsPerPoint": 8,
+    "views": 4,
+    "lightingMinutes": [
+      660,
+      1200
+    ],
+    "overview": true,
+    "notes": "RenderWorld e lightingAt em navegador de QA, sem horário forçado persistido. Cliques reais em canvas/minimapa; percursos acelerados com step(.05)."
+  },
+  "limitations": "Alturas, fundos, profundidades e dimensões do estacionamento são aproximações artísticas. Avenida representada somente nos braços da interseção.",
+  "errors": [],
+  "finalReview": "Removido rótulo C37 redundante acrescentado ao minimapa; preservado o rótulo dinâmico existente. Capturas da interface precedem apenas essa remoção textual."
+}

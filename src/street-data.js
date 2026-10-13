@@ -1,3 +1,4 @@
+import { SIMEAO_ROAD } from './road-profiles.js';
 // Levantamento visual das 136 fotografias de maps/simeao-de-macedo/, segunda revisão.
 // u/w medem posição/largura ao longo da rua, do início (sul) à esquina (norte).
 // bottom/h medem a abertura em relação à altura da fachada. Não são medidas reais.
@@ -156,3 +157,9 @@ export const demolitionLot = { x:80, y:1498, depth:187, length:101, refs:[[12,3]
 export const brickRecess = { x:-236, y:1682, depth:151, length:57, refs:[[13,7],[14,6]] };
 export const flowerShrubs = [{x:109,y:487,r:17},{x:218,y:397,r:15},{x:316,y:333,r:13}];
 export const bins = [{x:69,y:1184,kind:'box'},{x:69,y:1775},{x:69,y:1992},{x:69,y:2152,kind:'wire'},{x:-71,y:2260,kind:'wire'}];
+
+for (const b of streetBuildings) { if (!['cinema','pavilion'].includes(b.id)) b.x += (b.side === 'west' ? -1 : 1) * (SIMEAO_ROAD.outerHalfWidth - 80); }
+
+for (const b of specialBuildings) { if (!['cinema','pavilion'].includes(b.id)) b.x += (b.side === 'west' ? -1 : 1) * (SIMEAO_ROAD.outerHalfWidth - 80); }
+
+for (const item of [gardenWall, demolitionLot, brickRecess, ...bins]) item.x += Math.sign(item.x) * (SIMEAO_ROAD.outerHalfWidth - 80);

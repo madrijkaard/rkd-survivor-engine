@@ -6,12 +6,12 @@ import { crossPoints, START, CROSS_Y, MENDONCA_END, buildings, imagePath, locati
 import { CAMERA_VIEWS, project, unproject, withCameraView, withCrossStreetFrame, PROJECTION } from '../src/projection.js';
 import { CHURCH_PLAZA, PLAZA_CHURCH, CHURCH_TOWER, plazaSeats } from '../src/mendonca-data.js';
 
-test('os quinze panoramas consecutivos têm oito JPEGs distintos e coordenadas de origem',async()=>{
+test('os 37 panoramas têm oito JPEGs distintos e preservam o percurso original',async()=>{
   const manifest=JSON.parse(await readFile(new URL('../maps/conego-mendonca/manifest.json',import.meta.url)));
-  assert.equal(manifest.points.length,15);assert.equal(crossPoints.length,15);
-  assert.equal(new Set(manifest.points.map(p=>p.pano)).size,15);
+  assert.equal(manifest.points.length,37);assert.equal(crossPoints.length,37);
+  assert.equal(new Set(manifest.points.map(p=>p.pano)).size,37);
   assert.equal(manifest.points[8].pano,'HH_IwB3kuGNEdCLXhTzkhQ','O ponto indicado pelo usuário permanece na sequência');
-  assert.equal(manifest.points.at(-1).pano,'m50EKQjLKjyArRBYMtRRww','Esquina diante da academia');
+  assert.equal(manifest.points.find(p=>p.id===15).pano,'m50EKQjLKjyArRBYMtRRww','Esquina diante da academia');
   const hashes=new Set();
   for(const p of crossPoints){
     const folder=new URL(`../maps/conego-mendonca/ponto-${String(p.id).padStart(2,'0')}/`,import.meta.url);
@@ -22,23 +22,22 @@ test('os quinze panoramas consecutivos têm oito JPEGs distintos e coordenadas d
       hashes.add(createHash('sha256').update(bytes).digest('hex'));
     }
     assert.equal(p.pano,manifest.points[p.id-1].pano);
-    if(p.id>1){const previous=crossPoints[p.id-2];assert.ok(p.x-previous.x>110&&p.x-previous.x<165,'Avanços próximos de dez metros');}
+    if(p.id>1&&p.id<=15){const previous=crossPoints.find(q=>q.id===p.id-1);assert.ok(p.x-previous.x>110&&p.x-previous.x<165,'Avanços próximos de dez metros');}
   }
-  assert.equal(hashes.size,120);
+  assert.equal(hashes.size,296);
 });
 
-test('a igreja está inteira dentro da praça e suas quatro ruas formam uma volta livre',()=>{
+test('a igreja está dentro da praça, com acesso pelas ruas e limite ao norte documentado',()=>{
   for(const b of [PLAZA_CHURCH,CHURCH_TOWER]){
     assert.ok(b.x>CHURCH_PLAZA.x&&b.y>CHURCH_PLAZA.y);
     assert.ok(b.x+b.w<CHURCH_PLAZA.x+CHURCH_PLAZA.w);
     assert.ok(b.y+b.h<CHURCH_PLAZA.y+CHURCH_PLAZA.h);
     assert.equal(walkable(b.x+b.w/2,b.y+b.h/2),false,'Não é possível atravessar a igreja');
   }
-  const ring=[{x:1257,y:CROSS_Y},{x:1257,y:3300},{x:MENDONCA_END,y:3300},{x:MENDONCA_END,y:CROSS_Y}];
-  for(let i=0;i<ring.length;i++){
-    assert.ok(clearLine(ring[i],ring[(i+1)%ring.length]),`Rua ${i+1} livre`);
-    assert.ok(findPath(START,ring[i]),'Todas as ruas acessíveis desde a Simeão');
-  }
+  const ring=[{x:1257,y:CROSS_Y},{x:1257,y:3100},{x:MENDONCA_END,y:3100},{x:MENDONCA_END,y:CROSS_Y}];
+  for(const [a,b] of [[0,1],[3,2],[0,3]])assert.ok(clearLine(ring[a],ring[b]),'Ruas existentes livres');
+  for(const p of ring)assert.ok(findPath(START,p),'Acesso desde a Simeão');
+  assert.equal(clearLine({x:1257,y:3300},{x:MENDONCA_END,y:3300}),false,'Não inventar cruzamento através do muro atrás da igreja');
   for(const destination of [{x:1340,y:2820},{x:1915,y:2820},{x:1915,y:3130},{x:1340,y:3130}])assert.ok(findPath(ring[3],destination),'Circulação pelo piso da praça em volta da igreja');
   for(const s of plazaSeats)assert.equal(walkable(s.x+s.w/2,s.y+s.h/2),false,'Bancos rosados têm colisão');
   assert.equal(buildings.filter(b=>b.detail==='plaza-church').length,1);

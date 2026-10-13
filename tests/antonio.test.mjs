@@ -1,3 +1,4 @@
+import { antonioEdge, ANTONIO_FRONTAGE_OFFSET } from '../src/antonio-data.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile, readdir } from 'node:fs/promises';
@@ -7,12 +8,12 @@ import { antonioCenter } from '../src/antonio-data.js';
 import { buildingPlanPoint, buildingFootprint, footprintObstacle, hitsFootprint } from '../src/building-geometry.js';
 import { withCameraView, project, unproject } from '../src/projection.js';
 
-test('Antônio Alexandre: vinte posições, 160 fotos distintas e coordenadas preservadas',async()=>{
+test('Antônio Alexandre: 34 posições, 272 fotos distintas e coordenadas preservadas',async()=>{
   const manifest=JSON.parse(await readFile(new URL('../maps/antonio-alexandre/manifest.json',import.meta.url)));
-  assert.equal(manifest.points.length,20);assert.equal(parallelPoints.length,20);
-  assert.equal(new Set(manifest.points.map(p=>p.pano)).size,20);
+  assert.equal(manifest.points.length,34);assert.equal(parallelPoints.length,34);
+  assert.equal(new Set(manifest.points.map(p=>p.pano)).size,34);
   assert.equal(manifest.points[0].pano,'k6BHFWpglP1DnMesHhpImQ');
-  assert.equal(manifest.points.at(-1).pano,'WJLDwWseqC6nt98aIPhy2A');
+  assert.equal(manifest.points[19].pano,'WJLDwWseqC6nt98aIPhy2A');
   assert.deepEqual(manifest.directions,['N','NE','L','SE','S','SO','O','NO']);
   const hashes=new Set();
   for(const p of parallelPoints){
@@ -25,9 +26,10 @@ test('Antônio Alexandre: vinte posições, 160 fotos distintas e coordenadas pr
       assert.ok(bytes.length>5000);assert.equal(bytes.readUInt16BE(0),0xffd8);
       hashes.add(createHash('sha256').update(bytes).digest('hex'));
     }
-    if(p.id>1){const a=parallelPoints[p.id-2];assert.ok(p.latitude<a.latitude);assert.ok(Math.hypot(p.x-a.x,p.y-a.y)<165);}
+    const index=parallelPoints.indexOf(p);
+    if(index>0){const a=parallelPoints[index-1];assert.ok(p.latitude<a.latitude);assert.ok(Math.hypot(p.x-a.x,p.y-a.y)<165);}
   }
-  assert.equal(hashes.size,160);
+  assert.equal(hashes.size,272);
 });
 
 function walkPath(start,finish){
@@ -42,13 +44,13 @@ function walkPath(start,finish){
   assert.ok(Math.hypot(actor.x-finish.x,actor.y-finish.y)<1e-5);
 }
 test('as três ruas formam um percurso contínuo com retorno pela Vinte e Oito de Julho',()=>{
-  const north=parallelPoints[0],south=parallelPoints.at(-1);
+  const north=parallelPoints.find(p=>p.id===1),south=parallelPoints.find(p=>p.id===20);
   walkPath(START,crossPoints[0]);walkPath(crossPoints[0],north);walkPath(north,south);walkPath(south,START);
   for(let i=1;i<parallelPoints.length;i++)assert.ok(clearLine(parallelPoints[i-1],parallelPoints[i]),`Centro do trecho ${i+1} livre`);
   for(let y=-20;y<2230;y+=20)assert.ok(walkable(antonioCenter(y),y));
 });
 test('as fotos acompanham a rua paralela nas quatro câmeras e preservam a Cônego',()=>{
-  for(const p of parallelPoints.slice(1)){
+  for(const p of parallelPoints.filter(p=>p.id!==1)){
     const here=locationAt(p.x,p.y);assert.equal(here.route.id,'antonio-alexandre');assert.equal(here.point.id,p.id);
     for(let camera=0;camera<4;camera++)withCameraView(camera,()=>{const screen=project(p.x,p.y),ground=unproject(screen.x,screen.y);assert.ok(Math.hypot(ground.x-p.x,ground.y-p.y)<1e-8);});
   }
@@ -69,8 +71,8 @@ test('fachadas vizinhas acompanham a curva e se encontram na divisa dos lotes',(
   const row=buildings.filter(b=>b.street==='antonio-alexandre'&&!b.axis);
   const front=b=>{const p=buildingFootprint(b);return b.side==='east'?[p[0],p[3]]:[p[1],p[2]];};
   for(const b of row){
-    const [a,z]=front(b),roadShift=antonioCenter(z[1])-antonioCenter(a[1]);
-    assert.ok(Math.abs((z[0]-a[0])-roadShift)<1e-8,`${b.id}: fachada acompanha a orientação da rua`);
+    const [a,z]=front(b),offset=(b.side==='east'?1:-1)*(ANTONIO_FRONTAGE_OFFSET+(b.setback??0));
+    for(const p of [a,z])assert.ok((b.side==='east'?1:-1)*(p[0]-antonioEdge(p[1],offset))>=-1e-8,`${b.id}: fachada fora do passeio`);
     const neighbour=row.find(n=>n.side===b.side&&n.y===b.y+b.length&&(n.setback??0)===(b.setback??0));
     if(neighbour)assert.ok(Math.hypot(z[0]-front(neighbour)[0][0],z[1]-front(neighbour)[0][1])<1e-8,`${b.id}: sem degrau ou vão artificial na divisa`);
   }

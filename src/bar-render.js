@@ -1,5 +1,5 @@
 import { project as P } from './world.js';
-import { BAR } from './bar-layout.js';
+import { BAR, BAR_SHIFT } from './bar-layout.js';
 import { makeDetailedFacade } from './facades.js';
 import { drawDetailedBuilding } from './architecture.js';
 import { PROJECTION } from './projection.js';
@@ -34,16 +34,16 @@ function drawCounter(c){
 function bottles(c){
   const yy=2212;
   for(const z of [29,43]){
-    slab(c,-224,yy-4,130,5,z,'#9f8154');
+    slab(c,(-224+BAR_SHIFT),yy-4,130,5,z,'#9f8154');
     for(let i=0;i<15;i++){
-      const p=P(-219+i*8.2,yy-2,z),height=6+(i%3)*2;
+      const p=P((-219+BAR_SHIFT)+i*8.2,yy-2,z),height=6+(i%3)*2;
       c.fillStyle=['#477448','#7c5635','#6d8361','#758d85'][i%4];c.fillRect(p.x-1.7,p.y-height,3.4,height);c.fillRect(p.x-.8,p.y-height-3,1.6,3);
       c.fillStyle=i%2?'#cdb889':'#dad2b4';c.fillRect(p.x-1.4,p.y-height*.62,2.8,2.4);c.fillStyle='#b19661';c.fillRect(p.x-.9,p.y-height-3,1.8,.8);
     }
   }
 }
 function cues(c){
-  const x=-231,start=1968;
+  const x=(-231+BAR_SHIFT),start=1968;
   for(const z of [12,42])line(c,[x,start,z],[x,start+117,z],'#856344',2);
   for(let i=0;i<10;i++){const yy=start+5+i*11;line(c,[x-.2,yy,6],[x-.2,yy+.8,49],'#cba66c',1.5);line(c,[x-.3,yy,6],[x-.3,yy+.3,18],'#78553a',1.9);line(c,[x-.3,yy+.8,47],[x-.3,yy+.8,50],'#dcd1ac',.75);}
 }
@@ -81,17 +81,17 @@ export function createBarScene(bake,boundsFor,building){
   }
   for(let yy=b.y+5;yy<b.y+b.h-5;yy+=55){
     const end=Math.min(yy+55,b.y+b.h-5);
-    const panel=bake(c=>{wall(c,[-233,yy],[-233,end],55,'#c6bc9b');wall(c,[-232.8,yy],[-232.8,end],12,'#698894');line(c,[-233,yy,54],[-233,end,54],'#e0d3ad',1);},boundsFor(-239,yy,12,end-yy,62),P(-233,yy).y,'bar-wall');
+    const panel=bake(c=>{wall(c,[(-233+BAR_SHIFT),yy],[(-233+BAR_SHIFT),end],55,'#c6bc9b');wall(c,[(-232.8+BAR_SHIFT),yy],[(-232.8+BAR_SHIFT),end],12,'#698894');line(c,[(-233+BAR_SHIFT),yy,54],[(-233+BAR_SHIFT),end,54],'#e0d3ad',1);},boundsFor((-239+BAR_SHIFT),yy,12,end-yy,62),P((-233+BAR_SHIFT),yy).y,'bar-wall');
     if(PROJECTION.c<0){panel.opacity=.22;panel.noFade=true;}
     sprites.push(panel);
   }
-  sprites.push(bake(c=>{wall(c,[-233,2213],[-83,2213],57,'#c9c1a2');wall(c,[-233,2212.8],[-83,2212.8],12,'#68848a');bottles(c);},boundsFor(-241,2204,169,19,64),P(-158,2213).y,'bar-bottles'));
-  sprites.push(bake(c=>cues(c),boundsFor(-237,1963,12,128,53),P(-231,1965).y,'bar-cues'));
+  sprites.push(bake(c=>{wall(c,[(-233+BAR_SHIFT),2213],[(-83+BAR_SHIFT),2213],57,'#c9c1a2');wall(c,[(-233+BAR_SHIFT),2212.8],[(-83+BAR_SHIFT),2212.8],12,'#68848a');bottles(c);},boundsFor((-241+BAR_SHIFT),2204,169,19,64),P((-158+BAR_SHIFT),2213).y,'bar-bottles'));
+  sprites.push(bake(c=>cues(c),boundsFor((-237+BAR_SHIFT),1963,12,128,53),P((-231+BAR_SHIFT),1965).y,'bar-cues'));
   BAR.tables.forEach((t,i)=>sprites.push(bake(c=>drawPoolTable(c,t,i),boundsFor(t.x-4,t.y-4,t.w+8,t.h+8,31),P(t.x+t.w/2,t.y).y,`pool-table-${i+1}`)));
   sprites.push(bake(drawCounter,boundsFor(BAR.counter.x-5,BAR.counter.y-5,BAR.counter.w+10,BAR.counter.h+10,39),P(BAR.counter.x+BAR.counter.w/2,BAR.counter.y).y,'bar-counter'));
   // Low cutaway front wall keeps the character and all three tables visible.
   const ranges=[[1887,BAR.doors[0].y],[BAR.doors[0].y+BAR.doors[0].w,BAR.doors[1].y],[BAR.doors[1].y+BAR.doors[1].w,2218]];
-  for(const [a,z] of ranges)sprites.push(bake(c=>{wall(c,[-82,a],[-82,z],11,'#558197');line(c,[-82,a,12],[-82,z,12],'#d3bf8e',2);},boundsFor(-87,a,14,z-a,17),P(-82,a).y,'bar-low-wall'));
+  for(const [a,z] of ranges)sprites.push(bake(c=>{wall(c,[(-82+BAR_SHIFT),a],[(-82+BAR_SHIFT),z],11,'#558197');line(c,[(-82+BAR_SHIFT),a,12],[(-82+BAR_SHIFT),z,12],'#d3bf8e',2);},boundsFor((-87+BAR_SHIFT),a,14,z-a,17),P((-82+BAR_SHIFT),a).y,'bar-low-wall'));
   const npc=createPericlesSprite(),foot=P(BAR.owner.x,BAR.owner.y);
   sprites.push({image:npc,x:foot.x-20,y:foot.y-61,w:npc.width,h:npc.height,depth:foot.y,label:'pericles',noFade:true});
   return {floor,sprites};

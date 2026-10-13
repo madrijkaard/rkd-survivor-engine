@@ -1,4 +1,4 @@
-// Generated from maps/antonio-alexandre/manifest.json. North to south.
+// Generated from maps/antonio-alexandre/manifest.json. Stable capture IDs.
 export const antonioPoints = [
   {
     "id": 1,
@@ -178,6 +178,174 @@ export const antonioPoints = [
     "longitude": -43.884376,
     "x": 836,
     "y": -80,
+    "street": "antonio-alexandre"
+  },
+  {
+    "id": 21,
+    "pano": "OZqaCpvYDCigpb55uFEXLA",
+    "latitude": -4.4506549,
+    "longitude": -43.8847222,
+    "imageryDate": "2025-06",
+    "capturedAt": "2026-09-24",
+    "source": "Google Street View",
+    "x": 1257,
+    "y": 2478,
+    "street": "antonio-alexandre"
+  },
+  {
+    "id": 22,
+    "pano": "ykrUFta6DF5MRwcjltcWbw",
+    "latitude": -4.4504776,
+    "longitude": -43.884765,
+    "imageryDate": "2025-06",
+    "capturedAt": "2026-09-24",
+    "source": "Google Street View",
+    "x": 1257,
+    "y": 2737,
+    "street": "antonio-alexandre"
+  },
+  {
+    "id": 23,
+    "pano": "Wcq0-HfttJY6TW3OnQFZcw",
+    "latitude": -4.4503314,
+    "longitude": -43.8848204,
+    "imageryDate": "2025-06",
+    "capturedAt": "2026-09-24",
+    "source": "Google Street View",
+    "x": 1257,
+    "y": 2961,
+    "street": "antonio-alexandre"
+  },
+  {
+    "id": 24,
+    "pano": "aSqdwrBkqvbgaGYw_FEpZA",
+    "latitude": -4.4503913,
+    "longitude": -43.8848001,
+    "imageryDate": "2025-06",
+    "capturedAt": "2026-09-24",
+    "source": "Google Street View",
+    "x": 1257,
+    "y": 2870,
+    "street": "antonio-alexandre"
+  },
+  {
+    "id": 25,
+    "pano": "IDXf4gZ5v-U4KSm_QUll8g",
+    "latitude": -4.4502428,
+    "longitude": -43.8848368,
+    "imageryDate": "2025-06",
+    "capturedAt": "2026-09-24",
+    "source": "Google Street View",
+    "x": 1257,
+    "y": 3088,
+    "street": "antonio-alexandre"
+  },
+  {
+    "id": 26,
+    "pano": "89uL2SwvRWmWYqtR8qMmVg",
+    "latitude": -4.4501557,
+    "longitude": -43.8848604,
+    "imageryDate": "2025-06",
+    "capturedAt": "2026-09-24",
+    "source": "Google Street View",
+    "x": 1267,
+    "y": 3217,
+    "street": "antonio-alexandre"
+  },
+  {
+    "id": 27,
+    "pano": "vN2lBeIeLt2J4CjGcq5kVg",
+    "latitude": -4.4500701,
+    "longitude": -43.8848916,
+    "imageryDate": "2025-06",
+    "capturedAt": "2026-09-24",
+    "source": "Google Street View",
+    "x": 1281,
+    "y": 3347,
+    "street": "antonio-alexandre"
+  },
+  {
+    "id": 28,
+    "pano": "bAgsZhWbyS9hnZrFBDzq7g",
+    "latitude": -4.449986,
+    "longitude": -43.8849257,
+    "imageryDate": "2025-06",
+    "capturedAt": "2026-09-24",
+    "source": "Google Street View",
+    "x": 1291,
+    "y": 3477,
+    "street": "antonio-alexandre"
+  },
+  {
+    "id": 29,
+    "pano": "wh-wp8Uqw_HE0hgpNUd6Ww",
+    "latitude": -4.4498973,
+    "longitude": -43.8849468,
+    "imageryDate": "2025-06",
+    "capturedAt": "2026-09-24",
+    "source": "Google Street View",
+    "x": 1317,
+    "y": 3606,
+    "street": "antonio-alexandre"
+  },
+  {
+    "id": 30,
+    "pano": "zPPGIrWAeKZtAsVeGA2W3g",
+    "latitude": -4.4498089,
+    "longitude": -43.8849716,
+    "imageryDate": "2025-06",
+    "capturedAt": "2026-09-24",
+    "source": "Google Street View",
+    "x": 1341,
+    "y": 3737,
+    "street": "antonio-alexandre"
+  },
+  {
+    "id": 31,
+    "pano": "LNO4_VhtlMS4UkpFyB1pew",
+    "latitude": -4.4497214,
+    "longitude": -43.8849963,
+    "imageryDate": "2025-06",
+    "capturedAt": "2026-09-24",
+    "source": "Google Street View",
+    "x": 1351,
+    "y": 3867,
+    "street": "antonio-alexandre"
+  },
+  {
+    "id": 32,
+    "pano": "ZBEXXIap_tiPhHRhnnLhMw",
+    "latitude": -4.4496337,
+    "longitude": -43.8850208,
+    "imageryDate": "2025-06",
+    "capturedAt": "2026-09-24",
+    "source": "Google Street View",
+    "x": 1361,
+    "y": 3997,
+    "street": "antonio-alexandre"
+  },
+  {
+    "id": 33,
+    "pano": "gpMnjbBRw4Ep5mr1L2gpSA",
+    "latitude": -4.4495456,
+    "longitude": -43.8850451,
+    "imageryDate": "2025-06",
+    "capturedAt": "2026-09-24",
+    "source": "Google Street View",
+    "x": 1371,
+    "y": 4127,
+    "street": "antonio-alexandre"
+  },
+  {
+    "id": 34,
+    "pano": "DHci3sMPl6vDWhQwp4Fn9g",
+    "latitude": -4.4505645,
+    "longitude": -43.8847392,
+    "imageryDate": "2025-06",
+    "capturedAt": "2026-09-24",
+    "source": "Google Street View",
+    "x": 1257,
+    "y": 2608,
     "street": "antonio-alexandre"
   }
 ];

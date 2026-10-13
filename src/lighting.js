@@ -54,7 +54,7 @@ export function convexHull(points) {
 }
 
 export function poleLamps(pole) {
-  const offsets = pole.lamp ? [[-13, 0], [13, 0], [0, -13], [0, 13]] : [[18, 0]];
+  const offsets = pole.lamp ? (pole.lampArms===2?[[-13,0],[13,0]]:[[-13, 0], [13, 0], [0, -13], [0, 13]]) : [[18, 0]];
   return offsets.map(([dx, dy]) => ({
     x: pole.x + dx, y: pole.y + dy, z: pole.height * (pole.lamp ? 1 : .9),
   }));

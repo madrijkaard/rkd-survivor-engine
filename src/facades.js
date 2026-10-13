@@ -1,6 +1,17 @@
+import { drawBeneditoFacade, drawBeneditoOpeningDetails } from './benedito-render.js';
+import { drawMendoncaBeneditoFacade, drawMendoncaBeneditoOpeningDetails } from './mendonca-benedito-render.js';
+import { drawCoelhoFacade, drawCoelhoOpeningDetails } from './coelho-render.js';
+import { drawJulhoEastFacade } from './julho-east-render.js';
 import { PROJECTION } from './projection.js';
 import { drawAntonioFacade, drawAntonioOpeningDetails } from './antonio-facades.js';
 import { drawSimeaoFacade } from './simeao-facades.js';
+import { drawMatrizFacade } from './antonio-matriz-facades.js';
+import { drawMendoncaPracaFacade } from './mendonca-praca-render.js';
+import { drawAlcebiadesFacade, drawAlcebiadesOpeningDetails } from './alcebiades-render.js';
+import { drawMendoncaWestFacade } from './mendonca-west-render.js';
+import { drawFernandoFacade } from './fernando-render.js';
+import { drawJulhoFacade } from './julho-render.js';
+import { drawJulhoWestFacade, drawJulhoWestOpeningDetails } from './julho-west-render.js';
 // Desenho das frentes catalogadas em street-data.js. Todas as aberturas são
 // explícitas: o mesmo recorte de fotografia não cria portas/janelas duplicadas.
 function random(seed) { let n=seed>>>0; return () => ((n=Math.imul(n,1664525)+1013904223>>>0)/4294967296); }
@@ -198,8 +209,24 @@ export function makeDetailedFacade(b,image,lightPass=false) {
   }
   drawAntonioFacade(c,b,w,h,r);
   drawSimeaoFacade(c,b,w,h);
+  drawMatrizFacade(c,b,w,h);
+  drawJulhoFacade(c,b,w,h);
+  drawJulhoEastFacade(c,b,w,h);
+  drawCoelhoFacade(c,b,w,h);
+  drawMendoncaBeneditoFacade(c,b,w,h);
+  drawBeneditoFacade(c,b,w,h);
+  drawJulhoWestFacade(c,b,w,h);
+  drawFernandoFacade(c,b,w,h);
+  drawMendoncaWestFacade(c,b,w,h);
+  drawMendoncaPracaFacade(c,b,w,h);
+  drawAlcebiadesFacade(c,b,w,h);
   for(const o of b.openings) drawOpening(c,o,w,h,lightPass);
+  drawCoelhoOpeningDetails(c,b,w,h);
+  drawMendoncaBeneditoOpeningDetails(c,b,w,h);
+  drawBeneditoOpeningDetails(c,b,w,h);
+  drawJulhoWestOpeningDetails(c,b,w,h);
   drawAntonioOpeningDetails(c,b,w,h);
+  drawAlcebiadesOpeningDetails(c,b,w,h);
   if(b.detail==='aa-print'){
     const door=b.openings[0];for(let i=0;i<5;i++){c.fillStyle=['#3979a3','#d1af3f','#ca604d','#63884d','#a486ac'][i];c.fillRect((door.u+door.w*i/5)*w,h*.44,door.w*w/5,h*.13);}
   }

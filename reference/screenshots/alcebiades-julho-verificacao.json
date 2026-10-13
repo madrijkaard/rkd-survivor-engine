@@ -1,0 +1,29 @@
+{
+  "date": "2026-10-11",
+  "checks": [
+    "Praça Alcebíades Silva · Ponto 10",
+    "Praça Alcebíades Silva · Ponto 13",
+    "Praça Alcebíades Silva × Vinte e Oito de Julho",
+    "Praça Alcebíades Silva · Ponto 15",
+    "Retorno pela praça até Cardoso/10",
+    {
+      "keyboardDistance": 24.99999999999969
+    },
+    {
+      "views": [
+        "east-fronts",
+        "north-west-view",
+        "north-east-view",
+        "west-fronts"
+      ]
+    },
+    {
+      "groundClick": {
+        "x": -2222.9999717404226,
+        "y": 306.39996121334485
+      }
+    }
+  ],
+  "photosAtEnd": 8,
+  "errors": []
+}

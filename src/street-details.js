@@ -10,6 +10,16 @@ function slab(c,x,y,w,l,z,color){poly(c,[[x,y,z],[x+w,y,z],[x+w,y+l,z],[x,y+l,z]
 
 export function drawTree(c,t){
   const r=rng(t.seed),p=P(t.x,t.y),height=t.height||t.size*.8,crown=P(t.x,t.y,height);
+  if(t.kind==='pollarded'){
+    c.lineCap='round';
+    line(c,[t.x,t.y,0],[t.x+4,t.y,height*.72],'#71644b',14);
+    line(c,[t.x-3,t.y,0],[t.x+1,t.y,height*.70],'#a69674',3);
+    for(const [dx,dy,z] of [[-19,-5,1],[24,3,.90],[-9,11,.77]]){
+      line(c,[t.x+3,t.y,height*.51],[t.x+dx,t.y+dy,height*z],'#73694e',9);
+      line(c,[t.x+dx-3,t.y+dy,height*z],[t.x+dx+3,t.y+dy,height*z],'#b7a586',3);
+    }
+    c.lineCap='butt';return;
+  }
   if(t.kind==='palm'){
     c.strokeStyle='#77674e';c.lineWidth=5;c.beginPath();c.moveTo(p.x,p.y);c.quadraticCurveTo(p.x-7,p.y-height*.6,crown.x,crown.y);c.stroke();
     c.strokeStyle='#bdad81';c.lineWidth=1.4;c.stroke();
